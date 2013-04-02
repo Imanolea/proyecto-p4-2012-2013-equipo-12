@@ -288,7 +288,7 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 		//Partida p = new Partida ("S","ss","dd","22","344","23","232",23);
 		//getInstance().agregarPartida(p);
 		getInstance().listarEstadisticasJugares();
-		getInstance().listarEstadisticasPartidas();
+		//getInstance().listarEstadisticasPartidas();
 		getInstance().borrarPartidas();
 
 	}
