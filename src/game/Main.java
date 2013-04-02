@@ -83,7 +83,7 @@ implements ActionListener {
 		CollisionResults rEnemigoEscenario;
 
 		for (int i=0; i<pow.length; i++){
-			pow[i] = new Enemy(assetManager.loadModel("Models/Bicho/Bicho.j3o"));
+			pow[i] = new Enemy(assetManager.loadModel("Models/Pow/Pow.j3o"));
 			pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
 			do{
 				pow[i].getSpatial().setLocalTranslation((float)Math.random()*56-28, (float)Math.random()*5+8, (float)Math.random()*56-28);
