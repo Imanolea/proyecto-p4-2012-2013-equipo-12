@@ -1,4 +1,7 @@
+package database;
 
+
+import database.Conectable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Connection;

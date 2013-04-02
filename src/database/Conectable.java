@@ -1,3 +1,5 @@
+package database;
+
 
 public interface Conectable {
 

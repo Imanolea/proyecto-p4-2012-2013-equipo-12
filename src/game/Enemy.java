@@ -1,4 +1,4 @@
-package mygame;
+package game;
 
 import com.jme3.scene.Spatial;
 
