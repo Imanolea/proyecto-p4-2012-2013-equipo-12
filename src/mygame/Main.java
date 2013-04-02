@@ -1,6 +1,5 @@
 package mygame;
 
-import com.jme3.material.Material;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
@@ -13,18 +12,22 @@ import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 
 public class Main extends SimpleApplication
         implements ActionListener {
-
+ private RigidBodyControl    particle_phy;
   private final int NUMERO_ENEMIGOS = 20;  
   private Spatial sceneModel;
   private Spatial[] pow = new Spatial[NUMERO_ENEMIGOS];
@@ -35,7 +38,7 @@ public class Main extends SimpleApplication
   private PointLight lamp_light;
   private Vector3f walkDirection = new Vector3f();
   private boolean left = false, right = false, up = false, down = false;
-
+  Geometry mark;
   public static void main(String[] args) {
     Main app = new Main();
     app.start();
@@ -51,8 +54,10 @@ public class Main extends SimpleApplication
     
     viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
     flyCam.setMoveSpeed(100);
+ 
     setUpKeys();
     setUpLight();
+    initMark();
     
     for (int i=0; i<fire.length; i++)
         fire[i] = createFire();
@@ -91,6 +96,16 @@ public class Main extends SimpleApplication
     bulletAppState.getPhysicsSpace().add(player);
   }
   
+  
+    private ActionListener actionListener = new ActionListener() {
+    public void onAction(String name, boolean keyPressed, float tpf) {
+      if (name.equals("Shoot")) {
+        makeParticlePh();
+      }
+    }
+  };
+  
+    
   private ParticleEmitter createFire() {
    
     ParticleEmitter fire = 
@@ -146,17 +161,24 @@ public class Main extends SimpleApplication
       rootNode.addLight(l6);
       
   }
+  
 
   private void setUpKeys() {
       
+      
+         inputManager.addMapping("Shoot", 
+            new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+    inputManager.addListener(actionListener, "Shoot");
     inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
     inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
     inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
-    inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));;
+    inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+    inputManager.addMapping("Shoot", new KeyTrigger(KeyInput.KEY_SPACE));
     inputManager.addListener(this, "Left");
     inputManager.addListener(this, "Right");
     inputManager.addListener(this, "Up");
     inputManager.addListener(this, "Down");
+    inputManager.addListener(this, "Shoot");
   }
 
   public void onAction(String binding, boolean value, float tpf) {
@@ -169,8 +191,16 @@ public class Main extends SimpleApplication
     } else if (binding.equals("Down")) {
       if (value) { down = true; } else { down = false; }
     } 
+    
   }
-  
+    protected void initMark() {
+ 
+    mark = createFire();
+    Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    mark_mat.setColor("Color", ColorRGBA.Blue);
+    mark.setMaterial(mark_mat);
+}
+    
   protected void initCrossHairs() {
     guiNode.detachAllChildren();
     guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
@@ -183,6 +213,19 @@ public class Main extends SimpleApplication
     guiNode.attachChild(ch);
   }
 
+   public void makeParticlePh() {
+    
+    Geometry particle = createFire();
+    Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+    particle.setMaterial(mark_mat);
+    rootNode.attachChild(particle);
+    particle.setLocalTranslation(cam.getLocation());
+    particle_phy = new RigidBodyControl(1f);
+    particle.addControl(particle_phy);
+    bulletAppState.getPhysicsSpace().add(particle_phy);
+    particle_phy.setLinearVelocity(cam.getDirection().mult(25));
+  }
+  
   
   public void simpleUpdate(float tpf) {
     Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
@@ -198,4 +241,9 @@ public class Main extends SimpleApplication
     for (int i=0; i < pow.length; i++)
         pow[i].lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
   }
+
 }
+
+  
+
+   
