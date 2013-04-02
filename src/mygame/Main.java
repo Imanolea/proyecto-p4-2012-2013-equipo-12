@@ -216,14 +216,14 @@ public class Main extends SimpleApplication
    public void makeParticlePh() {
     
     Geometry particle = createFire();
-    Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-    particle.setMaterial(mark_mat);
+   // Material mark_mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+   // particle.setMaterial(mark_mat);
     rootNode.attachChild(particle);
     particle.setLocalTranslation(cam.getLocation());
     particle_phy = new RigidBodyControl(1f);
     particle.addControl(particle_phy);
     bulletAppState.getPhysicsSpace().add(particle_phy);
-    particle_phy.setLinearVelocity(cam.getDirection().mult(25));
+    particle_phy.setLinearVelocity(cam.getDirection().mult(100));
   }
   
   
