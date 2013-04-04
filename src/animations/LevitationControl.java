@@ -23,7 +23,6 @@ public class LevitationControl extends AbstractControl{
             setTopUp(2);
         
         if (up){
-            System.out.println("Arriba: "+getDisplacement());
             spatial.move(0f, tpf*getSpeed()/20, 0f);
             setDisplacement(getDisplacement() + tpf*getSpeed());
             if (getDisplacement()>getTopUp()){
@@ -31,7 +30,6 @@ public class LevitationControl extends AbstractControl{
                 setDisplacement(-getDisplacement());
             }
         } else {
-            System.out.println("Abajo: "+getDisplacement());
             spatial.move(0f, -tpf*getSpeed()/20, 0f);
             setDisplacement(getDisplacement() + tpf*getSpeed());
             if (getDisplacement()>getTopUp()){
