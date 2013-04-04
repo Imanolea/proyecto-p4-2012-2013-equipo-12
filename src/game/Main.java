@@ -287,7 +287,7 @@ implements ActionListener {
                     fire[i].setParticlesPerSec(0f);
                     fire[i].setShooted(false);
                     getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
-                    getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(2);
+                    getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(4);
                 }
             }
         }
