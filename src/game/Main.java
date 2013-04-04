@@ -85,7 +85,7 @@ implements ActionListener {
 		CollisionResults rEnemigoEscenario;
 
 		for (int i=0; i<pow.length; i++){
-			pow[i] = new Enemy(assetManager.loadModel("Models/Pow/Pow.j3o"));
+			pow[i] = new Enemy(assetManager.loadModel("Models/Pow/Pow.j3o")) {};
 			pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
             pow[i].getSpatial().setName(i+"-entity");
 			do{
