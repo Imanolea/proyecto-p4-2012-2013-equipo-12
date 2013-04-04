@@ -16,19 +16,27 @@ public class LevitationControl extends AbstractControl{
     
     protected void controlUpdate(float tpf) {
         
+        if (getSpeed()>2){
+            setSpeed(getSpeed() - 200*tpf);
+        }
+        else
+            setTopUp(2);
+        
         if (up){
-            spatial.move(0f, tpf*speed/20, 0f);
-            setDisplacement(getDisplacement() + tpf*speed);
-            if (getDisplacement()>topUp){
+            System.out.println("Arriba: "+getDisplacement());
+            spatial.move(0f, tpf*getSpeed()/20, 0f);
+            setDisplacement(getDisplacement() + tpf*getSpeed());
+            if (getDisplacement()>getTopUp()){
                 up=false;
-                setDisplacement(0);
+                setDisplacement(-getDisplacement());
             }
         } else {
-            spatial.move(0f, -tpf*speed/20, 0f);
-            setDisplacement(getDisplacement() + tpf*speed);
-            if (getDisplacement()>topUp){
+            System.out.println("Abajo: "+getDisplacement());
+            spatial.move(0f, -tpf*getSpeed()/20, 0f);
+            setDisplacement(getDisplacement() + tpf*getSpeed());
+            if (getDisplacement()>getTopUp()){
                 up=true;
-                setDisplacement(0);
+                setDisplacement(-getDisplacement());
             }
         }
     }
@@ -37,7 +45,6 @@ public class LevitationControl extends AbstractControl{
     }
 
     public Control cloneForSpatial(Spatial spatial) {
-        displacement = (float)Math.random()*4-2;
         Control control = new LevitationControl();
         control.setSpatial(spatial);
         return control;
