@@ -1,5 +1,6 @@
 package game;
 
+import animations.LevitationControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bounding.BoundingBox;
 import com.jme3.bounding.BoundingSphere;
@@ -39,6 +40,8 @@ implements ActionListener {
 	private Spatial sceneModel;
 	private Enemy[] pow = new Enemy[NUMERO_ENEMIGOS];
 	private Bullet[] fire = new Bullet[NUMERO_CARGAS];
+    private Material mPowNormal;
+    private Material mPowHurt;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private CharacterControl player;
@@ -68,7 +71,6 @@ implements ActionListener {
 		setUpKeys();
 		setUpLight();
 
-
 		for (int i=0; i<fire.length; i++)
 			fire[i] = createFire();
 
@@ -85,6 +87,7 @@ implements ActionListener {
 		for (int i=0; i<pow.length; i++){
 			pow[i] = new Enemy(assetManager.loadModel("Models/Pow/Pow.j3o"));
 			pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
+            pow[i].getSpatial().setName(i+"-entity");
 			do{
 				pow[i].getSpatial().setLocalTranslation((float)Math.random()*56-28, (float)Math.random()*5+8, (float)Math.random()*56-28);
 				rEnemigoEscenario = new CollisionResults();
@@ -93,6 +96,19 @@ implements ActionListener {
 			}while (rEnemigoEscenario.size()>0);
 			shootables.attachChild(pow[i].getSpatial());
 		}
+        
+        Spatial powHurt = assetManager.loadModel("Models/PowHurt/PowHurt.j3o");
+        
+        CollisionResults rMaterial = new CollisionResults();
+        pow[0].getSpatial().collideWith(pow[0].getSpatial().getWorldBound(), rMaterial);
+        rMaterial.toString();
+        mPowNormal = rMaterial.getClosestCollision().getGeometry().getMaterial();
+        CollisionResults rMaterial2 = new CollisionResults();
+        powHurt.collideWith(powHurt.getWorldBound(), rMaterial2);
+        rMaterial2.toString();
+        mPowHurt = rMaterial2.getClosestCollision().getGeometry().getMaterial();
+        
+        
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 		player = new CharacterControl(capsuleShape, 0.05f);
@@ -202,7 +218,17 @@ implements ActionListener {
 				i=fire.length;
 			}
 	}
-
+    
+    public Spatial getGeometrySpatial(Geometry geometry){
+        Spatial s = geometry.getParent();
+        while (s != null){
+            if (s.getName().endsWith("-entity")){
+                return s;
+            }
+            s = s.getParent();
+        }
+        return null;
+    }
 
 	public void onAction(String name, boolean isPressed, float tpf) {
 
@@ -221,7 +247,8 @@ implements ActionListener {
 		} 
 	}
 
-	public void simpleUpdate(float tpf) {
+	public void simpleUpdate(float tpf) {      
+        
 		Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
 		Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
 		walkDirection.set(0, 0, 0);
@@ -232,14 +259,18 @@ implements ActionListener {
 		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.getPhysicsLocation());
 
-		for (int i=0; i < pow.length; i++)
+		for (int i=0; i < pow.length; i++){
 			pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
-       
+            if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed()>2)
+                pow[i].getSpatial().setMaterial(mPowHurt);
+            else
+                pow[i].getSpatial().setMaterial(mPowNormal);
+        }
         
         for (int i=0; i < fire.length; i++){  
             if (fire[i].isShooted()){
                 fire[i].move(tpf);
-                Box ball = new Box(1.2f, 1.2f, 1.2f);
+                Box ball = new Box(1f, 1f, 1f);
                 Geometry theBall = new Geometry("Ball", ball);
                 theBall.move(fire[i].getWorldTranslation().x, fire[i].getWorldTranslation().y, fire[i].getWorldTranslation().z);
                 CollisionResults rScene = new CollisionResults();
@@ -252,8 +283,12 @@ implements ActionListener {
                     fire[i].setParticlesPerSec(0f);
                     fire[i].setShooted(false); 
                 }
-                if (rEnemy.size()>0)
-                    rEnemy.getCollision(0).getGeometry().getParent().removeFromParent();
+                if (rEnemy.size()>0){
+                    fire[i].setParticlesPerSec(0f);
+                    fire[i].setShooted(false);
+                    getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
+                    getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(2);
+                }
             }
         }
 

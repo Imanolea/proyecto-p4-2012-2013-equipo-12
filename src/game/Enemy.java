@@ -20,4 +20,5 @@ public class Enemy {
     public Spatial getSpatial() {
         return spatial;
     }
+
 }

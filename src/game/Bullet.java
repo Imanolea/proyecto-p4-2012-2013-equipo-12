@@ -40,16 +40,10 @@ class Bullet extends ParticleEmitter{
         this.direction = direction;
     }
     
-    /**
-     * @return the vel
-     */
     public float getVel() {
         return vel;
     }
 
-    /**
-     * @param vel the vel to set
-     */
     public void setVel(float vel) {
         this.vel = vel;
     }
