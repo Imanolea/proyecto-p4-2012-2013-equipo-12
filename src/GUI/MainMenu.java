@@ -4,10 +4,13 @@
  */
 package GUI;
 
+import game.Main;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,11 +27,13 @@ public class MainMenu extends JFrame {
     // Declaracion de componentes
     private JPanel mainPanel;
     private JButton settingsButton;
-    private JButton playButton;
+    public JButton playButton;
     private JButton leaderboardsButton;
     private JMenuBar menubar;
     private JMenu fileMenu;
     private JMenuItem exitMenuItem;
+    public boolean iniciar = false;
+    
 
     /**
      * Constructor de la ventana encargada de mostrar el menú del programa
@@ -71,6 +76,17 @@ public class MainMenu extends JFrame {
         playButton.setFont(new Font("Lucida Grande", Font.PLAIN, 28));
         playButton.setSelected(false);
 
+    //private JButton settingsButton;
+    //private JButton playButton;
+    //private JButton leaderboardsButton;
+        
+        playButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                game.Main.thread.start();
+            }
+        });
+        
 
 
         leaderboardsButton.setFont(new Font("Lucida Grande", Font.PLAIN, 28));
