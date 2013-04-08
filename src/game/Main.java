@@ -1,5 +1,6 @@
 package game;
 
+import GUI.MainMenu;
 import animations.LevitationControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bounding.BoundingBox;
@@ -30,6 +31,14 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
+import com.sun.tools.example.debug.gui.GUI;
+import java.awt.event.ActionEvent;
+import javax.swing.Action;
+import GUI.MainMenu;
+import java.beans.PropertyChangeListener;
+
+
+
 
 public class Main extends SimpleApplication
 implements ActionListener {
@@ -50,10 +59,22 @@ implements ActionListener {
     private Node shootables;
 	private Vector3f walkDirection = new Vector3f();
 	private boolean left = false, right = false, up = false, down = false;
+        
+        public static Thread thread;
 
 	public static void main(String[] args) {
-		Main app = new Main();
-		app.start();
+                        
+           thread = new Thread(new Runnable() {
+           public void run() {
+               Main app = new Main();
+               app.start();
+           }
+           });
+           
+           MainMenu menu = new MainMenu();
+           menu.main(args);
+            
+                
 	}
 
 	public void simpleInitApp() {
@@ -226,7 +247,7 @@ implements ActionListener {
     }
 
 	public void onAction(String name, boolean isPressed, float tpf) {
-
+            
 		if (name.equals("Shoot") && !isPressed) {
 			shootFire();
 		}
@@ -242,7 +263,8 @@ implements ActionListener {
 		} 
 	}
 
-	public void simpleUpdate(float tpf) {      
+	public void simpleUpdate(float tpf) { 
+            
         
 		Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
 		Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
@@ -294,7 +316,7 @@ implements ActionListener {
             }
         }
 
-	}
+        }
 
 }
 
