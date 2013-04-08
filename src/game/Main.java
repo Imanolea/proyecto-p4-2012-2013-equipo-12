@@ -42,6 +42,7 @@ implements ActionListener {
 	private Bullet[] fire = new Bullet[NUMERO_CARGAS];
     private Material mPowNormal;
     private Material mPowHurt;
+    private Material mPowEyesClosed;
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private CharacterControl player;
@@ -97,18 +98,12 @@ implements ActionListener {
 			shootables.attachChild(pow[i].getSpatial());
 		}
         
-        Spatial powHurt = assetManager.loadModel("Models/PowHurt/PowHurt.j3o");
+        Enemy powHurt = new Enemy (assetManager.loadModel("Models/Pow/PowHurt.j3o"));
+        Enemy powEyesClosed = new Enemy (assetManager.loadModel("Models/Pow/PowEyesClosed.j3o"));
         
-        CollisionResults rMaterial = new CollisionResults();
-        pow[0].getSpatial().collideWith(pow[0].getSpatial().getWorldBound(), rMaterial);
-        rMaterial.toString();
-        mPowNormal = rMaterial.getClosestCollision().getGeometry().getMaterial();
-        CollisionResults rMaterial2 = new CollisionResults();
-        powHurt.collideWith(powHurt.getWorldBound(), rMaterial2);
-        rMaterial2.toString();
-        mPowHurt = rMaterial2.getClosestCollision().getGeometry().getMaterial();
-        
-        
+        mPowNormal = pow[0].getMaterial();
+        mPowHurt = powHurt.getMaterial();
+        mPowEyesClosed = powEyesClosed.getMaterial();
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 		player = new CharacterControl(capsuleShape, 0.05f);
@@ -261,10 +256,17 @@ implements ActionListener {
 
 		for (int i=0; i < pow.length; i++){
 			pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
-            if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed()>2)
-                pow[i].getSpatial().setMaterial(mPowHurt);
-            else
-                pow[i].getSpatial().setMaterial(mPowNormal);
+            if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed()>2){
+                pow[i].getSpatial().setMaterial(mPowHurt);   
+            } else {
+                pow[i].setTimer(pow[i].getTimer()+tpf);
+                if (pow[i].getTimer()>7){
+                    pow[i].getSpatial().setMaterial(mPowEyesClosed);
+                    if (pow[i].getTimer()>7.1)
+                        pow[i].setTimer(1);
+                } else
+                    pow[i].getSpatial().setMaterial(mPowNormal);
+            }
         }
         
         for (int i=0; i < fire.length; i++){  
