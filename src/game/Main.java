@@ -3,8 +3,6 @@ package game;
 import GUI.MainMenu;
 import animations.LevitationControl;
 import com.jme3.app.SimpleApplication;
-import com.jme3.bounding.BoundingBox;
-import com.jme3.bounding.BoundingSphere;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -12,7 +10,6 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
-import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.font.BitmapText;
 import com.jme3.input.KeyInput;
@@ -24,18 +21,11 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.scene.shape.Sphere;
-import com.sun.tools.example.debug.gui.GUI;
-import java.awt.event.ActionEvent;
-import javax.swing.Action;
-import GUI.MainMenu;
-import java.beans.PropertyChangeListener;
 
 
 
@@ -62,19 +52,9 @@ implements ActionListener {
         
         public static Thread thread;
 
-	public static void main(String[] args) {
-                        
-           thread = new Thread(new Runnable() {
-           public void run() {
+	public static void main(String[] args) {   
                Main app = new Main();
-               app.start();
-           }
-           });
-           
-           MainMenu menu = new MainMenu();
-           menu.main(args);
-            
-                
+               app.start();                
 	}
 
 	public void simpleInitApp() {
@@ -290,6 +270,7 @@ implements ActionListener {
                     pow[i].getSpatial().setMaterial(mPowNormal);
             }
         }
+
         
         for (int i=0; i < fire.length; i++){  
             if (fire[i].isShooted()){
@@ -315,9 +296,7 @@ implements ActionListener {
                 }
             }
         }
-
-        }
-
+    }
 }
 
 
