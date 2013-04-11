@@ -26,6 +26,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import java.util.LinkedList;
 
 
 
@@ -39,13 +40,10 @@ implements ActionListener {
 	private Spatial sceneModel;
 	private Enemy[] pow = new Enemy[NUMERO_ENEMIGOS];
 	private Bullet[] fire = new Bullet[NUMERO_CARGAS];
-    private Material mPowNormal;
-    private Material mPowHurt;
-    private Material mPowEyesClosed;
+    private Material[] enemyMaterial = new Material[5];
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private CharacterControl player;
-	private PointLight lamp_light;
     private Node shootables;
 	private Vector3f walkDirection = new Vector3f();
 	private boolean left = false, right = false, up = false, down = false;
@@ -101,10 +99,14 @@ implements ActionListener {
         
         Enemy powHurt = new Enemy (assetManager.loadModel("Models/Pow/PowHurt.j3o"));
         Enemy powEyesClosed = new Enemy (assetManager.loadModel("Models/Pow/PowEyesClosed.j3o"));
+        Enemy powWeak = new Enemy (assetManager.loadModel("Models/Pow/PowWeak.j3o"));
+        Enemy powDeath = new Enemy (assetManager.loadModel("Models/Pow/PowDeath.j3o"));
         
-        mPowNormal = pow[0].getMaterial();
-        mPowHurt = powHurt.getMaterial();
-        mPowEyesClosed = powEyesClosed.getMaterial();
+        enemyMaterial[0] = pow[0].getMaterial();
+        enemyMaterial[1] = powHurt.getMaterial();
+        enemyMaterial[2] = powEyesClosed.getMaterial();
+        enemyMaterial[3] = powWeak.getMaterial();
+        enemyMaterial[4] = powDeath.getMaterial();
 
 		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
 		player = new CharacterControl(capsuleShape, 0.05f);
@@ -225,6 +227,17 @@ implements ActionListener {
         }
         return null;
     }
+    
+    
+    private void death(Spatial s) {
+        s.setMaterial(enemyMaterial[4]);
+        Spatial deathEnemy = s;
+        rootNode.attachChild(deathEnemy);
+        deathEnemy.setLocalTranslation(s.getLocalTranslation());
+        RigidBodyControl fDeathEnemy = new RigidBodyControl(1f);
+        deathEnemy.addControl(fDeathEnemy);
+        bulletAppState.getPhysicsSpace().add(fDeathEnemy);
+    }
 
 	public void onAction(String name, boolean isPressed, float tpf) {
             
@@ -257,20 +270,27 @@ implements ActionListener {
 		cam.setLocation(player.getPhysicsLocation());
 
 		for (int i=0; i < pow.length; i++){
-			pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
-            if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed()>2){
-                pow[i].getSpatial().setMaterial(mPowHurt);   
-            } else {
-                pow[i].setTimer(pow[i].getTimer()+tpf);
-                if (pow[i].getTimer()>7){
-                    pow[i].getSpatial().setMaterial(mPowEyesClosed);
-                    if (pow[i].getTimer()>7.1)
-                        pow[i].setTimer(1);
-                } else
-                    pow[i].getSpatial().setMaterial(mPowNormal);
+            if (!pow[i].isDeath()){
+			    pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
+            
+                if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed()>2){
+                    pow[i].getSpatial().setMaterial(enemyMaterial[1]);   
+                } else {
+                    pow[i].setTimer(pow[i].getTimer()+tpf);
+                    if (pow[i].getTimer()>7){
+                        pow[i].getSpatial().setMaterial(enemyMaterial[2]);
+                        if (pow[i].getTimer()>7.1)
+                            pow[i].setTimer(1);
+                    } else {
+                        if (pow[i].getHealth()>pow[i].getOriginalHealth()/2)
+                            pow[i].getSpatial().setMaterial(enemyMaterial[0]);
+                        else
+                            pow[i].getSpatial().setMaterial(enemyMaterial[3]);
+                    }
+                    
+                }
             }
         }
-
         
         for (int i=0; i < fire.length; i++){  
             if (fire[i].isShooted()){
@@ -291,6 +311,13 @@ implements ActionListener {
                 if (rEnemy.size()>0){
                     fire[i].setParticlesPerSec(0f);
                     fire[i].setShooted(false);
+                    String[] words = getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getName().split ("-");
+                    pow[Integer.parseInt(words[0])].setHealth(pow[Integer.parseInt(words[0])].getHealth()-1);
+                    if (pow[Integer.parseInt(words[0])].getHealth()==0){
+                        getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).removeFromParent(); 
+                        death(getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()));
+                        pow[Integer.parseInt(words[0])].setDeath(true);
+                    }
                     getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
                     getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(4);
                 }
