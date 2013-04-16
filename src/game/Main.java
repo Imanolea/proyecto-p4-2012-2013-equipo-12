@@ -18,7 +18,6 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
-import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
@@ -26,9 +25,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import java.util.LinkedList;
-
-
 
 
 public class Main extends SimpleApplication
@@ -46,13 +42,13 @@ implements ActionListener {
 	private CharacterControl player;
     private Node shootables;
 	private Vector3f walkDirection = new Vector3f();
-	private boolean left = false, right = false, up = false, down = false;
-        
-        public static Thread thread;
+	//private boolean camUpLimitsEstablished = false, camDownLimitsEstablished=false;
+    //private float yUpLocation=0, yUpLeft=0, yUpUp=0, yUpDirection=0, yDownLocation=0, yDownLeft=0, yDownUp=0, yDownDirection=0;
+    private boolean left = false, right = false, up = false, down = false;
 
 	public static void main(String[] args) {   
-               Main app = new Main();
-               app.start();                
+        Main app = new Main();
+        app.start();                
 	}
 
 	public void simpleInitApp() {
@@ -220,9 +216,8 @@ implements ActionListener {
     public Spatial getGeometrySpatial(Geometry geometry){
         Spatial s = geometry.getParent();
         while (s != null){
-            if (s.getName().endsWith("-entity")){
+            if (s.getName().endsWith("-entity"))
                 return s;
-            }
             s = s.getParent();
         }
         return null;
@@ -258,17 +253,52 @@ implements ActionListener {
 
 	public void simpleUpdate(float tpf) { 
             
-        
-		Vector3f camDir = cam.getDirection().clone().multLocal(0.6f);
 		Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
+        Vector3f camForward = cam.getDirection().clone().multLocal(0.6f);
+        camForward.y = 0;
 		walkDirection.set(0, 0, 0);
+        
 		if (left)  { walkDirection.addLocal(camLeft); }
 		if (right) { walkDirection.addLocal(camLeft.negate()); }
-		if (up)    { walkDirection.addLocal(camDir); }
-		if (down)  { walkDirection.addLocal(camDir.negate()); }
+		if (up)    { walkDirection.addLocal(camForward); }
+		if (down)  { walkDirection.addLocal(camForward.negate()); }
 		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.getPhysicsLocation());
-
+        
+        if (cam.getDirection().y>0.99){
+            
+            /*if (!camUpLimitsEstablished){
+                yUpLocation= cam.getLocation().y;
+                yUpLeft= cam.getLeft().y;
+                yUpUp= cam.getUp().y;
+                yUpDirection= cam.getDirection().y;
+                camUpLimitsEstablished=true;
+                System.out.println(yUpLocation);
+                System.out.println(yUpLeft);
+                System.out.println(yUpUp);
+                System.out.println(yUpDirection);
+            }*/
+            
+            cam.setFrame(new Vector3f(cam.getLocation().x, 4.6516128f,cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.4214387E-8f,cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870794f,cam.getUp().z), new Vector3f(cam.getDirection().x, 0.99033326f,cam.getDirection().z));
+        }
+        else if (cam.getDirection().y<-0.99){
+            
+            /*if (!camDownLimitsEstablished){
+                yDownLocation= cam.getLocation().y;
+                yDownLeft= cam.getLeft().y;
+                yDownUp= cam.getUp().y;
+                yDownDirection= cam.getDirection().y;
+                camDownLimitsEstablished=true;
+                System.out.println(yDownLocation);
+                System.out.println(yDownLeft);
+                System.out.println(yDownUp);
+                System.out.println(yDownDirection);
+            }*/
+            
+            cam.setFrame(new Vector3f(cam.getLocation().x, 4.652709f,cam.getLocation().z), new Vector3f(cam.getLeft().x, -3.501773E-7f,cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870472f,cam.getUp().z), new Vector3f(cam.getDirection().x, -0.9903338f,cam.getDirection().z));
+        } 
+            
+            
 		for (int i=0; i < pow.length; i++){
             if (!pow[i].isDeath()){
 			    pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
