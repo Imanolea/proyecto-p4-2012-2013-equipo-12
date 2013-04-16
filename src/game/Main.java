@@ -265,7 +265,7 @@ implements ActionListener {
 		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.getPhysicsLocation());
         
-        if (cam.getDirection().y>0.99){
+        if (cam.getDirection().y>0.99033326){
             
             /*if (!camUpLimitsEstablished){
                 yUpLocation= cam.getLocation().y;
@@ -281,7 +281,7 @@ implements ActionListener {
             
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.6516128f,cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.4214387E-8f,cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870794f,cam.getUp().z), new Vector3f(cam.getDirection().x, 0.99033326f,cam.getDirection().z));
         }
-        else if (cam.getDirection().y<-0.99){
+        else if (cam.getDirection().y<-0.9903338){
             
             /*if (!camDownLimitsEstablished){
                 yDownLocation= cam.getLocation().y;
