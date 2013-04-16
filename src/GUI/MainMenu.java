@@ -80,12 +80,12 @@ public class MainMenu extends JFrame {
     //private JButton playButton;
     //private JButton leaderboardsButton;
         
-        playButton.addActionListener(new ActionListener() {
+        /*playButton.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent ae) {
+            /*public void actionPerformed(ActionEvent ae) {
                 game.Main.thread.start();
             }
-        });
+        });*/
         
 
 
