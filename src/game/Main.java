@@ -42,8 +42,6 @@ implements ActionListener {
 	private CharacterControl player;
     private Node shootables;
 	private Vector3f walkDirection = new Vector3f();
-	//private boolean camUpLimitsEstablished = false, camDownLimitsEstablished=false;
-    //private float yUpLocation=0, yUpLeft=0, yUpUp=0, yUpDirection=0, yDownLocation=0, yDownLeft=0, yDownUp=0, yDownDirection=0;
     private boolean left = false, right = false, up = false, down = false;
 
 	public static void main(String[] args) {   
@@ -265,38 +263,10 @@ implements ActionListener {
 		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.getPhysicsLocation());
         
-        if (cam.getDirection().y>0.99033326){
-            
-            /*if (!camUpLimitsEstablished){
-                yUpLocation= cam.getLocation().y;
-                yUpLeft= cam.getLeft().y;
-                yUpUp= cam.getUp().y;
-                yUpDirection= cam.getDirection().y;
-                camUpLimitsEstablished=true;
-                System.out.println(yUpLocation);
-                System.out.println(yUpLeft);
-                System.out.println(yUpUp);
-                System.out.println(yUpDirection);
-            }*/
-            
+        if (cam.getDirection().y>0.99033326)    
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.6516128f,cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.4214387E-8f,cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870794f,cam.getUp().z), new Vector3f(cam.getDirection().x, 0.99033326f,cam.getDirection().z));
-        }
-        else if (cam.getDirection().y<-0.9903338){
-            
-            /*if (!camDownLimitsEstablished){
-                yDownLocation= cam.getLocation().y;
-                yDownLeft= cam.getLeft().y;
-                yDownUp= cam.getUp().y;
-                yDownDirection= cam.getDirection().y;
-                camDownLimitsEstablished=true;
-                System.out.println(yDownLocation);
-                System.out.println(yDownLeft);
-                System.out.println(yDownUp);
-                System.out.println(yDownDirection);
-            }*/
-            
+        else if (cam.getDirection().y<-0.9903338)         
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.652709f,cam.getLocation().z), new Vector3f(cam.getLeft().x, -3.501773E-7f,cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870472f,cam.getUp().z), new Vector3f(cam.getDirection().x, -0.9903338f,cam.getDirection().z));
-        } 
             
             
 		for (int i=0; i < pow.length; i++){
