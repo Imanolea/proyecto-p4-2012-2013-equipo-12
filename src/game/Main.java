@@ -20,6 +20,7 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -34,15 +35,19 @@ implements ActionListener {
 	private final int NUMERO_CARGAS = 5;
 
 	private Spatial sceneModel;
+    private Geometry cleanerShape;
 	private Enemy[] pow = new Enemy[NUMERO_ENEMIGOS];
 	private Bullet[] fire = new Bullet[NUMERO_CARGAS];
     private Material[] enemyMaterial = new Material[5];
 	private BulletAppState bulletAppState;
 	private RigidBodyControl landscape;
 	private CharacterControl player;
+    private Ray cleanerRay;
     private Node shootables;
+    private Node inhalables;
 	private Vector3f walkDirection = new Vector3f();
-    private boolean left = false, right = false, up = false, down = false;
+    private int enemiesCleaned;
+    private boolean left = false, right = false, up = false, down = false, aspire = false;
 
 	public static void main(String[] args) {   
         Main app = new Main();
@@ -53,12 +58,22 @@ implements ActionListener {
 
 		setDisplayFps(false);
 		setDisplayStatView(false);
-
+        
+        enemiesCleaned = 0;
+        
+        Box b = new Box(1f, 1f, 1f);
+        cleanerShape = new Geometry("Cleaner Shape", b);
+        
 		bulletAppState = new BulletAppState();
 		stateManager.attach(bulletAppState);
         
+        cleanerRay = new Ray(cam.getLocation(), cam.getDirection());
+        
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables);
+        
+        inhalables = new Node("Inhalables");
+        rootNode.attachChild(inhalables);
 
 		flyCam.setMoveSpeed(100);
 
@@ -80,7 +95,7 @@ implements ActionListener {
 
 		for (int i=0; i<pow.length; i++){
 			pow[i] = new Enemy(assetManager.loadModel("Models/Pow/Pow.j3o")) {};
-			pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
+            pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
             pow[i].getSpatial().setName(i+"-entity");
 			do{
 				pow[i].getSpatial().setLocalTranslation((float)Math.random()*56-28, (float)Math.random()*5+8, (float)Math.random()*56-28);
@@ -102,7 +117,7 @@ implements ActionListener {
         enemyMaterial[3] = powWeak.getMaterial();
         enemyMaterial[4] = powDeath.getMaterial();
 
-		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
+		CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
 		player = new CharacterControl(capsuleShape, 0.05f);
 		player.setGravity(30);
 		player.setPhysicsLocation(new Vector3f(0, 10, 0));
@@ -116,16 +131,18 @@ implements ActionListener {
 
 	private void setUpKeys() {
 
-		inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 		inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
 		inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
 		inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
 		inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
+        inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("Aspire", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
 		inputManager.addListener(this, "Left");
 		inputManager.addListener(this, "Right");
 		inputManager.addListener(this, "Up");
 		inputManager.addListener(this, "Down");
 		inputManager.addListener(this, "Shoot");
+        inputManager.addListener(this, "Aspire");
 	}
 
 	private Bullet createFire() {
@@ -192,9 +209,18 @@ implements ActionListener {
 		BitmapText ch = new BitmapText(guiFont, false);
 		ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
 		ch.setText("+");
+        
 		ch.setLocalTranslation(
 				settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
 				settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+        BitmapText ch2 = new BitmapText(guiFont, false);
+		ch2.setColor(ColorRGBA.White);
+		ch2.setSize(guiFont.getCharSet().getRenderedSize()*0.000004f*settings.getWidth()*settings.getHeight());
+		ch2.setText("Enemigos aspirados: "+enemiesCleaned);
+		ch2.setLocalTranslation(
+				settings.getWidth() / 25,
+				settings.getHeight() / 10, 0);
+		guiNode.attachChild(ch2);
 		guiNode.attachChild(ch);
 	}
 
@@ -222,14 +248,31 @@ implements ActionListener {
     }
     
     
-    private void death(Spatial s) {
+    private void death(Spatial s, int index) {
         s.setMaterial(enemyMaterial[4]);
-        Spatial deathEnemy = s;
-        rootNode.attachChild(deathEnemy);
-        deathEnemy.setLocalTranslation(s.getLocalTranslation());
-        RigidBodyControl fDeathEnemy = new RigidBodyControl(1f);
-        deathEnemy.addControl(fDeathEnemy);
-        bulletAppState.getPhysicsSpace().add(fDeathEnemy);
+        s.addControl(pow[index].getfDeathEnemy());
+        inhalables.attachChild(s);
+        bulletAppState.getPhysicsSpace().add(pow[index].getfDeathEnemy());
+    }
+    
+    private void aspire() {
+       CollisionResults rCleanerEnemy = new CollisionResults();
+       inhalables.collideWith(cleanerRay, rCleanerEnemy); 
+       rCleanerEnemy.toString();
+       if (rCleanerEnemy.size()>0){
+           String[] words = getGeometrySpatial(rCleanerEnemy.getClosestCollision().getGeometry()).getName().split ("-");
+           pow[Integer.parseInt(words[0])].setAspired(true);
+           pow[Integer.parseInt(words[0])].setHasBeenAspired(true);
+           pow[Integer.parseInt(words[0])].getfDeathEnemy().setLinearVelocity(cam.getDirection().mult(25f).negate());
+       }
+       else
+           for (int i = 0; i<pow.length; i++)
+            pow[i].setAspired(false);
+    }
+    
+    public void notAspire() {
+        for (int i = 0; i<pow.length; i++)
+            pow[i].setAspired(false);
     }
 
 	public void onAction(String name, boolean isPressed, float tpf) {
@@ -237,6 +280,9 @@ implements ActionListener {
 		if (name.equals("Shoot") && !isPressed) {
 			shootFire();
 		}
+        if (name.equals("Aspire")) {
+            if (isPressed) { aspire = true; } else { aspire = false; }
+        }
 		if (name.equals("Left")) {
 			if (isPressed) { left = true; } else { left = false; }
 		} else if (name.equals("Right")) {
@@ -250,7 +296,12 @@ implements ActionListener {
 	}
 
 	public void simpleUpdate(float tpf) { 
-            
+        
+        initCrossHairs();
+        
+        cleanerRay.setOrigin(cam.getLocation());
+        cleanerRay.setDirection(cam.getDirection());
+        
 		Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
         Vector3f camForward = cam.getDirection().clone().multLocal(0.6f);
         camForward.y = 0;
@@ -260,8 +311,10 @@ implements ActionListener {
 		if (right) { walkDirection.addLocal(camLeft.negate()); }
 		if (up)    { walkDirection.addLocal(camForward); }
 		if (down)  { walkDirection.addLocal(camForward.negate()); }
+        if (aspire) {aspire();} else {notAspire();}
 		player.setWalkDirection(walkDirection);
 		cam.setLocation(player.getPhysicsLocation());
+        cleanerShape.setLocalTranslation(player.getPhysicsLocation());
         
         if (cam.getDirection().y>0.99033326)    
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.6516128f,cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.4214387E-8f,cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870794f,cam.getUp().z), new Vector3f(cam.getDirection().x, 0.99033326f,cam.getDirection().z));
@@ -270,6 +323,7 @@ implements ActionListener {
             
             
 		for (int i=0; i < pow.length; i++){
+            Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
             if (!pow[i].isDeath()){
 			    pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
             
@@ -286,9 +340,24 @@ implements ActionListener {
                             pow[i].getSpatial().setMaterial(enemyMaterial[0]);
                         else
                             pow[i].getSpatial().setMaterial(enemyMaterial[3]);
-                    }
-                    
+                    }       
                 }
+            }
+            else{
+                CollisionResults rEnemyCleaner = new CollisionResults();
+                inhalables.collideWith(cleanerShape.getWorldBound(), rEnemyCleaner);
+                rEnemyCleaner.toString();
+                if (rEnemyCleaner.size()>0){
+                    String[] words = getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).getName().split ("-");
+                    if (pow[Integer.parseInt(words[0])].isHasBeenAspired()){
+                        getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).removeFromParent(); 
+                        enemiesCleaned++;
+                    }
+                }
+                if (pow[i].isAspired())
+                    pow[i].getfDeathEnemy().setGravity(new Vector3f(0,0f,0));
+                else
+                    pow[i].getfDeathEnemy().setGravity(new Vector3f(0,-9.81f,0));
             }
         }
         
@@ -313,13 +382,14 @@ implements ActionListener {
                     fire[i].setShooted(false);
                     String[] words = getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getName().split ("-");
                     pow[Integer.parseInt(words[0])].setHealth(pow[Integer.parseInt(words[0])].getHealth()-1);
-                    if (pow[Integer.parseInt(words[0])].getHealth()==0){
-                        getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).removeFromParent(); 
-                        death(getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()));
-                        pow[Integer.parseInt(words[0])].setDeath(true);
-                    }
                     getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
                     getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(4);
+                    if (pow[Integer.parseInt(words[0])].getHealth()==0){
+                        getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).removeFromParent(); 
+                        death(getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()), Integer.parseInt(words[0]));
+                        pow[Integer.parseInt(words[0])].getSpatial().removeControl(LevitationControl.class);
+                        pow[Integer.parseInt(words[0])].setDeath(true);
+                    }
                 }
             }
         }
