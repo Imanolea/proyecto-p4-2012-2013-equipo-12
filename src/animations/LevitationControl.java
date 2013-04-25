@@ -19,8 +19,10 @@ public class LevitationControl extends AbstractControl{
         if (getSpeed()>2){
             setSpeed(getSpeed() - 200*tpf);
         }
-        else
+        else{
             setTopUp(2);
+            setSpeed(2);
+        }
         
         if (up){
             spatial.move(0f, tpf*getSpeed()/20, 0f);
