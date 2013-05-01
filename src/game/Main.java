@@ -3,6 +3,8 @@ package game;
 import GUI.MainMenu;
 import animations.LevitationControl;
 import com.jme3.app.SimpleApplication;
+import com.jme3.bounding.BoundingBox;
+import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -43,10 +45,12 @@ implements ActionListener {
 	private RigidBodyControl landscape;
 	private CharacterControl player;
     private Ray cleanerRay;
+    private BoundingVolume boundEnemy;
     private Node shootables;
     private Node inhalables;
 	private Vector3f walkDirection = new Vector3f();
     private int enemiesCleaned;
+    private float spawnTimer;
     private boolean left = false, right = false, up = false, down = false, aspire = false;
 
 	public static void main(String[] args) {   
@@ -60,6 +64,7 @@ implements ActionListener {
 		setDisplayStatView(false);
         
         enemiesCleaned = 0;
+        spawnTimer = 0;
         
         Box b = new Box(1f, 1f, 1f);
         cleanerShape = new Geometry("Cleaner Shape", b);
@@ -75,8 +80,6 @@ implements ActionListener {
         inhalables = new Node("Inhalables");
         rootNode.attachChild(inhalables);
 
-		flyCam.setMoveSpeed(100);
-
 		setUpKeys();
 		setUpLight();
 
@@ -84,7 +87,8 @@ implements ActionListener {
 			fire[i] = createFire();
 
 		sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario.j3o");
-		sceneModel.setLocalScale(6f);
+		sceneModel.setName("Scene-entity");
+        sceneModel.setLocalScale(6f);
 
 		CollisionShape sceneShape =
 				CollisionShapeFactory.createMeshShape((Node) sceneModel);
@@ -105,6 +109,8 @@ implements ActionListener {
 			}while (rEnemigoEscenario.size()>0);
 			shootables.attachChild(pow[i].getSpatial());
 		}
+        
+        boundEnemy = pow[0].getSpatial().getWorldBound();
         
         Enemy powHurt = new Enemy (assetManager.loadModel("Models/Pow/PowHurt.j3o"));
         Enemy powEyesClosed = new Enemy (assetManager.loadModel("Models/Pow/PowEyesClosed.j3o"));
@@ -238,6 +244,7 @@ implements ActionListener {
 	}
     
     public Spatial getGeometrySpatial(Geometry geometry){
+
         Spatial s = geometry.getParent();
         while (s != null){
             if (s.getName().endsWith("-entity"))
@@ -245,8 +252,7 @@ implements ActionListener {
             s = s.getParent();
         }
         return null;
-    }
-    
+    }  
     
     private void death(Spatial s, int index) {
         s.setMaterial(enemyMaterial[4]);
@@ -274,6 +280,40 @@ implements ActionListener {
         for (int i = 0; i<pow.length; i++)
             pow[i].setAspired(false);
     }
+    
+    public void spawn (){
+        boolean found = false;
+        int c = -1;
+        for (int i=0; i<pow.length; i++){
+            if (pow[i].getSpatial().getParent()==null){
+                c = i;
+            }
+        }
+        if (c!=-1)
+            do{
+                pow[c].getSpatial().setLocalTranslation((float)Math.random()*56-28, (float)Math.random()*5+8, (float)Math.random()*56-28);
+                /*Ray r = new Ray(pow[c].getSpatial().getWorldTranslation(), player.getPhysicsLocation());
+                CollisionResults rEnemyPlayer = new CollisionResults();
+                r.collideWith(sceneModel.getWorldBound(), rEnemyPlayer);
+                rEnemyPlayer.toString();*/
+                CollisionResults rEnemigoEscenario = new CollisionResults();
+				sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
+				rEnemigoEscenario.toString();  
+                if (rEnemigoEscenario.size()<=0)
+                    //if (getGeometrySpatial(rEnemyPlayer.getClosestCollision().getGeometry()).getName()=="Scene-entity" && rEnemigoEscenario.size()<=0){
+                    found = true;
+                    pow[c].getSpatial().setMaterial(enemyMaterial[1]);
+                    pow[c].getSpatial().removeControl(pow[c].getfDeathEnemy());
+                    pow[c].setHealth(2);
+                    pow[c].setDeath(false);
+                    pow[c].setHasBeenAspired(false);
+                    pow[c].getfDeathEnemy().setGravity(new Vector3f(0,-9.81f,0));
+                    pow[c].setActive(false);
+                    pow[c].getSpatial().scale(0.1f);
+                    rootNode.attachChild(pow[c].getSpatial());
+                    //}
+            } while (!found);
+    }
 
 	public void onAction(String name, boolean isPressed, float tpf) {
             
@@ -299,6 +339,13 @@ implements ActionListener {
         
         initCrossHairs();
         
+        spawnTimer += tpf;
+        
+        if (spawnTimer > 15){
+           spawnTimer = 0;
+           spawn();
+        }
+        
         cleanerRay.setOrigin(cam.getLocation());
         cleanerRay.setDirection(cam.getDirection());
         
@@ -323,13 +370,20 @@ implements ActionListener {
             
             
 		for (int i=0; i < pow.length; i++){
+            if (!pow[i].isActive()){
+                pow[i].getSpatial().scale(1+tpf*3);
+                if (pow[i].getSpatial().getWorldBound().getVolume()>=boundEnemy.getVolume()){
+                    pow[i].setActive(true);
+                    shootables.attachChild(pow[i].getSpatial());
+                }
+            }
             Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
             if (!pow[i].isDeath()){
 			    pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
             
                 if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed()>2){
                     pow[i].getSpatial().setMaterial(enemyMaterial[1]);   
-                } else {
+                } else if (pow[i].isActive()){
                     pow[i].setTimer(pow[i].getTimer()+tpf);
                     if (pow[i].getTimer()>7){
                         pow[i].getSpatial().setMaterial(enemyMaterial[2]);
@@ -343,7 +397,7 @@ implements ActionListener {
                     }       
                 }
             }
-            else{
+            else {
                 CollisionResults rEnemyCleaner = new CollisionResults();
                 inhalables.collideWith(cleanerShape.getWorldBound(), rEnemyCleaner);
                 rEnemyCleaner.toString();
@@ -355,7 +409,7 @@ implements ActionListener {
                     }
                 }
                 if (pow[i].isAspired())
-                    pow[i].getfDeathEnemy().setGravity(new Vector3f(0,0f,0));
+                    pow[i].getfDeathEnemy().setGravity(Vector3f.ZERO);
                 else
                     pow[i].getfDeathEnemy().setGravity(new Vector3f(0,-9.81f,0));
             }
@@ -387,7 +441,6 @@ implements ActionListener {
                     if (pow[Integer.parseInt(words[0])].getHealth()==0){
                         getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).removeFromParent(); 
                         death(getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()), Integer.parseInt(words[0]));
-                        pow[Integer.parseInt(words[0])].getSpatial().removeControl(LevitationControl.class);
                         pow[Integer.parseInt(words[0])].setDeath(true);
                     }
                 }
