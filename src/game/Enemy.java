@@ -13,6 +13,7 @@ public class Enemy {
     private RigidBodyControl fDeathEnemy;
     private int health;
     private boolean death;
+    private boolean active;
     private boolean aspired;
     private boolean hasBeenAspired;
     
@@ -22,6 +23,7 @@ public class Enemy {
         death = false;
         fDeathEnemy = new RigidBodyControl(1f);
         hasBeenAspired = false;
+        active = true;
     }
     
     public Enemy(Spatial s) {
@@ -30,6 +32,7 @@ public class Enemy {
         death = false;
         fDeathEnemy = new RigidBodyControl(1f);
         hasBeenAspired = false;
+        active = true;
     }
 
     public void setSpatial(Spatial spatial) {
@@ -115,6 +118,20 @@ public class Enemy {
      */
     public void setHasBeenAspired(boolean hasBeenAspired) {
         this.hasBeenAspired = hasBeenAspired;
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }
