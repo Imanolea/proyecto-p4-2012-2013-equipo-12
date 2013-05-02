@@ -20,6 +20,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
@@ -66,7 +67,7 @@ implements ActionListener {
         enemiesCleaned = 0;
         spawnTimer = 0;
         
-        Box b = new Box(1f, 1f, 1f);
+        Box b = new Box(1.1f, 1.1f, 1.1f);
         cleanerShape = new Geometry("Cleaner Shape", b);
         
 		bulletAppState = new BulletAppState();
@@ -205,6 +206,11 @@ implements ActionListener {
 		l6.setColor(ColorRGBA.White);
 		l6.setDirection(new Vector3f(0,5f,0).normalizeLocal());
 		rootNode.addLight(l6);
+        
+        /*PointLight p1 = new PointLight();
+		p1.setColor(ColorRGBA.White);
+        p1.setPosition(new Vector3f(1,1,1));
+		rootNode.addLight(p1);*/
 
 	}
 
