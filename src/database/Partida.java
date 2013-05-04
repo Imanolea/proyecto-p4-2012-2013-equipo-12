@@ -15,7 +15,6 @@ public class Partida {
 	private Timestamp fecha_hora;
 	private String puntuacion;
 	private String nivel;
-	private String ranking;
 	private String disparos_ac;
 	private String disparos_tot;
 	private String muertes;
@@ -31,7 +30,7 @@ public class Partida {
 		this.fecha_h = fecha_h;
 	}
 
-	public Partida(String cod_u, String puntuacion, String nivel, String ranking, 
+	public Partida(String cod_u, String puntuacion, String nivel,
 	String disparos_ac, String disparos_tot, String muertes, double tiempo){
 		this.cod_u = cod_u;
 		//Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -45,21 +44,19 @@ public class Partida {
 		this.fecha_hora = sqlTimestamp;
 		this.puntuacion = puntuacion;
 		this.nivel = nivel;
-		this.ranking = ranking;
 		this.disparos_ac = disparos_ac;
 		this.disparos_tot = disparos_tot;
 		this.muertes = muertes;
 		this.tiempo = tiempo;
 	}
 	
-	public Partida(String cod_u, String puntuacion, String nivel, String ranking, 
+	public Partida(String cod_u, String puntuacion, String nivel, 
 			String disparos_ac, String disparos_tot, String muertes, double tiempo,String fecha) {
 		
 		this.cod_u = cod_u;
 		this.fecha_h = fecha;
 		this.puntuacion = puntuacion;
 		this.nivel = nivel;
-		this.ranking = ranking;
 		this.disparos_ac = disparos_ac;
 		this.disparos_tot = disparos_tot;
 		this.muertes = muertes;
@@ -96,14 +93,6 @@ public class Partida {
 
 	public void setNivel(String nivel) {
 		this.nivel = nivel;
-	}
-
-	public String getRanking() {
-		return ranking;
-	}
-
-	public void setRanking(String ranking) {
-		this.ranking = ranking;
 	}
 
 	public String getDisparos_ac() {
