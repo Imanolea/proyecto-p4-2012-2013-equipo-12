@@ -79,6 +79,66 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable{
 		}
 		desconectar();
 	}
+
+        public void listarTop10(){
+		conectar();
+		try{
+			// Ahora utilizamos las sentencias de BD
+			String query = "SELECT * FROM TOP;";
+			statement = conn.createStatement();
+			rs = statement.executeQuery(query);
+                        int i = 1;
+			// y recorremos lo obtenido
+			while (rs.next() && i<=10) {
+				String nick = "" + rs.getString("NICK");
+				System.out.println("NICK: "+nick);
+                                String name = "" + rs.getString("PUNTUACION");
+				System.out.println("PUNTUACION: "+name);
+				String nivel  = "" + rs.getString("NIVEL");
+				System.out.println("NIVEL: "+nivel);
+				String disparos_ac = "" + rs.getString("DISPAROS_AC");
+				System.out.println("DISPAROS_AC: "+disparos_ac);
+				String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+				System.out.println("DISPAROS_TOT: "+disparos_tot);
+				String tiempo = "" + rs.getString("TIEMPO");
+				System.out.println("TIEMPO: "+tiempo);
+                                System.out.println("TIEMPO: "+(int)Float.parseFloat(tiempo)/3600+"horas, "+(int)(Float.parseFloat(tiempo)%3600)/1+"minutos, "+(int)(Float.parseFloat(tiempo)%360)%1+"segundos.");
+                                System.out.println("--");
+                                i++;
+			}
+			rs.close();
+			statement.close();
+		}catch(SQLException e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecucion de sentencias SQLite.", "La conexion no pudo ser establecida", 2);
+		}
+		desconectar();
+	}
+        
+        public void mostrarDisparosTopporciento(){
+            conectar();
+		try{
+			// Ahora utilizamos las sentencias de BD
+			String query = "SELECT NICK, DISPAROS_AC, DISPAROS_TOT FROM TOP;";
+			statement = conn.createStatement();
+			rs = statement.executeQuery(query);
+			// y recorremos lo obtenido
+			while (rs.next()) {
+                            	String nick = "" + rs.getString("NICK");
+				String disparos_ac = "" + rs.getString("DISPAROS_AC");
+				String disparos_tot = "" + rs.getString("DISPAROS_TOT"); 
+				System.out.println("PORCENTAJE ACIERTOS por "+nick+": "+(Integer.parseInt(disparos_ac)*100)/Integer.parseInt(disparos_tot));
+
+                                System.out.println("--");
+			}
+			rs.close();
+			statement.close();
+		}catch(SQLException e){
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecucion de sentencias SQLite.", "La conexion no pudo ser establecida", 2);
+		}
+		desconectar();
+        }
 	
 	public void agregarPerfil(Jugador jugador){
 		conectar();
@@ -106,23 +166,21 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable{
 		String fecha_horaS =fecha_hora.toString();
 		String puntuacion = partida.getPuntuacion();
 		String nivel = partida.getNivel();
-		String ranking = partida.getRanking();
 		String disparos_ac = partida.getDisparos_ac();
 		String disparos_tot = partida.getDisparos_tot();
 		String muertes = partida.getMuertes();
 		double tiempo = partida.getTiempo();
 		
 		try {
-			ps = conn.prepareStatement("INSERT INTO PARTIDA VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			ps = conn.prepareStatement("INSERT INTO PARTIDA VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, cod_u);
 			ps.setString(2, fecha_horaS);
 			ps.setString(3, puntuacion);
 			ps.setString(4, nivel);
-			ps.setString(5, ranking);
-			ps.setString(6, disparos_ac);
-			ps.setString(7, disparos_tot);
-			ps.setString(8, muertes);
-			ps.setDouble(9, tiempo);
+			ps.setString(5, disparos_ac);
+			ps.setString(6, disparos_tot);
+			ps.setString(7, muertes);
+			ps.setDouble(8, tiempo);
 			ps.executeUpdate();
 			ps.close();
 			desconectar();
@@ -148,8 +206,6 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable{
 				System.out.println("PUNTUACION: "+name);
 				String nivel  = "" + rs.getString("NIVEL");
 				System.out.println("NIVEL: "+nivel);
-				String ranking = "" + rs.getString("RANKING");
-				System.out.println("RANKING: "+ranking);
 				String disparos_ac = "" + rs.getString("DISPAROS_AC");
 				System.out.println("DISPAROS_AC: "+disparos_ac);
 				String disparos_tot = "" + rs.getString("DISPAROS_TOT");
@@ -172,12 +228,14 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable{
 	
 	
 	public static void main(String[] args){
-		//Jugador Imanol = new Jugador("387", "Imanolea", "Imanol.Barriuso");
+		//Jugador Imanol = new Jugador("13", "Jon Ander", "Jonan");
 		//getInstance().agregarPerfil(Imanol);
 		
-		//Partida partidita = new Partida("123", "100", "2", "3", "19", "100", "9", 128);
+		//Partida partidita = new Partida("13", "900", "3", "900", "1200", "9", 12800);
 		//getInstance().agregarPartida(partidita);
-		getInstance().listarEstadisticasPartidas();
+		//getInstance().listarEstadisticasPartidas();
+                getInstance().listarTop10();
+                getInstance().mostrarDisparosTopporciento();
 		//getInstance().listarEstadisticasJugares();
 	}
 }
