@@ -43,7 +43,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private InputManager inputManager;
     private ViewPort viewPort;
     private SimpleApplication app;
-    private MainApp game = null;
+    public MainApp game = null;
     private AppActionListener actionListener = new AppActionListener();
     private AudioRenderer audioRenderer;
     private ViewPort guiViewPort;
@@ -51,7 +51,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private FlyByCamera flyCam;
     private Nifty nifty;
     private String titulos[][] = {{"Comienzo", "Start"},
-        {"Estadísticas", "Statistics"}, {"¿?", "?¿"}, {"Salir", "Quit"}};
+        {"Estadísticas", "Statistics"}, {"Registrarse", "SIGN UP"}, {"Salir", "Quit"}};
     private int i = 0;
 
     public MenuState(MainApp game) {
@@ -103,12 +103,12 @@ public class MenuState extends AbstractAppState implements ScreenController {
         // enable depth test and back-face culling for performance
         app.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-     
+
         // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
-       
+
 
         if (niftyDisplay == null) {
             niftyDisplay = new NiftyJmeDisplay(
@@ -230,7 +230,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         width("55%");
 
                                         // GUI element
-                                        control(new ButtonBuilder("Button_", titulos[2][i]) {
+                                        control(new ButtonBuilder("Button_SIGN_UP", titulos[2][i]) {
                                             {
                                                 alignCenter();
                                                 valignCenter();
@@ -238,7 +238,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("80%");
                                                 visibleToMouse(true);
-                                                interactOnClick("changeLanguage(this, 0)");
+                                                interactOnClick("startInput()");
                                             }
                                         });
                                     }
@@ -427,29 +427,29 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     }
 
-    public void stateAttached(AppStateManager stateManager) {
+    public void stateAttached(AppStateManager stateManager){
         //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
-
+        super.stateAttached(stateManager);
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
-//      
+
+
     }
 
     @Override
-    public void stateDetached(AppStateManager stateManager) {
-
-
+    public void stateDetached(AppStateManager stateManager){
+        super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
-        game.getGUIViewPort().removeProcessor(niftyDisplay);
+        //game.getGUIViewPort().removeProcessor(niftyDisplay);
     }
 
     public void render(RenderManager rm) {
     }
 
     public void startGame() {
-        
-        nifty.exit();
+
+        //nifty.exit();
         game.loadGame();
         nifty.removeScreen("MenuScreen");
 
@@ -461,5 +461,27 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void loadMenu() {
         game.loadMenu();
+
+    }
+
+    public void startInput() {
+
+        // nifty.exit();
+        nifty.removeScreen("MenuScreen");
+        game.loadInput();
+
+
+    }
+
+    public void exit() {
+        System.exit(0);
+    }
+
+    public void loadMenu2() {
+        InputState.b = true;
+        nifty.removeScreen("InputScreen");
+
+        game.loadMenu();
+        niftyDisplay.cleanup();
     }
 }
