@@ -1,16 +1,27 @@
 /*
- * PROBLEMAS A SOLUCIONAR:
- *  - como llamar desde una clase al juego (--> ERROR) O, de lo contrario, llamar a la ventana desde el juego
- *  - mostrar ventana con estadisticas cargadas
- *  - repintar ventana en caso de cambio de lenguaje
- *  - actualizar valores desde otra clase, como el caso de la i
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
+package game;
 
-
-package GUI;
-
+import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioRenderer;
+import com.jme3.font.BitmapFont;
+import com.jme3.font.BitmapText;
+import com.jme3.input.FlyByCamera;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.material.RenderState;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Node;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -20,49 +31,104 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import game.Main;
-import game.Main;
 
-public class MainScreen extends SimpleApplication implements ScreenController {
+public class MenuState extends AbstractAppState implements ScreenController {
 
-    //private String titulos[][] = new String[2][4];
+    protected Node rootNode = new Node("Root Node");
+    protected Node guiNode = new Node("Gui Node");
+    protected BitmapText menuText;
+    protected BitmapFont menuFont;
+    private AssetManager assetManager;
+    private AppStateManager stateManager;
+    private InputManager inputManager;
+    private ViewPort viewPort;
+    private SimpleApplication app;
+    private MainApp game = null;
+    private AppActionListener actionListener = new AppActionListener();
+    private AudioRenderer audioRenderer;
+    private ViewPort guiViewPort;
+    private NiftyJmeDisplay niftyDisplay;
+    private FlyByCamera flyCam;
+    private Nifty nifty;
     private String titulos[][] = {{"Comienzo", "Start"},
         {"Estadísticas", "Statistics"}, {"¿?", "?¿"}, {"Salir", "Quit"}};
     private int i = 0;
 
-    public static void main(String[] args) {
-        MainScreen app = new MainScreen();
-        app.start();
+    public MenuState(MainApp game) {
+        this.game = game;
     }
-    
-    public static void startMainScreen() {
-        MainScreen app = new MainScreen();
-        app.start();
+
+    public void bind(Nifty nifty, Screen screen) {
+        this.nifty = nifty;
+    }
+
+    public void onStartScreen() {
+    }
+
+    public void onEndScreen() {
+    }
+
+    private class AppActionListener implements ActionListener {
+
+        public void onAction(String name, boolean value, float tpf) {
+            if (!value) {
+                return;
+            }
+
+        }
+    }
+
+    public void loadFPSText() {
+        menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+        menuText = new BitmapText(menuFont, false);
+        menuText.setSize(menuFont.getCharSet().getRenderedSize());
+        menuText.setLocalTranslation(0, (game.getContext().getSettings().getHeight() / 2f) - (menuText.getLineHeight() / 2f), 0);
+        menuText.setText("Frames per second");
+        guiNode.attachChild(menuText);
     }
 
     @Override
-    public void simpleInitApp() {
-        
-        final MainScreen aplicacion = this;
-        
-        NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(
-                assetManager, inputManager, audioRenderer, guiViewPort);
-        Nifty nifty = niftyDisplay.getNifty();
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app);
+        this.game = (MainApp) game; // can cast Application to something more specific
 
+        this.assetManager = this.game.getAssetManager();
+        this.stateManager = this.game.getStateManager();
+        this.inputManager = this.game.getInputManager();
+        this.viewPort = this.game.getViewPort();
+        this.audioRenderer = this.game.getAudioRenderer();
+        this.guiViewPort = this.game.getGuiViewPort();
+        this.flyCam = new FlyByCamera(game.getCamera());
+
+        // enable depth test and back-face culling for performance
+        app.getRenderer().applyRenderState(RenderState.DEFAULT);
+
+     
+        // Init input
+        if (game.getInputManager() != null) {
+            game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
+        }
+       
+
+        if (niftyDisplay == null) {
+            niftyDisplay = new NiftyJmeDisplay(
+                    assetManager, inputManager, audioRenderer, guiViewPort);
+
+        }
+        nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
-
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
 
         inputManager.setCursorVisible(true);
-        
-        System.out.print("Escribo el numero"+i);
+
+
 
         // <screen>
         nifty.addScreen("MenuScreen", new ScreenBuilder("Menu") {
             {
-                controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
+                controller(new MenuState(game)); // This connects the Java class StartingScreen and the GUI screen.     
 
                 // <layer>
                 layer(new LayerBuilder("Layer_ID") {
@@ -78,7 +144,7 @@ public class MainScreen extends SimpleApplication implements ScreenController {
                                 width("50%");
 
                                 // add text
-                            
+
                                 text(new TextBuilder() {
                                     {
                                         text("POWDERS");
@@ -124,7 +190,7 @@ public class MainScreen extends SimpleApplication implements ScreenController {
                                                 height("50%");
                                                 width("80%");
                                                 visibleToMouse(true);
-                                                interactOnClick("startPowders()");
+                                                interactOnClick("startGame()");
                                             }
                                         });
                                     }
@@ -172,7 +238,6 @@ public class MainScreen extends SimpleApplication implements ScreenController {
                                                 height("50%");
                                                 width("80%");
                                                 visibleToMouse(true);
-                                                PowdersScreenController.changeLanguage(aplicacion, i);
                                                 interactOnClick("changeLanguage(this, 0)");
                                             }
                                         });
@@ -309,9 +374,9 @@ public class MainScreen extends SimpleApplication implements ScreenController {
                                                         filename("Pictures/esp.jpg");
                                                         System.out.print("DddESAPAÑA");
                                                         visibleToMouse(true);
-                                                        
+
                                                         interactOnClick("aplicacion.getI()");
-                                                        
+
                                                     }
                                                 });
 
@@ -342,33 +407,59 @@ public class MainScreen extends SimpleApplication implements ScreenController {
         }.build(nifty));
         // </screen>
 
+        game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("MenuScreen"); // it is used to start the screen
+//loadMenu();
+    }
+
+    @Override
+    public void update(float tpf) {
+        super.update(tpf);
+
+
+
+        // simple update and root node
+
+        rootNode.updateLogicalState(tpf);
+        guiNode.updateLogicalState(tpf);
+        rootNode.updateGeometricState();
+        guiNode.updateGeometricState();
+
+    }
+
+    public void stateAttached(AppStateManager stateManager) {
+        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
+
+        game.getViewPort().attachScene(rootNode);
+        game.getGUIViewPort().attachScene(guiNode);
+//      
+    }
+
+    @Override
+    public void stateDetached(AppStateManager stateManager) {
+
+
+        game.getViewPort().detachScene(rootNode);
+        game.getGUIViewPort().detachScene(guiNode);
+        game.getGUIViewPort().removeProcessor(niftyDisplay);
+    }
+
+    public void render(RenderManager rm) {
     }
 
     public void startGame() {
-        System.out.print("FUNCIONAAAA EL START");
-        Main game = new Main();
-        game.start();
+        
+        nifty.exit();
+        game.loadGame();
+        nifty.removeScreen("MenuScreen");
+
     }
 
-    public void bind(Nifty nifty, Screen screen) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void quitGame() {
+        game.stop();
     }
 
-    public void onStartScreen() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void onEndScreen() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public int getI() {
-        System.out.print(i);
-        return i;
-    }
-
-    public void setI(int entero) {
-        i = entero;
+    public void loadMenu() {
+        game.loadMenu();
     }
 }

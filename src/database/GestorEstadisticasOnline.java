@@ -1,7 +1,6 @@
 package database;
 
 
-import database.Conectable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.sql.Connection;
@@ -145,7 +144,7 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 		String fecha_horaS =fecha_hora.toString();
 		String puntuacion = partida.getPuntuacion();
 		String nivel = partida.getNivel();
-		String ranking = partida.getRanking();
+		
 		String disparos_ac = partida.getDisparos_ac();
 		String disparos_tot = partida.getDisparos_tot();
 		String muertes = partida.getMuertes();
@@ -157,7 +156,7 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 			ps.setString(2, fecha_horaS);
 			ps.setString(3, puntuacion);
 			ps.setString(4, nivel);
-			ps.setString(5, ranking);
+			
 			ps.setString(6, disparos_ac);
 			ps.setString(7, disparos_tot);
 			ps.setString(8, muertes);
@@ -219,7 +218,7 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 				double numero=Double.valueOf(tiempod).doubleValue();
 
 
-				Partida p = new Partida(cod_u,punt,nivel,ranking,disparos_ac,disparos_tot,muertos,numero,fecha_hora);
+				Partida p = new Partida(cod_u,punt,nivel,disparos_ac,disparos_tot,muertos,numero,fecha_hora);
 
 				a.add(p);
 
@@ -231,7 +230,7 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 
 				String pos= "" + s;
 
-				((Partida) a.get(s-1)).setRanking(pos);
+				
 			}
 
 			String dataValues[][]= new String[a.size()][10];
@@ -243,31 +242,31 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 				String b= parTempx.getFecha_h();
 				String c= parTempx.getPuntuacion();
 				String d= parTempx.getNivel();
-				String f= parTempx.getRanking();
+				
 				String h= parTempx.getDisparos_ac();
 				String tot= parTempx.getDisparos_tot();
 				String dm= parTempx.getMuertes();
 
 
-				dataValues[x][0]=f;
-
-				dataValues[x][1]=cod;
 				
-				dataValues[x][2]=b;
 
-				dataValues[x][3]=c;
+				dataValues[x][0]=cod;
+				
+				dataValues[x][1]=b;
 
-				dataValues[x][4]=d;
+				dataValues[x][2]=c;
 
-				dataValues[x][5]=h;
+				dataValues[x][3]=d;
 
-				dataValues[x][6]=dm;
+				dataValues[x][4]=h;
 
-				dataValues[x][7]=tot;
+				dataValues[x][5]=dm;
+
+				dataValues[x][6]=tot;
 
 				String tiempo = "" + parTempx.getTiempo();
 
-				dataValues[x][8]=tiempo;
+				dataValues[x][7]=tiempo;
 
 
 			}
@@ -291,8 +290,8 @@ public class GestorEstadisticasOnline extends JFrame implements Conectable{
 		//Partida p = new Partida ("S","ss","dd","22","344","23","232",23);
 		//getInstance().agregarPartida(p);
 		getInstance().listarEstadisticasJugares();
-		//getInstance().listarEstadisticasPartidas();
-		getInstance().borrarPartidas();
+		getInstance().listarEstadisticasPartidas();
+		//getInstance().borrarPartidas();
 
 	}
 }
