@@ -62,12 +62,13 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Camera cam;
     private ViewPort viewPort;
     private BulletAppState physics;
-    private final int NUMERO_ENEMIGOS = 20;
-    private final int NUMERO_CARGAS = 5;
+    private final int NUMBER_ENEMIES = 20;
+    private final int NUMBER_CHARGES = 5;
+    private final int CLEANER_CAPACITY = 5;
     private Spatial sceneModel;
     private Geometry cleanerShape;
-    private Enemy[] pow = new Enemy[NUMERO_ENEMIGOS];
-    private Bullet[] fire = new Bullet[NUMERO_CARGAS];
+    private Enemy[] pow = new Enemy[NUMBER_ENEMIES];
+    private Bullet[] fire = new Bullet[NUMBER_CHARGES];
     private Material[] enemyMaterial = new Material[5];
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
@@ -76,6 +77,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private BoundingVolume boundEnemy;
     private Node shootables;
     private Node inhalables;
+    private Node aspiredEnemies;
     private Node guiNode = new Node();
     private Vector3f walkDirection = new Vector3f();
     private int enemiesCleaned;
@@ -85,7 +87,6 @@ public class GameState extends AbstractAppState implements ActionListener {
     public GameState(MainApp game) {
         this.game = game;
     }
-
    
 
     private class AppActionListener implements ActionListener {
@@ -165,6 +166,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables);
+        
+        aspiredEnemies = new Node("Aspired enemies");
+        rootNode.attachChild(aspiredEnemies);
 
         inhalables = new Node("Inhalables");
         rootNode.attachChild(inhalables);
@@ -218,27 +222,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         player = new CharacterControl(capsuleShape, 0.05f);
         player.setGravity(30);
         player.setPhysicsLocation(new Vector3f(0, 10, 0));
-        
-        Spatial portal = assetManager.loadModel("Models/Portal/Portal.j3o");
-        Spatial portal2 = assetManager.loadModel("Models/Portal/Portal2.j3o");
-        Spatial portal3 = assetManager.loadModel("Models/Portal/Portal3.j3o");
-        Spatial portal4 = assetManager.loadModel("Models/Portal/Portal4.j3o");
-        Spatial portal5 = assetManager.loadModel("Models/Portal/Portal5.j3o");
-        portal.move(9, 0, 1);
-        portal2.move(-9, 0, 1);
-        portal3.move(0, 0, 12);
-        portal4.move(0, 0, -4);
-        portal5.move(9, 0, -4);
-        portal.scale(3);
-        portal2.scale(3);
-        portal3.scale(3);
-        portal4.scale(3);
-        portal5.scale(3);
-        rootNode.attachChild(portal);
-        rootNode.attachChild(portal2);
-        rootNode.attachChild(portal3);
-        rootNode.attachChild(portal4);
-        rootNode.attachChild(portal5);
 
 
         rootNode.attachChild(sceneModel);
@@ -272,22 +255,34 @@ public class GameState extends AbstractAppState implements ActionListener {
         cleanerRay.setOrigin(cam.getLocation());
         cleanerRay.setDirection(cam.getDirection());
 
-        Vector3f camLeft = cam.getLeft().clone().multLocal(0.4f);
-        Vector3f camForward = cam.getDirection().clone().multLocal(0.6f);
+        Vector3f camLeft = cam.getLeft().clone().multLocal(0.33f);
+        Vector3f camForward = cam.getDirection().clone().multLocal(0.5f);
         camForward.y = 0;
         walkDirection.set(0, 0, 0);
 
-        if (left) {
+        if (left && !up && !down) {
             walkDirection.addLocal(camLeft);
         }
-        if (right) {
+        if (right && !up && !down) {
             walkDirection.addLocal(camLeft.negate());
         }
-        if (up) {
+        if (up && !right && !left) {
             walkDirection.addLocal(camForward);
         }
-        if (down) {
+        if (down && !right && !left) {
             walkDirection.addLocal(camForward.negate());
+        }
+        if (left && up){
+            walkDirection.addLocal(camLeft.add(camForward).divide(1.5f));
+        }
+        if (left && down){
+            walkDirection.addLocal(camLeft.add(camForward.negate()).divide(1.5f));
+        }
+        if (right && up){
+            walkDirection.addLocal(camLeft.negate().add(camForward).divide(1.5f));
+        }
+        if (right && down){
+            walkDirection.addLocal(camLeft.negate().add(camForward.negate()).divide(1.5f));
         }
         if (aspire) {
             aspire();
@@ -340,8 +335,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                 rEnemyCleaner.toString();
                 if (rEnemyCleaner.size() > 0) {
                     String[] words = getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).getName().split("-");
-                    if (pow[Integer.parseInt(words[0])].isHasBeenAspired()) {
-                        getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).removeFromParent();
+                    if (pow[Integer.parseInt(words[0])].isHasBeenAspired() && enemiesCleaned<CLEANER_CAPACITY) {
+                        pow[Integer.parseInt(words[0])].getfDeathEnemy().setLinearVelocity(Vector3f.ZERO);
+                        pow[Integer.parseInt(words[0])].getSpatial().removeControl(pow[Integer.parseInt(words[0])].getfDeathEnemy());
+                        pow[Integer.parseInt(words[0])].getSpatial().move(0, 30, 0);
+                        bulletAppState.getPhysicsSpace().remove(pow[Integer.parseInt(words[0])].getfDeathEnemy());
+                        aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
                         enemiesCleaned++;
                     }
                 }
@@ -429,12 +428,30 @@ public class GameState extends AbstractAppState implements ActionListener {
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("Aspire", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        inputManager.addMapping("Throw", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener(this, "Left");
         inputManager.addListener(this, "Right");
         inputManager.addListener(this, "Up");
         inputManager.addListener(this, "Down");
         inputManager.addListener(this, "Shoot");
         inputManager.addListener(this, "Aspire");
+        inputManager.addListener(this, "Throw");
+    }
+    
+    private void throwEnemies() {
+        for (int i=0; i<pow.length; i++){
+            if (pow[i].getSpatial().getParent()==aspiredEnemies){
+                pow[i].getSpatial().removeFromParent();
+                pow[i].setHasBeenAspired(false);
+                inhalables.attachChild(pow[i].getSpatial());
+                pow[i].getSpatial().setLocalTranslation(cam.getLocation().add(cam.getDirection()));
+                pow[i].getSpatial().addControl(pow[i].getfDeathEnemy());
+                bulletAppState.getPhysicsSpace().add(pow[i].getfDeathEnemy());
+                pow[i].getfDeathEnemy().setLinearVelocity(cam.getDirection().mult(30));
+                enemiesCleaned-=1;
+                i=pow.length;
+            }
+        }
     }
 
     private Bullet createFire() {
@@ -517,7 +534,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         ch2.setColor(ColorRGBA.White);
         ch2.setSize(40);
-        ch2.setText("Enemigos aspirados: " + enemiesCleaned);
+        ch2.setText("Enemigos aspirados: " + enemiesCleaned+"/"+CLEANER_CAPACITY);
         ch2.setLocalTranslation(
                 settings.getWidth() / 25,
                 settings.getHeight() / 10, 0);
@@ -591,7 +608,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         if (c != -1) {
             do {
-                pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                //pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                pow[c].getSpatial().setLocalTranslation(1,10,1);
                 /*Ray r = new Ray(pow[c].getSpatial().getWorldTranslation(), player.getPhysicsLocation());
                  CollisionResults rEnemyPlayer = new CollisionResults();
                  r.collideWith(sceneModel.getWorldBound(), rEnemyPlayer);
@@ -608,7 +626,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                 pow[c].setHealth(2);
                 pow[c].setDeath(false);
                 pow[c].setHasBeenAspired(false);
-                pow[c].getfDeathEnemy().setGravity(new Vector3f(0, -9.81f, 0));
                 pow[c].setActive(false);
                 pow[c].getSpatial().scale(0.1f);
                 rootNode.attachChild(pow[c].getSpatial());
@@ -621,6 +638,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         if (name.equals("Shoot") && !isPressed) {
             shootFire();
+        }
+        if (name.equals("Throw") && !isPressed) {
+            throwEnemies();
         }
         if (name.equals("Aspire")) {
             if (isPressed) {
