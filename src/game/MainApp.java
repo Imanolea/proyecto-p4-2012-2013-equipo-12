@@ -16,6 +16,7 @@ public class MainApp extends Application {
    private GameState te = null;
    private MenuState ms = null;
    private AppSettings s;
+   private InputState is = null;
    
    public MainApp() {
       
@@ -47,6 +48,7 @@ public class MainApp extends Application {
       // Create the States
       ms = new MenuState(this);
       te = new GameState(this);
+      is = new InputState(this);
       
       // Attach MenuState
       getStateManager().attach(ms);
@@ -69,6 +71,16 @@ public class MainApp extends Application {
 
    public void loadMenu() {
       getStateManager().detach(te);
+      getStateManager().attach(ms);
+   }
+   
+   public void loadInput() {
+       
+      getStateManager().detach(ms);
+      getStateManager().attach(is);
+   }
+      public void loadMenu2() {
+      getStateManager().detach(is);
       getStateManager().attach(ms);
    }
    
