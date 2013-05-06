@@ -6,7 +6,6 @@
 package game;
 
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -485,8 +484,9 @@ public class InputState extends AbstractAppState implements ScreenController {
     public void startInput() {
 
         //nifty.exit();
-        game.loadInput();
         nifty.removeScreen("MenuScreen");
+        game.loadInput();
+        
 
     }
 

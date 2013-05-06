@@ -82,6 +82,10 @@ public class MainApp extends Application {
       getStateManager().detach(ms);
       getStateManager().attach(is);
    }
+      public void loadMenu2() {
+      getStateManager().detach(is);
+      getStateManager().attach(ms);
+   }
    
    public AppSettings getSettings()
    {

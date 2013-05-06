@@ -478,10 +478,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void loadMenu2() {
-        InputState.b = true;
+        
         nifty.removeScreen("InputScreen");
 
-        game.loadMenu();
+        game.loadMenu2();
         niftyDisplay.cleanup();
     }
 }
