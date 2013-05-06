@@ -155,7 +155,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemiesCleaned = 0;
         spawnTimer = 0;
 
-        Box b = new Box(1.1f, 1.1f, 1.1f);
+        Box b = new Box(1.3f, 1.3f, 1.3f);
         cleanerShape = new Geometry("Cleaner Shape", b);
 
         bulletAppState = new BulletAppState();
@@ -218,7 +218,27 @@ public class GameState extends AbstractAppState implements ActionListener {
         player = new CharacterControl(capsuleShape, 0.05f);
         player.setGravity(30);
         player.setPhysicsLocation(new Vector3f(0, 10, 0));
-
+        
+        Spatial portal = assetManager.loadModel("Models/Portal/Portal.j3o");
+        Spatial portal2 = assetManager.loadModel("Models/Portal/Portal2.j3o");
+        Spatial portal3 = assetManager.loadModel("Models/Portal/Portal3.j3o");
+        Spatial portal4 = assetManager.loadModel("Models/Portal/Portal4.j3o");
+        Spatial portal5 = assetManager.loadModel("Models/Portal/Portal5.j3o");
+        portal.move(9, 0, 1);
+        portal2.move(-9, 0, 1);
+        portal3.move(0, 0, 12);
+        portal4.move(0, 0, -4);
+        portal5.move(9, 0, -4);
+        portal.scale(3);
+        portal2.scale(3);
+        portal3.scale(3);
+        portal4.scale(3);
+        portal5.scale(3);
+        rootNode.attachChild(portal);
+        rootNode.attachChild(portal2);
+        rootNode.attachChild(portal3);
+        rootNode.attachChild(portal4);
+        rootNode.attachChild(portal5);
 
 
         rootNode.attachChild(sceneModel);
@@ -481,8 +501,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     protected void initCrossHairs() {
 
-        ///guiNode.detachAllChildren();
-
+        guiNode.detachAllChildren();
 
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
