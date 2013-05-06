@@ -21,7 +21,6 @@ public class MainApp extends Application {
       
    }
 
-    @Override
     public void start(){
         // set some default settings in-case
         // settings dialog is not shown
@@ -41,7 +40,6 @@ public class MainApp extends Application {
         super.start();
     }
    
-   @Override
     public void initialize() {
       // initialize the standard environment first
       super.initialize();
@@ -55,7 +53,6 @@ public class MainApp extends Application {
     }
    
    
-   @Override
     public void update() {
         super.update();
         float tpf = timer.getTimePerFrame() * speed;
