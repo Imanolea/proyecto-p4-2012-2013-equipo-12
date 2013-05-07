@@ -36,5 +36,11 @@ public class Jugador {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+        
+        public void printJugador(Jugador j){
+            System.out.println("COD_U: "+j.getCod_u());
+            System.out.println("NAME: "+j.getNombre());
+            System.out.println("NICK: "+j.getNick());
+        }
 	
 }
