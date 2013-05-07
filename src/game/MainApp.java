@@ -30,7 +30,7 @@ public class MainApp extends Application {
         if (settings == null)
         {
             s= new AppSettings(true);
-        s.setSettingsDialogImage("/Pictures/uk.png");
+        s.setSettingsDialogImage("/Pictures/Fondo.png");
             setSettings(s);
         }
 
