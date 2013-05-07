@@ -153,6 +153,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         enemiesCleaned = 0;
         spawnTimer = 0;
+        
+        inputManager.deleteMapping("FLYCAM_ZoomIn");
+        inputManager.deleteMapping("FLYCAM_ZoomOut");
 
         Box b = new Box(1.3f, 1.3f, 1.3f);
         cleanerShape = new Geometry("Cleaner Shape", b);
@@ -421,8 +424,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("Shoot", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        inputManager.addMapping("Aspire", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        inputManager.addMapping("Throw", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("Aspire", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));        inputManager.addMapping("Throw", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener(this, "Left");
         inputManager.addListener(this, "Right");
         inputManager.addListener(this, "Up");

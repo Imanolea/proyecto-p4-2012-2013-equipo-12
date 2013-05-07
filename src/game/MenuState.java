@@ -22,6 +22,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import database.Jugador;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -31,6 +32,7 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.controls.TextField;
 
 public class MenuState extends AbstractAppState implements ScreenController {
 
@@ -51,8 +53,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private FlyByCamera flyCam;
     private Nifty nifty;
     private String titulos[][] = {{"Comienzo", "Start"},
-        {"Estadísticas", "Statistics"}, {"Registrarse", "SIGN UP"}, {"Salir", "Quit"}};
-    private int i = 0;
+        {"Estadísticas", "Statistics"}, {"Registrarse", "Sign Up"}, {"Salir", "Quit"}};
+    private int i = 1;
+    private boolean primeraVez1 = true;
+    private boolean primeraVez2 = true;
 
     public MenuState(MainApp game) {
         this.game = game;
@@ -326,21 +330,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 height("75%");
                                                 width("10%");
 
-                                                // add image
-                                                image(new ImageBuilder() {
-                                                    {
-                                                        valignCenter();
-                                                        alignRight();
-                                                        height("100%");
-                                                        width("100%");
-                                                        filename("Pictures/uk.png");
-                                                        visibleToMouse(true);
-                                                        interactOnClick("i = getInt1()");
-                                                        interactOnRelease("aplicacion.restart()");
-                                                    }
-                                                });
-
-
+                                                // image uk
                                             }
                                         }); // </panel_3.2.2>
 
@@ -364,23 +354,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 height("75%");
                                                 width("10%");
 
-                                                // add image
-                                                image(new ImageBuilder() {
-                                                    {
-                                                        valignCenter();
-                                                        alignRight();
-                                                        height("100%");
-                                                        width("100%");
-                                                        filename("Pictures/esp.jpg");
-                                                        System.out.print("DddESAPAÑA");
-                                                        visibleToMouse(true);
-
-                                                        interactOnClick("aplicacion.getI()");
-
-                                                    }
-                                                });
-
-
+                                                // add image esp
                                             }
                                         }); // </panel_3.2.4>
 
@@ -427,7 +401,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     }
 
-    public void stateAttached(AppStateManager stateManager){
+    public void stateAttached(AppStateManager stateManager) {
         //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         super.stateAttached(stateManager);
         game.getViewPort().attachScene(rootNode);
@@ -437,7 +411,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     @Override
-    public void stateDetached(AppStateManager stateManager){
+    public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
@@ -478,10 +452,59 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void loadMenu2() {
-        
+
         nifty.removeScreen("InputScreen");
 
         game.loadMenu2();
         niftyDisplay.cleanup();
+    }
+
+    public void leerTextFields() {
+        String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
+        System.out.print("Name : " + name);
+
+        String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
+        System.out.print("Nick : " + nick);
+    }
+
+    public void borrarTextoName() {
+        if (primeraVez1) {
+            nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).setText("");
+            primeraVez1 = false;
+        }
+    }
+
+    public void borrarTextoNick() {
+        if (primeraVez2) {
+            nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).setText("");
+            primeraVez2 = false;
+        }
+    }
+
+    public void insertarUsuario() {
+
+        String cod_u = database.GestorEstadisticasLocal.ultimoCod_uAsignado();
+        int codigo_u = Integer.parseInt(cod_u);
+        codigo_u++;
+        cod_u = "" + codigo_u;
+
+        String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
+        
+        String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
+        
+        while(name.substring(0, 1).equals(" ")){
+            name = name.substring(1);
+        }
+        
+        while(nick.substring(0, 1).equals(" ")){
+            nick = nick.substring(1);
+        }
+        
+        Jugador j = new Jugador(cod_u, name, nick);
+        j.printJugador(j);
+        
+        database.GestorEstadisticasLocal.agregarPerfilStatic(j);
+        
+        loadMenu2();
     }
 }
