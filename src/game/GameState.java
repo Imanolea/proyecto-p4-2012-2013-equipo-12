@@ -116,10 +116,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         menuText.setLocalTranslation(0, (game.getContext().getSettings().getHeight() / 2f) - (menuText.getLineHeight() / 2f), 0);
         menuText.setText("Press [M] to go back to the Menu");
         // guiNode.attachChild(menuText);
-
     }
 
-    @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
 
@@ -231,7 +229,6 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     }
 
-    @Override
     public void update(float tpf) {
         super.update(tpf);
 
@@ -292,17 +289,12 @@ public class GameState extends AbstractAppState implements ActionListener {
         player.setWalkDirection(walkDirection);
         cam.setLocation(player.getPhysicsLocation());
         cleanerShape.setLocalTranslation(player.getPhysicsLocation());
-
+        
         if (cam.getDirection().y > 0.9439419f) {
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1509075f, cam.getLocation().z), new Vector3f(cam.getLeft().x, 7.916242E-9f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.33011156f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.9439419f, cam.getDirection().z));
         } else if (cam.getDirection().y < -0.93508357) {
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1510572f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.2441149E-5f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.3544274f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.93508357f, cam.getDirection().z));
         }
-        
-        System.out.println(cam.getLocation().y);
-        System.out.println(cam.getLeft().y);
-        System.out.println(cam.getUp().y);
-        System.out.println(cam.getDirection().y);
         
         for (int i = 0; i < pow.length; i++) {
             if (!pow[i].isActive()) {
@@ -387,8 +379,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                 }
             }
         }
-
-        //simple update and root node
 
         rootNode.updateLogicalState(tpf);
 
@@ -513,11 +503,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         l6.setDirection(new Vector3f(0, 5f, 0).normalizeLocal());
         rootNode.addLight(l6);
 
-        /*PointLight p1 = new PointLight();
-         p1.setColor(ColorRGBA.White);
-         p1.setPosition(new Vector3f(1,1,1));
-         rootNode.addLight(p1);*/
-
     }
 
     protected void initCrossHairs() {
@@ -612,16 +597,11 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         if (c != -1) {
             do {
-                //pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
-                pow[c].getSpatial().setLocalTranslation(1,10,1);
-                /*Ray r = new Ray(pow[c].getSpatial().getWorldTranslation(), player.getPhysicsLocation());
-                 CollisionResults rEnemyPlayer = new CollisionResults();
-                 r.collideWith(sceneModel.getWorldBound(), rEnemyPlayer);
-                 rEnemyPlayer.toString();*/
+                pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
                 CollisionResults rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
-                if (rEnemigoEscenario.size() <= 0) //if (getGeometrySpatial(rEnemyPlayer.getClosestCollision().getGeometry()).getName()=="Scene-entity" && rEnemigoEscenario.size()<=0){
+                if (rEnemigoEscenario.size() <= 0)
                 {
                     found = true;
                 }
