@@ -293,13 +293,17 @@ public class GameState extends AbstractAppState implements ActionListener {
         cam.setLocation(player.getPhysicsLocation());
         cleanerShape.setLocalTranslation(player.getPhysicsLocation());
 
-        if (cam.getDirection().y > 0.99033326) {
-            cam.setFrame(new Vector3f(cam.getLocation().x, 4.6516128f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.4214387E-8f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870794f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.99033326f, cam.getDirection().z));
-        } else if (cam.getDirection().y < -0.9903338) {
-            cam.setFrame(new Vector3f(cam.getLocation().x, 4.652709f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -3.501773E-7f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.13870472f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.9903338f, cam.getDirection().z));
+        if (cam.getDirection().y > 0.9439419f) {
+            cam.setFrame(new Vector3f(cam.getLocation().x, 4.1509075f, cam.getLocation().z), new Vector3f(cam.getLeft().x, 7.916242E-9f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.33011156f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.9439419f, cam.getDirection().z));
+        } else if (cam.getDirection().y < -0.93508357) {
+            cam.setFrame(new Vector3f(cam.getLocation().x, 4.1510572f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.2441149E-5f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.3544274f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.93508357f, cam.getDirection().z));
         }
-
-
+        
+        System.out.println(cam.getLocation().y);
+        System.out.println(cam.getLeft().y);
+        System.out.println(cam.getUp().y);
+        System.out.println(cam.getDirection().y);
+        
         for (int i = 0; i < pow.length; i++) {
             if (!pow[i].isActive()) {
                 pow[i].getSpatial().scale(1 + tpf * 3);
