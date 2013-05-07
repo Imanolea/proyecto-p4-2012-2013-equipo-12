@@ -207,9 +207,9 @@ public class InputState extends AbstractAppState implements ScreenController {
                                         width("55%");
 
 
-                                        control(new TextFieldBuilder("NameInput1", "nombre") {
+                                        control(new TextFieldBuilder("NameInput", "nombre") {
                                             {
-                                                interactOnClick("");
+                                                interactOnMouseOver("borrarTextoName()");
                                                 width("200px");
                                             }
                                         });
@@ -249,8 +249,9 @@ public class InputState extends AbstractAppState implements ScreenController {
                                         width("55%");
 
 
-                                        control(new TextFieldBuilder("NameInput2", "nick") {
+                                        control(new TextFieldBuilder("NickInput", "nick") {
                                             {
+                                                interactOnMouseOver("borrarTextoNick()");
                                                 width("200px");
                                             }
                                         });
@@ -278,8 +279,8 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("40%");
                                                 visibleToMouse(true);
-                                                interactOnClick("exit()");
-
+                                                interactOnClick("insertarUsuario()");
+                                                //interactOnRelease("loadMenu2()");
                                             }
                                         });
 
@@ -290,7 +291,6 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 valignCenter();
                                                 height("16%");
                                                 width("20%");
-                                                interactOnClick("start");
                                             }
                                         });
 
@@ -358,21 +358,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("75%");
                                                 width("10%");
 
-                                                // add image
-                                                image(new ImageBuilder() {
-                                                    {
-                                                        valignCenter();
-                                                        alignRight();
-                                                        height("100%");
-                                                        width("100%");
-                                                        filename("Pictures/uk.png");
-                                                        visibleToMouse(true);
-                                                        interactOnClick("i = getInt1()");
-                                                        interactOnRelease("aplicacion.restart()");
-                                                    }
-                                                });
-
-
+                                                // add image uk
                                             }
                                         }); // </panel_3.2.2>
 
@@ -396,23 +382,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("75%");
                                                 width("10%");
 
-                                                // add image
-                                                image(new ImageBuilder() {
-                                                    {
-                                                        valignCenter();
-                                                        alignRight();
-                                                        height("100%");
-                                                        width("100%");
-                                                        filename("Pictures/esp.jpg");
-                                                        System.out.print("DddESAPAÑA");
-                                                        visibleToMouse(true);
-
-                                                        interactOnClick("aplicacion.getI()");
-
-                                                    }
-                                                });
-
-
+                                                // add image esp
                                             }
                                         }); // </panel_3.2.4>
 
