@@ -31,6 +31,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -66,6 +67,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private final int NUMBER_CHARGES = 5;
     private final int CLEANER_CAPACITY = 5;
     private Spatial sceneModel;
+    private Spatial portal;
     private Geometry cleanerShape;
     private Enemy[] pow = new Enemy[NUMBER_ENEMIES];
     private Bullet[] fire = new Bullet[NUMBER_CHARGES];
@@ -120,7 +122,6 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-
 
         this.game = (MainApp) game; // can cast Application to something more specific
         // this.rootNode = this.rootNode;
@@ -181,7 +182,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             fire[i] = createFire();
         }
 
-        sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario.j3o");
+        sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario1.j3o");
         sceneModel.setName("Scene-entity");
         sceneModel.setLocalScale(6f);
 
@@ -207,12 +208,18 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
 
         boundEnemy = pow[0].getSpatial().getWorldBound();
+        
+        portal = assetManager.loadModel("Models/Portal/Portal.j3o");
+        portal.setLocalTranslation(-22.46f, 0, 13.617f);
+        portal.rotate(0, 110, 0);
+        portal.scale(4f);
+        rootNode.attachChild(portal);
 
         Enemy powHurt = new Enemy(assetManager.loadModel("Models/Pow/PowHurt.j3o"));
         Enemy powEyesClosed = new Enemy(assetManager.loadModel("Models/Pow/PowEyesClosed.j3o"));
         Enemy powWeak = new Enemy(assetManager.loadModel("Models/Pow/PowWeak.j3o"));
         Enemy powDeath = new Enemy(assetManager.loadModel("Models/Pow/PowDeath.j3o"));
-
+        
         enemyMaterial[0] = pow[0].getMaterial();
         enemyMaterial[1] = powHurt.getMaterial();
         enemyMaterial[2] = powEyesClosed.getMaterial();
@@ -238,7 +245,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         int fps = (int) game.getTimer().getFrameRate();
         fpsText.setText("Frames per second: " + fps);
 
-        initCrossHairs();
+        //initCrossHairs();
         guiNode.setQueueBucket(Bucket.Gui);
         guiNode.setCullHint(CullHint.Never);
 
@@ -332,6 +339,9 @@ public class GameState extends AbstractAppState implements ActionListener {
                 CollisionResults rEnemyCleaner = new CollisionResults();
                 inhalables.collideWith(cleanerShape.getWorldBound(), rEnemyCleaner);
                 rEnemyCleaner.toString();
+                CollisionResults rEnemyPortal = new CollisionResults();
+                inhalables.collideWith(portal.getWorldBound(), rEnemyPortal);
+                rEnemyPortal.toString();
                 if (rEnemyCleaner.size() > 0) {
                     String[] words = getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).getName().split("-");
                     if (pow[Integer.parseInt(words[0])].isHasBeenAspired() && enemiesCleaned<CLEANER_CAPACITY) {
@@ -342,6 +352,10 @@ public class GameState extends AbstractAppState implements ActionListener {
                         aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
                         enemiesCleaned++;
                     }
+                }
+                if (rEnemyPortal.size()>0){
+                    String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
+                    pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
                 }
                 if (pow[i].isAspired()) {
                     pow[i].getfDeathEnemy().setGravity(Vector3f.ZERO);
@@ -461,8 +475,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         f.setMaterial(mat_red);
         f.setImagesX(2);
         f.setImagesY(2);
-        f.setEndColor(new ColorRGBA(1f, 1f, 0f, 1f));
-        f.setStartColor(new ColorRGBA(1f, 1f, 0f, 0.5f));
+        f.setEndColor(new ColorRGBA(0.34f, 0.137f, 0.878f, 1f));
+        f.setStartColor(new ColorRGBA(0.34f, 0.137f, 0.878f, 0.5f));
         f.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 3, 0));
         f.setStartSize(2f);
         f.setEndSize(0.1f);
