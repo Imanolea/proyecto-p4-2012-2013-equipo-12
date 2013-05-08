@@ -17,6 +17,8 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import database.GestorEstadisticasLocal;
+import database.Partida;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -26,6 +28,7 @@ import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import java.util.ArrayList;
 
 public class StatisticsState extends AbstractAppState implements ScreenController {
 
@@ -37,7 +40,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
     private AppStateManager stateManager;
     private InputManager inputManager;
     private ViewPort viewPort;
-    
     private MainApp game = null;
     private AudioRenderer audioRenderer;
     private ViewPort guiViewPort;
@@ -47,7 +49,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
     private String titulos[][] = {{"Comienzo", "Start"},
         {"Estadísticas", "Statistics"}, {"¿?", "?¿"}, {"Salir", "Quit"}};
     private int i = 0;
-    public static boolean b=false;
+    public static boolean b = false;
 
     public StatisticsState(MainApp game) {
         this.game = game;
@@ -96,7 +98,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         this.flyCam = new FlyByCamera(game.getCamera());
 
         // enable depth test and back-face culling for performance
-       game.getRenderer().applyRenderState(RenderState.DEFAULT);
+        game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
 
         // Init input
@@ -105,11 +107,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         }
 
 
-        
-            niftyDisplay = new NiftyJmeDisplay(
-                    assetManager, inputManager, audioRenderer, guiViewPort);
 
-        
+        niftyDisplay = new NiftyJmeDisplay(
+                assetManager, inputManager, audioRenderer, guiViewPort);
+
+
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
@@ -135,14 +137,22 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("15%");
-                                width("50%");
+                                height("100%");
+                                width("100%");
 
                                 // add text
 
                                 text(new TextBuilder() {
                                     {
-                                        text("SIGN UP");
+                                        alignCenter();
+                                        valignCenter();
+                                        String s = "";
+                                        ArrayList<Partida> a = GestorEstadisticasLocal.listarEstadisticasPartidas();
+                                       /* for (Partida p : a) {
+                                            s = s + p.getCod_u();
+                                        }
+                                        * */
+                                        text(s);
                                         font("Interface/Fonts/Default.fnt");
                                         height("100%");
                                         width("100%");
@@ -151,259 +161,14 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             }
                         }); // </panel_1>
 
-                        panel(new PanelBuilder("Panel_TITLE2") {
-                            {
-                                childLayoutCenter();
-                                alignCenter();
-                                height("10%");
-                                width("50%");
-
-
-                            }
-                        }); // </panel_1>
-
-                        // <panel_2>
-                        panel(new PanelBuilder("Panel_BUTTONS2") {
-                            {
-                                childLayoutVertical(); // panel properties, add more...               
-                                alignCenter();
-                                height("60%");
-                                width("50%");
-
-                                panel(new PanelBuilder("Panel_EMPTY2") {
-                                    {
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("55%");
-                                        alignCenter();
-                                        valignCenter();
-
-                                        text(new TextBuilder() {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                text("Insert name:");
-                                                font("Interface/Fonts/Default.fnt");
-                                                height("100%");
-                                                width("100%");
-                                            }
-                                        });
-
-                                    }
-                                });
-
-                                panel(new PanelBuilder("Panel_START2") {
-                                    {
-                                        alignCenter();
-                                        valignCenter();
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("55%");
-
-
-                                        control(new TextFieldBuilder("NameInput", "nombre") {
-                                            {
-                                                interactOnMouseOver("borrarTextoName()");
-                                                width("200px");
-                                            }
-                                        });
-
-                                    }
-                                });// </panel_2.1>
-
-                                // <panel_2.2>
-                                panel(new PanelBuilder("Panel_STATISTICS2") {
-                                    {
-                                        childLayoutCenter();
-                                        alignCenter();
-                                        valignCenter();
-                                        height("16%");
-                                        width("55%");
-
-                                        text(new TextBuilder() {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                text("Insert nickname:");
-                                                font("Interface/Fonts/Default.fnt");
-                                                height("100%");
-                                                width("100%");
-                                            }
-                                        });
-                                    }
-                                });// </panel_2.2>
-
-                                // <panel_2.3>
-                                panel(new PanelBuilder("Panel_2") {
-                                    {
-                                        childLayoutCenter();
-                                        alignCenter();
-                                        valignCenter();
-                                        height("16%");
-                                        width("55%");
-
-
-                                        control(new TextFieldBuilder("NickInput", "nick") {
-                                            {
-                                                interactOnMouseOver("borrarTextoNick()");
-                                                width("200px");
-                                            }
-                                        });
-
-
-
-                                    }
-                                });// </panel_2.3>
-
-                                // <panel_2.4>
-                                panel(new PanelBuilder("Panel_QUIT2") {
-                                    {
-                                        childLayoutHorizontal();
-                                        alignCenter();
-                                        valignCenter();
-                                        height("16%");
-                                        width("55%");
-
-                                        // GUI element
-                                        control(new ButtonBuilder("Button_OK2", "OK") {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                backgroundColor("#f108");
-                                                height("50%");
-                                                width("40%");
-                                                visibleToMouse(true);
-                                                interactOnClick("insertarUsuario()");
-                                                
-                                            }
-                                        });
-
-                                        panel(new PanelBuilder("Panel_PANELEMPTY2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                alignCenter();
-                                                valignCenter();
-                                                height("16%");
-                                                width("20%");
-                                            }
-                                        });
-
-                                        control(new ButtonBuilder("Button_QUIT2", "Back") {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                backgroundColor("#f108");
-                                                height("50%");
-                                                width("40%");
-                                                visibleToMouse(true);
-                                                interactOnClick("loadMenu3()");
-
-                                            }
-                                        });
-                                    }
-                                });// </panel_2.4>
-
-                            }
-                        }); // </panel_2>
-
-                        // <panel_3>
-                        panel(new PanelBuilder("Panel_LANGUAGES2") {
-                            {
-                                childLayoutHorizontal();
-                                alignCenter();
-                                height("15%");
-                                width("100%");
-
-                                // <panel_3.1>
-                                panel(new PanelBuilder("Panel_EMPTY3.12") {
-                                    {
-                                        childLayoutCenter();
-                                        valignCenter();
-                                        height("50%");
-                                        width("50%");
-                                    }
-                                }); // </panel_3.1>
-
-                                // <panel_3.2>
-                                panel(new PanelBuilder("Panel_IN_LANGUAGES2") {
-                                    {
-                                        childLayoutHorizontal();
-                                        valignCenter();
-                                        height("50%");
-                                        width("50%"); ////////////////// NESPÂÑOL ENGLIH
-
-                                        // <panel_3.2.1>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.12") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("70%");
-
-
-                                            }
-                                        }); // </panel_3.2.1>
-
-                                        // <panel_3.2.2>
-                                        panel(new PanelBuilder("Panel_UK2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image uk
-                                            }
-                                        }); // </panel_3.2.2>
-
-                                        // <panel_3.2.3>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.32") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.3>
-
-                                        // <panel_3.2.4>
-                                        panel(new PanelBuilder("Panel_ESP2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image esp
-                                            }
-                                        }); // </panel_3.2.4>
-
-                                        // <panel_3.2.5>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.52") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.6>
-
-                                    }
-                                }); // </panel_3.2>
-                            }
-                        });// </panel_3>
                     }
                 });
                 // </layer>
             }
         }.build(nifty));
         // </screen>
- 
-     game.getGUIViewPort().addProcessor(niftyDisplay);
+
+        game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("StatisticsScreen"); // it is used to start the screen
     }
 
@@ -427,9 +192,8 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
-        if (b==true)
-        {
-        game.getGUIViewPort().addProcessor(niftyDisplay);
+        if (b == true) {
+            game.getGUIViewPort().addProcessor(niftyDisplay);
         }
 //      
     }
@@ -444,8 +208,4 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
     public void render(RenderManager rm) {
     }
-
-   
-
-   
 }
