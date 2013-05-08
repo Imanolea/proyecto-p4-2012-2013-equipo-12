@@ -218,7 +218,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("80%");
                                                 visibleToMouse(true);
-                                                interactOnClick("showStatistics()");
+                                                interactOnClick("startStatistics()");
                                             }
                                         });
                                     }
@@ -437,6 +437,21 @@ public class MenuState extends AbstractAppState implements ScreenController {
         game.loadMenu();
 
     }
+     public void startStatistics() {
+
+        nifty.removeScreen("MenuScreen");
+        game.loadStatistics();
+        
+
+    }
+
+    public void quitStatistics() {
+        game.stop();
+    }
+
+    public void loadStatistics() {
+        game.loadInput();
+    }
 
     public void startInput() {
 
@@ -457,6 +472,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         game.loadMenu2();
         niftyDisplay.cleanup();
+    }
+     public void loadMenu3() {
+
+        nifty.removeScreen("StatisticsScreen");
+
+        game.loadMenu3();
+       
     }
 
     public void leerTextFields() {

@@ -20,6 +20,7 @@ public class Partida {
 	private String muertes;
 	private double tiempo;
 	private String fecha_h;
+        private String tiempos;
 	
 	
 	public String getFecha_h() {
@@ -31,7 +32,7 @@ public class Partida {
 	}
 
 	public Partida(String cod_u, String puntuacion, String nivel,
-	String disparos_ac, String disparos_tot, String muertes, double tiempo){
+	String disparos_ac, String disparos_tot, String muertes, String tiempos){
 		this.cod_u = cod_u;
 		//Timestamp ts = new Timestamp(System.currentTimeMillis());
 		//SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SS aaa");
@@ -47,7 +48,7 @@ public class Partida {
 		this.disparos_ac = disparos_ac;
 		this.disparos_tot = disparos_tot;
 		this.muertes = muertes;
-		this.tiempo = tiempo;
+		this.tiempos = tiempos;
 	}
 	
 	public Partida(String cod_u, String puntuacion, String nivel, 

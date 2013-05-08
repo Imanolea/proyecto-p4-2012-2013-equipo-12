@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -51,7 +52,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         }
         return connection;
     }
-    
+
     public static Connection conectarStatic() {
         Connection connection = null;
         try {
@@ -75,16 +76,15 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         }
     }
 
-    
     public static void desconectar(Connection connection) {
         try {
             // cerramos todo
             connection.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.print("EXCEPTION");
         }
     }
-    
+
     public static GestorEstadisticasLocal getInstance() {
         if (instance == null) {
             instance = new GestorEstadisticasLocal();
@@ -196,7 +196,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error a la hora de arreglar un PERFIL.", "La conexi��n no pudo ser establecida", 2);
         }
     }
-    
+
     public static void agregarPerfilStatic(Jugador jugador) {
         Connection connection;
         PreparedStatement ps;
@@ -218,7 +218,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             e.printStackTrace();
         }
     }
-    
+
     public static String ultimoCod_uAsignado() {
         Connection connection = conectarStatic();
         conectar(connection);
@@ -228,13 +228,13 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             String query = "SELECT COD_U FROM JUGADOR ORDER BY COD_U DESC;";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
-            
-            
+
+
             cod_u = "" + rs.getString("COD_U");
-            
+
             rs.close();
             statement.close();
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -272,21 +272,24 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         }
     }
 
-    public void listarEstadisticasPartidas() {
-        conectar();
+    public static ArrayList listarEstadisticasPartidas() {
+
+        ArrayList<Partida> aP = new ArrayList<Partida>();
+        Connection connection = conectarStatic();
+        conectar(connection);
         try {
             // Ahora utilizamos las sentencias de BD
             String query = "SELECT * FROM PARTIDA;";
-            statement = conn.createStatement();
-            rs = statement.executeQuery(query);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next()) {
                 String cod_u = "" + rs.getString("COD_U");
                 System.out.println("COD_U: " + cod_u);
                 String nick = "" + rs.getString("FECHA_HORA");
                 System.out.println("FECHA_HORA: " + nick);
-                String name = "" + rs.getString("PUNTUACION");
-                System.out.println("PUNTUACION: " + name);
+                String punt = "" + rs.getString("PUNTUACION");
+                System.out.println("PUNTUACION: " + punt);
                 String nivel = "" + rs.getString("NIVEL");
                 System.out.println("NIVEL: " + nivel);
                 String disparos_ac = "" + rs.getString("DISPAROS_AC");
@@ -298,15 +301,20 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
 
-                System.out.println("--");
+                Partida p = new Partida(cod_u, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
+                aP.add(p);
+
             }
-            rs.close();
             statement.close();
+            desconectar(connection);
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecuci��n de sentencias SQLite.", "La conexi��n no pudo ser establecida", 2);
+
         }
-        desconectar();
+
+        return aP;
+
+
     }
 
     public static void main(String[] args) {
