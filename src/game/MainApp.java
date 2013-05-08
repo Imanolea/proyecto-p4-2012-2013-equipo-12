@@ -17,6 +17,7 @@ public class MainApp extends Application {
    private MenuState ms = null;
    private AppSettings s;
    private InputState is = null;
+   private StatisticsState ss= null;
    
    public MainApp() {
       
@@ -31,6 +32,7 @@ public class MainApp extends Application {
         {
             s= new AppSettings(true);
         s.setSettingsDialogImage("/Pictures/Fondo.png");
+        
             setSettings(s);
         }
 
@@ -49,6 +51,7 @@ public class MainApp extends Application {
       ms = new MenuState(this);
       te = new GameState(this);
       is = new InputState(this);
+      ss= new StatisticsState(this);
       
       // Attach MenuState
       getStateManager().attach(ms);
@@ -83,6 +86,10 @@ public class MainApp extends Application {
       getStateManager().detach(is);
       getStateManager().attach(ms);
    }
+         public void loadMenu3() {
+      getStateManager().detach(ss);
+      getStateManager().attach(ms);
+   }
    
    public AppSettings getSettings()
    {
@@ -114,6 +121,12 @@ public class MainApp extends Application {
    public static void main(String... args) {
       new MainApp().start();
    }
+
+    public void loadStatistics() {
+       
+          getStateManager().detach(ms);
+      getStateManager().attach(ss);
+    }
 
    
 

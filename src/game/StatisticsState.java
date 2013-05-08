@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -22,19 +17,17 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import database.Jugador;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
+import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.controls.TextField;
 
-public class MenuState extends AbstractAppState implements ScreenController {
+public class StatisticsState extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
@@ -44,21 +37,19 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private AppStateManager stateManager;
     private InputManager inputManager;
     private ViewPort viewPort;
-    private SimpleApplication app;
-    public MainApp game = null;
-    private AppActionListener actionListener = new AppActionListener();
+    
+    private MainApp game = null;
     private AudioRenderer audioRenderer;
     private ViewPort guiViewPort;
     private NiftyJmeDisplay niftyDisplay;
     private FlyByCamera flyCam;
     private Nifty nifty;
     private String titulos[][] = {{"Comienzo", "Start"},
-        {"Estadísticas", "Statistics"}, {"Registrarse", "Sign Up"}, {"Salir", "Quit"}};
-    private int i = 1;
-    private boolean primeraVez1 = true;
-    private boolean primeraVez2 = true;
+        {"Estadísticas", "Statistics"}, {"¿?", "?¿"}, {"Salir", "Quit"}};
+    private int i = 0;
+    public static boolean b=false;
 
-    public MenuState(MainApp game) {
+    public StatisticsState(MainApp game) {
         this.game = game;
     }
 
@@ -105,7 +96,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         this.flyCam = new FlyByCamera(game.getCamera());
 
         // enable depth test and back-face culling for performance
-        app.getRenderer().applyRenderState(RenderState.DEFAULT);
+       game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
 
         // Init input
@@ -114,11 +105,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
         }
 
 
-        if (niftyDisplay == null) {
+        
             niftyDisplay = new NiftyJmeDisplay(
                     assetManager, inputManager, audioRenderer, guiViewPort);
 
-        }
+        
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
@@ -129,18 +120,18 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
 
 
-        // <screen>
-        nifty.addScreen("MenuScreen", new ScreenBuilder("Menu") {
+        nifty.addScreen("StatisticsScreen", new ScreenBuilder("SScreen") {
             {
-                controller(new MenuState(game)); // This connects the Java class StartingScreen and the GUI screen.     
+                //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
+                controller(new MenuState(game));
 
-                // <layer>
-                layer(new LayerBuilder("Layer_ID") {
+
+                layer(new LayerBuilder("Layer_ID2") {
                     {
                         childLayoutVertical(); // layer properties, add more...
 
                         // <panel_1>
-                        panel(new PanelBuilder("Panel_TITLE") {
+                        panel(new PanelBuilder("Panel_TITLE2") {
                             {
                                 childLayoutCenter();
                                 alignCenter();
@@ -151,7 +142,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
                                 text(new TextBuilder() {
                                     {
-                                        text("POWDERS");
+                                        text("SIGN UP");
                                         font("Interface/Fonts/Default.fnt");
                                         height("100%");
                                         width("100%");
@@ -160,24 +151,48 @@ public class MenuState extends AbstractAppState implements ScreenController {
                             }
                         }); // </panel_1>
 
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("50%");
+
+
+                            }
+                        }); // </panel_1>
+
                         // <panel_2>
-                        panel(new PanelBuilder("Panel_BUTTONS") {
+                        panel(new PanelBuilder("Panel_BUTTONS2") {
                             {
                                 childLayoutVertical(); // panel properties, add more...               
                                 alignCenter();
-                                height("70%");
+                                height("60%");
                                 width("50%");
 
-                                panel(new PanelBuilder("Panel_EMPTY") {
+                                panel(new PanelBuilder("Panel_EMPTY2") {
                                     {
                                         childLayoutCenter();
                                         height("16%");
                                         width("55%");
+                                        alignCenter();
+                                        valignCenter();
+
+                                        text(new TextBuilder() {
+                                            {
+                                                alignCenter();
+                                                valignCenter();
+                                                text("Insert name:");
+                                                font("Interface/Fonts/Default.fnt");
+                                                height("100%");
+                                                width("100%");
+                                            }
+                                        });
 
                                     }
                                 });
 
-                                panel(new PanelBuilder("Panel_START") {
+                                panel(new PanelBuilder("Panel_START2") {
                                     {
                                         alignCenter();
                                         valignCenter();
@@ -185,23 +200,19 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
-                                        control(new ButtonBuilder("Button_START", titulos[0][i]) {
+
+                                        control(new TextFieldBuilder("NameInput", "nombre") {
                                             {
-                                                alignCenter();
-                                                valignCenter();
-                                                backgroundColor("#f108");
-                                                height("50%");
-                                                width("80%");
-                                                visibleToMouse(true);
-                                                interactOnClick("startGame()");
+                                                interactOnMouseOver("borrarTextoName()");
+                                                width("200px");
                                             }
                                         });
+
                                     }
                                 });// </panel_2.1>
 
                                 // <panel_2.2>
-                                panel(new PanelBuilder("Panel_STATISTICS") {
+                                panel(new PanelBuilder("Panel_STATISTICS2") {
                                     {
                                         childLayoutCenter();
                                         alignCenter();
@@ -209,23 +220,21 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
-                                        control(new ButtonBuilder("Button_STATISTICS", titulos[1][i]) {
+                                        text(new TextBuilder() {
                                             {
                                                 alignCenter();
                                                 valignCenter();
-                                                backgroundColor("#f108");
-                                                height("50%");
-                                                width("80%");
-                                                visibleToMouse(true);
-                                                interactOnClick("startStatistics()");
+                                                text("Insert nickname:");
+                                                font("Interface/Fonts/Default.fnt");
+                                                height("100%");
+                                                width("100%");
                                             }
                                         });
                                     }
                                 });// </panel_2.2>
 
                                 // <panel_2.3>
-                                panel(new PanelBuilder("Panel_") {
+                                panel(new PanelBuilder("Panel_2") {
                                     {
                                         childLayoutCenter();
                                         alignCenter();
@@ -233,59 +242,72 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
-                                        control(new ButtonBuilder("Button_SIGN_UP", titulos[2][i]) {
+
+                                        control(new TextFieldBuilder("NickInput", "nick") {
                                             {
-                                                alignCenter();
-                                                valignCenter();
-                                                backgroundColor("#f108");
-                                                height("50%");
-                                                width("80%");
-                                                visibleToMouse(true);
-                                                interactOnClick("startInput()");
+                                                interactOnMouseOver("borrarTextoNick()");
+                                                width("200px");
                                             }
                                         });
+
+
+
                                     }
                                 });// </panel_2.3>
 
                                 // <panel_2.4>
-                                panel(new PanelBuilder("Panel_QUIT") {
+                                panel(new PanelBuilder("Panel_QUIT2") {
                                     {
-                                        childLayoutCenter();
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignCenter();
                                         height("16%");
                                         width("55%");
 
                                         // GUI element
-                                        control(new ButtonBuilder("Button_QUIT", titulos[3][i]) {
+                                        control(new ButtonBuilder("Button_OK2", "OK") {
                                             {
                                                 alignCenter();
                                                 valignCenter();
                                                 backgroundColor("#f108");
                                                 height("50%");
-                                                width("80%");
+                                                width("40%");
                                                 visibleToMouse(true);
-                                                interactOnClick("exit()");
+                                                interactOnClick("insertarUsuario()");
+                                                
+                                            }
+                                        });
+
+                                        panel(new PanelBuilder("Panel_PANELEMPTY2") {
+                                            {
+                                                childLayoutHorizontal();
+                                                alignCenter();
+                                                valignCenter();
+                                                height("16%");
+                                                width("20%");
+                                            }
+                                        });
+
+                                        control(new ButtonBuilder("Button_QUIT2", "Back") {
+                                            {
+                                                alignCenter();
+                                                valignCenter();
+                                                backgroundColor("#f108");
+                                                height("50%");
+                                                width("40%");
+                                                visibleToMouse(true);
+                                                interactOnClick("loadMenu3()");
 
                                             }
                                         });
                                     }
                                 });// </panel_2.4>
 
-                                panel(new PanelBuilder("Panel_QUIT") {
-                                    {
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("25%");
-                                    }
-                                });
-
                             }
                         }); // </panel_2>
 
                         // <panel_3>
-                        panel(new PanelBuilder("Panel_LANGUAGES") {
+                        panel(new PanelBuilder("Panel_LANGUAGES2") {
                             {
                                 childLayoutHorizontal();
                                 alignCenter();
@@ -293,7 +315,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 width("100%");
 
                                 // <panel_3.1>
-                                panel(new PanelBuilder("Panel_EMPTY3.1") {
+                                panel(new PanelBuilder("Panel_EMPTY3.12") {
                                     {
                                         childLayoutCenter();
                                         valignCenter();
@@ -303,7 +325,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 }); // </panel_3.1>
 
                                 // <panel_3.2>
-                                panel(new PanelBuilder("Panel_IN_LANGUAGES") {
+                                panel(new PanelBuilder("Panel_IN_LANGUAGES2") {
                                     {
                                         childLayoutHorizontal();
                                         valignCenter();
@@ -311,7 +333,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         width("50%"); ////////////////// NESPÂÑOL ENGLIH
 
                                         // <panel_3.2.1>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.1") {
+                                        panel(new PanelBuilder("Panel_EMPTY3.2.12") {
                                             {
                                                 childLayoutHorizontal();
                                                 valignCenter();
@@ -323,19 +345,19 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         }); // </panel_3.2.1>
 
                                         // <panel_3.2.2>
-                                        panel(new PanelBuilder("Panel_UK") {
+                                        panel(new PanelBuilder("Panel_UK2") {
                                             {
                                                 childLayoutHorizontal();
                                                 valignCenter();
                                                 height("75%");
                                                 width("10%");
 
-                                                // image uk
+                                                // add image uk
                                             }
                                         }); // </panel_3.2.2>
 
                                         // <panel_3.2.3>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.3") {
+                                        panel(new PanelBuilder("Panel_EMPTY3.2.32") {
                                             {
                                                 childLayoutHorizontal();
                                                 valignCenter();
@@ -347,7 +369,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         }); // </panel_3.2.3>
 
                                         // <panel_3.2.4>
-                                        panel(new PanelBuilder("Panel_ESP") {
+                                        panel(new PanelBuilder("Panel_ESP2") {
                                             {
                                                 childLayoutHorizontal();
                                                 valignCenter();
@@ -359,7 +381,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         }); // </panel_3.2.4>
 
                                         // <panel_3.2.5>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.5") {
+                                        panel(new PanelBuilder("Panel_EMPTY3.2.52") {
                                             {
                                                 childLayoutHorizontal();
                                                 valignCenter();
@@ -380,13 +402,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
             }
         }.build(nifty));
         // </screen>
-
-        game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("MenuScreen"); // it is used to start the screen
-//loadMenu();
+ 
+     game.getGUIViewPort().addProcessor(niftyDisplay);
+        nifty.gotoScreen("StatisticsScreen"); // it is used to start the screen
     }
 
-    @Override
     public void update(float tpf) {
         super.update(tpf);
 
@@ -401,13 +421,17 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     }
 
+    @Override
     public void stateAttached(AppStateManager stateManager) {
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         super.stateAttached(stateManager);
+        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
-
-
+        if (b==true)
+        {
+        game.getGUIViewPort().addProcessor(niftyDisplay);
+        }
+//      
     }
 
     @Override
@@ -415,118 +439,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
-        //game.getGUIViewPort().removeProcessor(niftyDisplay);
+        game.getGUIViewPort().removeProcessor(niftyDisplay);
     }
 
     public void render(RenderManager rm) {
     }
 
-    public void startGame() {
+   
 
-        //nifty.exit();
-        game.loadGame();
-        nifty.removeScreen("MenuScreen");
-
-    }
-
-    public void quitGame() {
-        game.stop();
-    }
-
-    public void loadMenu() {
-        game.loadMenu();
-
-    }
-     public void startStatistics() {
-
-        nifty.removeScreen("MenuScreen");
-        game.loadStatistics();
-        
-
-    }
-
-    public void quitStatistics() {
-        game.stop();
-    }
-
-    public void loadStatistics() {
-        game.loadInput();
-    }
-
-    public void startInput() {
-
-        // nifty.exit();
-        nifty.removeScreen("MenuScreen");
-        game.loadInput();
-
-
-    }
-
-    public void exit() {
-        System.exit(0);
-    }
-
-    public void loadMenu2() {
-
-        nifty.removeScreen("InputScreen");
-
-        game.loadMenu2();
-        niftyDisplay.cleanup();
-    }
-     public void loadMenu3() {
-
-        nifty.removeScreen("StatisticsScreen");
-
-        game.loadMenu3();
-       
-    }
-
-    public void leerTextFields() {
-        String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
-        System.out.print("Name : " + name);
-
-        String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
-        System.out.print("Nick : " + nick);
-    }
-
-    public void borrarTextoName() {
-        if (primeraVez1) {
-            nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).setText("");
-            primeraVez1 = false;
-        }
-    }
-
-    public void borrarTextoNick() {
-        if (primeraVez2) {
-            nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).setText("");
-            primeraVez2 = false;
-        }
-    }
-
-    public void insertarUsuario() {
-
-        String cod_u = database.GestorEstadisticasLocal.ultimoCod_uAsignado();
-        int codigo_u = Integer.parseInt(cod_u);
-        codigo_u++;
-        cod_u = "" + codigo_u;
-
-        String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
-        
-        String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
-        
-        while(name.substring(0, 1).equals(" ")){
-            name = name.substring(1);
-        }
-        
-        while(nick.substring(0, 1).equals(" ")){
-            nick = nick.substring(1);
-        }
-        
-        Jugador j = new Jugador(cod_u, name, nick);
-        j.printJugador(j);
-        
-        database.GestorEstadisticasLocal.agregarPerfilStatic(j);
-        
-        loadMenu2();
-    }
+   
 }
