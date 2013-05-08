@@ -19,9 +19,7 @@ public class MainApp extends Application {
    private InputState is = null;
    private StatisticsState ss= null;
    
-   public MainApp() {
-      
-   }
+   public MainApp() { }
 
     public void start(){
         // set some default settings in-case
@@ -31,7 +29,7 @@ public class MainApp extends Application {
         if (settings == null)
         {
             s= new AppSettings(true);
-        s.setSettingsDialogImage("/Pictures/Fondo.png");
+        s.setSettingsDialogImage("/Pictures/Portada.jpg");
         
             setSettings(s);
         }
