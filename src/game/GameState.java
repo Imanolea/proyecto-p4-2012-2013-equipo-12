@@ -182,7 +182,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             fire[i] = createFire();
         }
 
-        sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario1.j3o");
+        sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario.j3o");
         sceneModel.setName("Scene-entity");
         sceneModel.setLocalScale(6f);
 
@@ -245,7 +245,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         int fps = (int) game.getTimer().getFrameRate();
         fpsText.setText("Frames per second: " + fps);
 
-        //initCrossHairs();
+        initCrossHairs();
         guiNode.setQueueBucket(Bucket.Gui);
         guiNode.setCullHint(CullHint.Never);
 
