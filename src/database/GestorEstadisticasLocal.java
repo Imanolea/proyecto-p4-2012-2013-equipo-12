@@ -118,37 +118,87 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         desconectar();
     }
 
+    public static String listarTop10(int pos) {
+        String[] array = new String[10];
+        Connection connection = null;
+        Statement statement;
+        ResultSet rs;
+        String string = "";
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
+            String query = "SELECT * FROM TOP;";
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            int i = 0;
+            // y recorremos lo obtenido
+            while (rs.next() && i < 10) {
+                if (pos == i) {
+                    return string;
+                } else {
+                    String nick = "" + rs.getString("NICK");
+                    //System.out.println("NICK: " + nick);
+                    String punt = "" + rs.getString("PUNTUACION");
+                    //System.out.println("PUNTUACION: " + name);
+                    String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                    //System.out.println("DISPAROS_AC: " + disparos_ac);
+                    String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                    //System.out.println("DISPAROS_TOT: " + disparos_tot);
+                    String tiempo = "" + rs.getString("TIEMPO");
+                    //System.out.println("TIEMPO: " + tiempo);
+                    //System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
+                    //System.out.println("--");
+                    int prec = (Integer.parseInt(disparos_ac) * 100) / Integer.parseInt(disparos_tot);
+                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
+                    array[i] = string;
+                    i++;
+                }
+            }
+            rs.close();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        desconectar(connection);
+        return string;
+    }
+
     public void listarTop10() {
         conectar();
+        Connection connection = null;
+        Statement statement;
+        ResultSet rs;
+        String string = "";
+
         try {
-            // Ahora utilizamos las sentencias de BD
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
             String query = "SELECT * FROM TOP;";
-            statement = conn.createStatement();
+            statement = connection.createStatement();
             rs = statement.executeQuery(query);
-            int i = 1;
+            int i = 0;
             // y recorremos lo obtenido
-            while (rs.next() && i <= 10) {
+            while (rs.next() && i < 10) {
+
                 String nick = "" + rs.getString("NICK");
                 System.out.println("NICK: " + nick);
-                String name = "" + rs.getString("PUNTUACION");
-                System.out.println("PUNTUACION: " + name);
-                String nivel = "" + rs.getString("NIVEL");
-                System.out.println("NIVEL: " + nivel);
+                String punt = "" + rs.getString("PUNTUACION");
+                System.out.println("PUNTUACION: " + punt);
                 String disparos_ac = "" + rs.getString("DISPAROS_AC");
                 System.out.println("DISPAROS_AC: " + disparos_ac);
                 String disparos_tot = "" + rs.getString("DISPAROS_TOT");
                 System.out.println("DISPAROS_TOT: " + disparos_tot);
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
-                System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
-                System.out.println("--");
-                i++;
+                System.out.println("   ---   ");
+                //System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
+                //System.out.println("--");                
             }
             rs.close();
             statement.close();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecucion de sentencias SQLite.", "La conexion no pudo ser establecida", 2);
         }
         desconectar();
     }
@@ -303,7 +353,6 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
 
                 Partida p = new Partida(cod_u, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
                 aP.add(p);
-
             }
             statement.close();
             desconectar(connection);
@@ -313,19 +362,65 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         }
 
         return aP;
+    }
+
+    public static String listarEstadisticasPartidas(int i) {
+
+        Connection connection = conectarStatic();
+        conectar(connection);
+        i++;
+        int j = 0;
+        String r = "";
+
+        try {
+            // Ahora utilizamos las sentencias de BD
+            String query = "SELECT * FROM PARTIDA;";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            // y recorremos lo obtenido
+            while (rs.next() && j != i) {
+                String cod_u = "" + rs.getString("COD_U");
+                System.out.println("COD_U: " + cod_u);
+                String nick = "" + rs.getString("FECHA_HORA");
+                System.out.println("FECHA_HORA: " + nick);
+                String punt = "" + rs.getString("PUNTUACION");
+                System.out.println("PUNTUACION: " + punt);
+                String nivel = "" + rs.getString("NIVEL");
+                System.out.println("NIVEL: " + nivel);
+                String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                System.out.println("DISPAROS_AC: " + disparos_ac);
+                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                System.out.println("DISPAROS_TOT: " + disparos_tot);
+                String muertos = "" + rs.getString("MUERTES");
+                System.out.println("MUERTOS: " + muertos);
+                String tiempo = "" + rs.getString("TIEMPO");
+                System.out.println("TIEMPO: " + tiempo);
+
+                Partida p = new Partida(cod_u, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
+                r = p.print();
+                j++;
+            }
+            statement.close();
+            desconectar(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+
+        return r;
 
 
     }
 
     public static void main(String[] args) {
-        //Jugador Imanol = new Jugador("12", "Jon Ander2", "Jonan2");
-        //getInstance().agregarPerfil(Imanol);
+        Jugador Imanol = new Jugador("3", "Jesus", "jesuspereira");
+        getInstance().agregarPerfil(Imanol);
 
-        //Partida partidita = new Partida("13", "900", "3", "900", "1200", "9", 12800);
-        //getInstance().agregarPartida(partidita);
+        Partida partidita = new Partida("3", "1230", "3", "900", "50", "9", "12800");
+        getInstance().agregarPartida(partidita);
         //getInstance().listarEstadisticasPartidas();
-        //getInstance().listarTop10();
+        getInstance().listarTop10();
         //getInstance().mostrarDisparosTopporciento();
-        getInstance().listarEstadisticasJugares();
+        //getInstance().listarEstadisticasJugares();
     }
 }

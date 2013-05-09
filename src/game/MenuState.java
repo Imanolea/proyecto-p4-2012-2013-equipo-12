@@ -22,6 +22,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import database.GestorEstadisticasLocal;
 import database.Jugador;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
@@ -529,4 +530,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         
         loadMenu2();
     }
+    
+    
+    
 }

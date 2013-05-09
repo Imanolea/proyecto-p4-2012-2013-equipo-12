@@ -28,6 +28,7 @@ import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.Color;
 import java.util.ArrayList;
 
 public class StatisticsState extends AbstractAppState implements ScreenController {
@@ -120,7 +121,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
         inputManager.setCursorVisible(true);
 
-
+        final String s = GestorEstadisticasLocal.listarTop10(0);
 
         nifty.addScreen("StatisticsScreen", new ScreenBuilder("SScreen") {
             {
@@ -137,7 +138,30 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("100%");
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder("ef") {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        String s = GestorEstadisticasLocal.listarTop10(1);
+                                        text(s);
+                                    }
+                                });
+                            }
+                        }); // </panel_1>
+                        // <panel_2>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
                                 width("100%");
 
                                 // add text
@@ -146,20 +170,217 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                     {
                                         alignCenter();
                                         valignCenter();
-                                        String s = "";
-                                        ArrayList<Partida> a = GestorEstadisticasLocal.listarEstadisticasPartidas();
-                                       /* for (Partida p : a) {
-                                            s = s + p.getCod_u();
-                                        }
-                                        * */
-                                        text(s);
-                                        font("Interface/Fonts/Default.fnt");
                                         height("100%");
                                         width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(2)){
+                                           String s = GestorEstadisticasLocal.listarTop10(2);
+                                           text(s); 
+                                        }                                        
                                     }
                                 });
                             }
-                        }); // </panel_1>
+                        }); // </panel_2>
+                        // <panel_3>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(3)){
+                                           String s = GestorEstadisticasLocal.listarTop10(3);
+                                           text(s); 
+                                        }  
+                                    }
+                                });
+                            }
+                        }); // </panel_3>
+                        // </panel_4>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder("ef") {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(4)){
+                                           String s = GestorEstadisticasLocal.listarTop10(4);
+                                           text(s); 
+                                        } 
+                                    }
+                                });
+                            }
+                        }); // </panel_4>
+                        // <panel_5>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(5)){
+                                           String s = GestorEstadisticasLocal.listarTop10(5);
+                                           text(s); 
+                                        }
+                                    }
+                                });
+                            }
+                        }); // </panel_5>
+                        // <panel_5>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(6)){
+                                           String s = GestorEstadisticasLocal.listarTop10(6);
+                                           text(s); 
+                                        }
+                                    }
+                                });
+                            }
+                        }); // </panel_6>
+                        // <panel_7>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder("ef") {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(7)){
+                                           String s = GestorEstadisticasLocal.listarTop10(7);
+                                           text(s); 
+                                        }
+                                    }
+                                });
+                            }
+                        }); // </panel_7>
+                        // <panel_8>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(8)){
+                                           String s = GestorEstadisticasLocal.listarTop10(8);
+                                           text(s); 
+                                        }
+                                    }
+                                });
+                            }
+                        }); // </panel_8>
+                        // <panel_9>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(9)){
+                                           String s = GestorEstadisticasLocal.listarTop10(9);
+                                           text(s); 
+                                        }
+                                    }
+                                });
+                            }
+                        }); // </panel_9>
+                        // <panel_10>
+                        panel(new PanelBuilder("Panel_TITLE2") {
+                            {
+                                childLayoutCenter();
+                                alignCenter();
+                                height("10%");
+                                width("100%");
+
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("100%");
+                                        width("100%");
+                                        font("Interface/Fonts/Default.fnt");
+                                        if(noHayMasPartidas(10)){
+                                           String s = GestorEstadisticasLocal.listarTop10(10);
+                                           text(s); 
+                                        }
+                                    }
+                                });
+                            }
+                        }); // </panel_10>
 
                     }
                 });
@@ -167,6 +388,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
             }
         }.build(nifty));
         // </screen>
+
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("StatisticsScreen"); // it is used to start the screen
@@ -207,5 +429,19 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
     }
 
     public void render(RenderManager rm) {
+    }
+
+    public static boolean noHayMasPartidas(int i) {
+        if (i != 0) {
+            String nueva = GestorEstadisticasLocal.listarTop10(i);
+            String deAntes = GestorEstadisticasLocal.listarTop10(i-1);
+            if(nueva.equals(deAntes))
+                return false;
+            else
+                return true;
+        }else
+            return false;
+        
+
     }
 }
