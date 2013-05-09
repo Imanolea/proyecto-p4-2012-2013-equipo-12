@@ -1,138 +1,149 @@
 package database;
 
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 /**
- * 
+ *
  * @author Team 12
  *
  */
 public class Partida {
-	
-	private String cod_u;
-	private Timestamp fecha_hora;
-	private String puntuacion;
-	private String nivel;
-	private String disparos_ac;
-	private String disparos_tot;
-	private String muertes;
-	private double tiempo;
-	private String fecha_h;
-        private String tiempos;
-	
-	
-	public String getFecha_h() {
-		return fecha_h;
-	}
 
-	public void setFecha_h(String fecha_h) {
-		this.fecha_h = fecha_h;
-	}
+    private String cod_u;
+    private Timestamp fecha_hora;
+    private String puntuacion;
+    private String nivel;
+    private String disparos_ac;
+    private String disparos_tot;
+    private String muertes;
+    private double tiempo;
+    private String fecha_h;
+    private String tiempos;
+    //private String contraseña;
 
-	public Partida(String cod_u, String puntuacion, String nivel,
-	String disparos_ac, String disparos_tot, String muertes, String tiempos){
-		this.cod_u = cod_u;
-		//Timestamp ts = new Timestamp(System.currentTimeMillis());
-		//SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SS aaa");
-		//String fecha_hora = formatter.format(ts);
-		java.util.Date utilDate = new java.util.Date(); //fecha actual
-		long lnMilisegundos = utilDate.getTime();
+    public String getFecha_h() {
+        return fecha_h;
+    }
 
-		java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(lnMilisegundos);
+    public void setFecha_h(String fecha_h) {
+        this.fecha_h = fecha_h;
+    }
 
-		this.fecha_hora = sqlTimestamp;
-		this.puntuacion = puntuacion;
-		this.nivel = nivel;
-		this.disparos_ac = disparos_ac;
-		this.disparos_tot = disparos_tot;
-		this.muertes = muertes;
-		this.tiempos = tiempos;
-	}
-	
-	public Partida(String cod_u, String puntuacion, String nivel, 
-			String disparos_ac, String disparos_tot, String muertes, double tiempo,String fecha) {
-		
-		this.cod_u = cod_u;
-		this.fecha_h = fecha;
-		this.puntuacion = puntuacion;
-		this.nivel = nivel;
-		this.disparos_ac = disparos_ac;
-		this.disparos_tot = disparos_tot;
-		this.muertes = muertes;
-		this.tiempo = tiempo;
-	}
+    public Partida(String cod_u, String puntuacion, String nivel,
+            String disparos_ac, String disparos_tot, String muertes, String tiempos) {
+        this.cod_u = cod_u;
+        //Timestamp ts = new Timestamp(System.currentTimeMillis());
+        //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SS aaa");
+        //String fecha_hora = formatter.format(ts);
+        java.util.Date utilDate = new java.util.Date(); //fecha actual
+        long lnMilisegundos = utilDate.getTime();
 
-	public String getCod_u() {
-		return cod_u;
-	}
+        java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(lnMilisegundos);
 
-	public void setCod_u(String cod_u) {
-		this.cod_u = cod_u;
-	}
+        this.fecha_hora = sqlTimestamp;
+        this.puntuacion = puntuacion;
+        this.nivel = nivel;
+        this.disparos_ac = disparos_ac;
+        this.disparos_tot = disparos_tot;
+        this.muertes = muertes;
+        this.tiempos = tiempos;
+    }
 
-	public Timestamp getFecha_hora() {
-		return fecha_hora;
-	}
+    public Partida(String cod_u, String puntuacion, String nivel,
+            String disparos_ac, String disparos_tot, String muertes, double tiempo, String fecha) {
 
-	public void setFecha_hora(Timestamp fecha_hora) {
-		this.fecha_hora = fecha_hora;
-	}
+        this.cod_u = cod_u;
+        this.fecha_h = fecha;
+        this.puntuacion = puntuacion;
+        this.nivel = nivel;
+        this.disparos_ac = disparos_ac;
+        this.disparos_tot = disparos_tot;
+        this.muertes = muertes;
+        this.tiempo = tiempo;
+    }
 
-	public String getPuntuacion() {
-		return puntuacion;
-	}
+    public String getCod_u() {
+        return cod_u;
+    }
 
-	public void setPuntuacion(String puntuacion) {
-		this.puntuacion = puntuacion;
-	}
+    public void setCod_u(String cod_u) {
+        this.cod_u = cod_u;
+    }
 
-	public String getNivel() {
-		return nivel;
-	}
+    public Timestamp getFecha_hora() {
+        return fecha_hora;
+    }
 
-	public void setNivel(String nivel) {
-		this.nivel = nivel;
-	}
+    public void setFecha_hora(Timestamp fecha_hora) {
+        this.fecha_hora = fecha_hora;
+    }
 
-	public String getDisparos_ac() {
-		return disparos_ac;
-	}
+    public String getPuntuacion() {
+        return puntuacion;
+    }
 
-	public void setDisparos_ac(String disparos_ac) {
-		this.disparos_ac = disparos_ac;
-	}
+    public void setPuntuacion(String puntuacion) {
+        this.puntuacion = puntuacion;
+    }
 
-	public String getDisparos_tot() {
-		return disparos_tot;
-	}
+    public String getNivel() {
+        return nivel;
+    }
 
-	public void setDisparos_tot(String disparos_tot) {
-		this.disparos_tot = disparos_tot;
-	}
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
 
-	public String getMuertes() {
-		return muertes;
-	}
+    public String getDisparos_ac() {
+        return disparos_ac;
+    }
 
-	public void setMuertes(String muertes) {
-		this.muertes = muertes;
-	}
+    public void setDisparos_ac(String disparos_ac) {
+        this.disparos_ac = disparos_ac;
+    }
 
-	public double getTiempo() {
-		return tiempo;
-	}
+    public String getDisparos_tot() {
+        return disparos_tot;
+    }
 
-	public void setTiempo(double tiempo) {
-		this.tiempo = tiempo;
-	}
+    public void setDisparos_tot(String disparos_tot) {
+        this.disparos_tot = disparos_tot;
+    }
 
-	public static void main(String[] args){
-		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-		String g = formatter.format(ts);		
-		System.out.println(g);
-	}
+    public String getMuertes() {
+        return muertes;
+    }
 
+    public void setMuertes(String muertes) {
+        this.muertes = muertes;
+    }
+
+    public double getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(double tiempo) {
+        this.tiempo = tiempo;
+    }
+    
+    /*
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String pass) {
+        this.contraseña = pass;
+    }
+     */
+    public static void main(String[] args) {
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        String g = formatter.format(ts);
+        System.out.println(g);
+    }
+
+    public String print() {
+        return ("COD_U: " + this.getCod_u() + "; PUNTUACION: " + this.getPuntuacion());
+    }
 }
