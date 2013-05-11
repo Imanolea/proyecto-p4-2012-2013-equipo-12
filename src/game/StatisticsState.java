@@ -121,7 +121,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
         inputManager.setCursorVisible(true);
 
-        final String s = GestorEstadisticasLocal.listarTop10(0);
+        final String s = GestorEstadisticasLocal.listarTop10Static(0);
 
         nifty.addScreen("StatisticsScreen", new ScreenBuilder("SScreen") {
             {
@@ -138,7 +138,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -150,7 +150,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        String s = GestorEstadisticasLocal.listarTop10(1);
+                                        String s = GestorEstadisticasLocal.listarTop10Static(1);
                                         text(s);
                                     }
                                 });
@@ -161,7 +161,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -173,10 +173,10 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(2)){
-                                           String s = GestorEstadisticasLocal.listarTop10(2);
-                                           text(s); 
-                                        }                                        
+                                        if (noHayMasPartidas(2)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(2);
+                                            text(s);
+                                        }
                                     }
                                 });
                             }
@@ -186,7 +186,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -198,10 +198,10 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(3)){
-                                           String s = GestorEstadisticasLocal.listarTop10(3);
-                                           text(s); 
-                                        }  
+                                        if (noHayMasPartidas(3)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(3);
+                                            text(s);
+                                        }
                                     }
                                 });
                             }
@@ -211,7 +211,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -223,10 +223,10 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(4)){
-                                           String s = GestorEstadisticasLocal.listarTop10(4);
-                                           text(s); 
-                                        } 
+                                        if (noHayMasPartidas(4)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(4);
+                                            text(s);
+                                        }
                                     }
                                 });
                             }
@@ -236,7 +236,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -248,9 +248,9 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(5)){
-                                           String s = GestorEstadisticasLocal.listarTop10(5);
-                                           text(s); 
+                                        if (noHayMasPartidas(5)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(5);
+                                            text(s);
                                         }
                                     }
                                 });
@@ -261,7 +261,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -273,9 +273,9 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(6)){
-                                           String s = GestorEstadisticasLocal.listarTop10(6);
-                                           text(s); 
+                                        if (noHayMasPartidas(6)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(6);
+                                            text(s);
                                         }
                                     }
                                 });
@@ -286,7 +286,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -298,9 +298,9 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(7)){
-                                           String s = GestorEstadisticasLocal.listarTop10(7);
-                                           text(s); 
+                                        if (noHayMasPartidas(7)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(7);
+                                            text(s);
                                         }
                                     }
                                 });
@@ -311,7 +311,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -323,9 +323,9 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(8)){
-                                           String s = GestorEstadisticasLocal.listarTop10(8);
-                                           text(s); 
+                                        if (noHayMasPartidas(8)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(8);
+                                            text(s);
                                         }
                                     }
                                 });
@@ -336,7 +336,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -348,9 +348,9 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(9)){
-                                           String s = GestorEstadisticasLocal.listarTop10(9);
-                                           text(s); 
+                                        if (noHayMasPartidas(9)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(9);
+                                            text(s);
                                         }
                                     }
                                 });
@@ -361,7 +361,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("10%");
+                                height("9%");
                                 width("100%");
 
                                 // add text
@@ -373,14 +373,27 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if(noHayMasPartidas(10)){
-                                           String s = GestorEstadisticasLocal.listarTop10(10);
-                                           text(s); 
+                                        if (noHayMasPartidas(10)) {
+                                            String s = GestorEstadisticasLocal.listarTop10Static(10);
+                                            text(s);
                                         }
                                     }
                                 });
                             }
                         }); // </panel_10>
+
+                        control(new ButtonBuilder("Button_QUIT2", "Back") {
+                            {
+                                alignCenter();
+                                valignCenter();
+                                backgroundColor("#f108");
+                                height("8%");
+                                width("40%");
+                                visibleToMouse(true);
+                                interactOnClick("loadMenuFromStatistics()");
+
+                            }
+                        });
 
                     }
                 });
@@ -433,15 +446,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
     public static boolean noHayMasPartidas(int i) {
         if (i != 0) {
-            String nueva = GestorEstadisticasLocal.listarTop10(i);
-            String deAntes = GestorEstadisticasLocal.listarTop10(i-1);
-            if(nueva.equals(deAntes))
+            String nueva = GestorEstadisticasLocal.listarTop10Static(i);
+            String deAntes = GestorEstadisticasLocal.listarTop10Static(i - 1);
+            if (nueva.equals(deAntes)) {
                 return false;
-            else
+            } else {
                 return true;
-        }else
+            }
+        } else {
             return false;
-        
+        }
+
 
     }
 }
