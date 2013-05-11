@@ -34,9 +34,12 @@ import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.controls.TextField;
+import de.lessvoid.nifty.tools.Color;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class MenuState extends AbstractAppState implements ScreenController {
-
+    
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
     protected BitmapText menuText;
@@ -53,36 +56,38 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private NiftyJmeDisplay niftyDisplay;
     private FlyByCamera flyCam;
     private Nifty nifty;
-    private String titulos[][] = {{"Comienzo", "Start"},
-        {"Estadísticas", "Statistics"}, {"Registrarse", "Sign Up"}, {"Salir", "Quit"}};
+    private String titulos[][] = {{"Comienzo", "Start"}, {"Estadísticas", "Statistics"},
+        {"Registrarse", "Sign Up"}, {"Cambiar de Jugador", "Change Player"}, {"Salir", "Quit"}};
     private int i = 1;
     private boolean primeraVez1 = true;
     private boolean primeraVez2 = true;
-
+    private boolean primeraVez3 = true;
+    private String nameJugador;
+    
     public MenuState(MainApp game) {
         this.game = game;
     }
-
+    
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
     }
-
+    
     public void onStartScreen() {
     }
-
+    
     public void onEndScreen() {
     }
-
+    
     private class AppActionListener implements ActionListener {
-
+        
         public void onAction(String name, boolean value, float tpf) {
             if (!value) {
                 return;
             }
-
+            
         }
     }
-
+    
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         menuText = new BitmapText(menuFont, false);
@@ -91,7 +96,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -104,7 +109,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
-
+        nameJugador = "";
         // enable depth test and back-face culling for performance
         app.getRenderer().applyRenderState(RenderState.DEFAULT);
 
@@ -113,19 +118,19 @@ public class MenuState extends AbstractAppState implements ScreenController {
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
-
-
+        
+        
         if (niftyDisplay == null) {
             niftyDisplay = new NiftyJmeDisplay(
                     assetManager, inputManager, audioRenderer, guiViewPort);
-
+            
         }
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
-
+        
         inputManager.setCursorVisible(true);
 
 
@@ -144,9 +149,32 @@ public class MenuState extends AbstractAppState implements ScreenController {
                         panel(new PanelBuilder("Panel_TITLE") {
                             {
                                 childLayoutCenter();
+                                alignRight();
+                                valignBottom();
+                                height("10%");
+                                width("95%");
+
+                                // "Hi, user" text.
+
+                                /*text(new TextBuilder() {
+                                    {
+                                        alignRight();
+                                        text("Hi, " + nameJugador);
+                                        font("Interface/Fonts/Default.fnt");
+                                        height("100%");
+                                        width("27%");
+                                    }
+                                });*/
+                            }
+                        }); // </panel_1>
+
+                        // <panel_1>
+                        panel(new PanelBuilder("Panel_TITLE") {
+                            {
+                                childLayoutCenter();
                                 alignCenter();
-                                height("15%");
-                                width("50%");
+                                height("5%");
+                                width("90%");
 
                                 // add text
 
@@ -168,16 +196,16 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 alignCenter();
                                 height("70%");
                                 width("50%");
-
+                                
                                 panel(new PanelBuilder("Panel_EMPTY") {
                                     {
                                         childLayoutCenter();
                                         height("16%");
                                         width("55%");
-
+                                        
                                     }
                                 });
-
+                                
                                 panel(new PanelBuilder("Panel_START") {
                                     {
                                         alignCenter();
@@ -226,7 +254,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 });// </panel_2.2>
 
                                 // <panel_2.3>
-                                panel(new PanelBuilder("Panel_") {
+                                panel(new PanelBuilder("Panel_SIGN_UP") {
                                     {
                                         childLayoutCenter();
                                         alignCenter();
@@ -243,14 +271,14 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("80%");
                                                 visibleToMouse(true);
-                                                interactOnClick("startInput()");
+                                                interactOnClick("loadInputFromMenu()");
                                             }
                                         });
                                     }
                                 });// </panel_2.3>
 
                                 // <panel_2.4>
-                                panel(new PanelBuilder("Panel_QUIT") {
+                                panel(new PanelBuilder("Panel_CHANGEPLAYER") {
                                     {
                                         childLayoutCenter();
                                         alignCenter();
@@ -259,7 +287,31 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         width("55%");
 
                                         // GUI element
-                                        control(new ButtonBuilder("Button_QUIT", titulos[3][i]) {
+                                        control(new ButtonBuilder("Button_CHANGEPLAYER", titulos[3][i]) {
+                                            {
+                                                alignCenter();
+                                                valignCenter();
+                                                backgroundColor("#f108");
+                                                height("50%");
+                                                width("80%");
+                                                visibleToMouse(true);
+                                                interactOnClick("loadLogIn2FromMenu()");
+                                                
+                                            }
+                                        });
+                                    }
+                                });// </panel_2.4>
+
+                                panel(new PanelBuilder("Panel_EXIT") {
+                                    {
+                                        childLayoutCenter();
+                                        height("16%");
+                                        width("55%");
+                                        alignCenter();
+                                        valignCenter();
+
+                                        // GUI element
+                                        control(new ButtonBuilder("Button_QUIT", titulos[4][i]) {
                                             {
                                                 alignCenter();
                                                 valignCenter();
@@ -268,20 +320,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 width("80%");
                                                 visibleToMouse(true);
                                                 interactOnClick("exit()");
-
+                                                
                                             }
                                         });
                                     }
-                                });// </panel_2.4>
-
-                                panel(new PanelBuilder("Panel_QUIT") {
-                                    {
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("25%");
-                                    }
                                 });
-
+                                
+                                
                             }
                         }); // </panel_2>
 
@@ -289,90 +334,34 @@ public class MenuState extends AbstractAppState implements ScreenController {
                         panel(new PanelBuilder("Panel_LANGUAGES") {
                             {
                                 childLayoutHorizontal();
-                                alignCenter();
-                                height("15%");
+                                alignRight();
+                                valignTop();
+                                height("12%");
                                 width("100%");
-
-                                // <panel_3.1>
-                                panel(new PanelBuilder("Panel_EMPTY3.1") {
+                                
+                                panel(new PanelBuilder("Panel_LANGUAGES") {
                                     {
-                                        childLayoutCenter();
+                                        childLayoutOverlay();
+                                        alignRight();
                                         valignCenter();
-                                        height("50%");
-                                        width("50%");
+                                        height("12%");
+                                        width("80%");
                                     }
-                                }); // </panel_3.1>
-
-                                // <panel_3.2>
-                                panel(new PanelBuilder("Panel_IN_LANGUAGES") {
+                                });
+                                
+                                
+                                image(new ImageBuilder() {
                                     {
-                                        childLayoutHorizontal();
+                                        this.filename("/Pictures/Titulo.png");
                                         valignCenter();
-                                        height("50%");
-                                        width("50%"); ////////////////// NESPÂÑOL ENGLIH
-
-                                        // <panel_3.2.1>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.1") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("70%");
-
-
-                                            }
-                                        }); // </panel_3.2.1>
-
-                                        // <panel_3.2.2>
-                                        panel(new PanelBuilder("Panel_UK") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // image uk
-                                            }
-                                        }); // </panel_3.2.2>
-
-                                        // <panel_3.2.3>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.3") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.3>
-
-                                        // <panel_3.2.4>
-                                        panel(new PanelBuilder("Panel_ESP") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image esp
-                                            }
-                                        }); // </panel_3.2.4>
-
-                                        // <panel_3.2.5>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.5") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.6>
-
+                                        alignRight();
+                                        height("75%");
+                                        width("16%");
+                                        
                                     }
-                                }); // </panel_3.2>
+                                });
+                                
+                                
                             }
                         });// </panel_3>
                     }
@@ -386,7 +375,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nifty.gotoScreen("MenuScreen"); // it is used to start the screen
 //loadMenu();
     }
-
+    
     @Override
     public void update(float tpf) {
         super.update(tpf);
@@ -399,18 +388,18 @@ public class MenuState extends AbstractAppState implements ScreenController {
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
         guiNode.updateGeometricState();
-
+        
     }
-
+    
     public void stateAttached(AppStateManager stateManager) {
         //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         super.stateAttached(stateManager);
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
-
-
+        
+        
     }
-
+    
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
@@ -418,119 +407,171 @@ public class MenuState extends AbstractAppState implements ScreenController {
         game.getGUIViewPort().detachScene(guiNode);
         //game.getGUIViewPort().removeProcessor(niftyDisplay);
     }
-
+    
     public void render(RenderManager rm) {
     }
-
+    
     public void startGame() {
 
         //nifty.exit();
         game.loadGame();
         nifty.removeScreen("MenuScreen");
-
+        
     }
-
+    
     public void quitGame() {
         game.stop();
     }
-
+    
     public void loadMenu() {
         game.loadMenu();
-
+        
     }
-     public void startStatistics() {
-
+    
+    public void startStatistics() {
+        
         nifty.removeScreen("MenuScreen");
         game.loadStatistics();
         
-
+        
     }
-
+    
     public void quitStatistics() {
         game.stop();
     }
-
+    
     public void loadStatistics() {
         game.loadInput();
     }
-
-    public void startInput() {
+    
+    public void loadInputFromMenu() {
 
         // nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
-
-
     }
+    
+    public void loadInputFromLogIn() {
 
+        // nifty.exit();
+        nifty.removeScreen("LogInScreen");
+        game.loadInput();
+    }
+    
     public void exit() {
         System.exit(0);
     }
-
-    public void loadMenu2() {
-
+    
+    public void loadMenuFromInput() {
+        
         nifty.removeScreen("InputScreen");
-
-        game.loadMenu2();
+        
+        game.loadMenuFromInput();
         niftyDisplay.cleanup();
     }
-     public void loadMenu3() {
-
+    
+    public void loadMenuFromStatistics() {
         nifty.removeScreen("StatisticsScreen");
-
-        game.loadMenu3();
-       
+        game.loadMenuFromStatistics();
     }
-
+    
+    public void loadMenuFromLogIn() {
+        nifty.removeScreen("LogInScreen");
+        game.loadMenuFromLogIn();
+    }
+    
+    public void loadLogInFromMenu() {
+        nifty.removeScreen("MenuScreen");
+        game.loadLogInFromMenu();
+    }
+    
+    public void loadMenuFromLogIn2() {
+        nifty.removeScreen("LogInScreen2");
+        game.loadMenuFromLogIn2();
+    }
+    
+    public void loadLogIn2FromMenu() {
+        nifty.removeScreen("MenuScreen");
+        game.loadLogIn2FromMenu();
+    }
+    
     public void leerTextFields() {
         String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
         System.out.print("Name : " + name);
-
+        
         String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
         System.out.print("Nick : " + nick);
     }
-
+    
     public void borrarTextoName() {
         if (primeraVez1) {
             nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).setText("");
             primeraVez1 = false;
         }
     }
-
+    
     public void borrarTextoNick() {
         if (primeraVez2) {
             nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).setText("");
             primeraVez2 = false;
         }
     }
-
+    
+    public void borrarTextoPass() {
+        if (primeraVez3) {
+            nifty.getScreen("InputScreen").findNiftyControl("PassInput", TextField.class).setText("");
+            primeraVez3 = false;
+        }
+    }
+    
     public void insertarUsuario() {
-
-        String cod_u = database.GestorEstadisticasLocal.ultimoCod_uAsignado();
-        int codigo_u = Integer.parseInt(cod_u);
-        codigo_u++;
-        cod_u = "" + codigo_u;
-
+        
         String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
         
         String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
         
-        while(name.substring(0, 1).equals(" ")){
+        String pass = nifty.getScreen("InputScreen").findNiftyControl("PassInput", TextField.class).getText();
+        
+        
+        while (name.substring(0, 1).equals(" ")) {
             name = name.substring(1);
         }
         
-        while(nick.substring(0, 1).equals(" ")){
+        while (nick.substring(0, 1).equals(" ")) {
             nick = nick.substring(1);
         }
         
-        Jugador j = new Jugador(cod_u, name, nick);
+        Jugador j = new Jugador(nick, pass, name);
         j.printJugador(j);
         
         database.GestorEstadisticasLocal.agregarPerfilStatic(j);
         
-        loadMenu2();
+        loadMenuFromInput();
     }
     
+    public void cargarUsuario() {
+        
+        String nick = nifty.getScreen("LogInScreen").findNiftyControl("NickLogIn", TextField.class).getText();
+        
+        String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
+        
+        nameJugador = database.GestorEstadisticasLocal.comprobarJugadorStatic(nick, password);
+        
+        if (!nameJugador.equals("")) {
+            loadMenuFromLogIn();
+        }
+    }
     
-    
+    public void cargarUsuario2() {
+        
+        String nick = nifty.getScreen("LogInScreen2").findNiftyControl("NickLogIn", TextField.class).getText();
+        
+        String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
+        
+        nameJugador = database.GestorEstadisticasLocal.comprobarJugadorStatic(nick, password);
+        
+        if (!nameJugador.equals("")) {
+            loadMenuFromLogIn2();
+        }
+    }
 }
