@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
  */
 public class Partida {
 
-    private String cod_u;
+    private String nick;
     private Timestamp fecha_hora;
     private String puntuacion;
     private String nivel;
@@ -30,9 +30,9 @@ public class Partida {
         this.fecha_h = fecha_h;
     }
 
-    public Partida(String cod_u, String puntuacion, String nivel,
+    public Partida(String nick, String puntuacion, String nivel,
             String disparos_ac, String disparos_tot, String muertes, String tiempos) {
-        this.cod_u = cod_u;
+        this.nick = nick;
         //Timestamp ts = new Timestamp(System.currentTimeMillis());
         //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SS aaa");
         //String fecha_hora = formatter.format(ts);
@@ -50,10 +50,10 @@ public class Partida {
         this.tiempos = tiempos;
     }
 
-    public Partida(String cod_u, String puntuacion, String nivel,
+    public Partida(String nick, String puntuacion, String nivel,
             String disparos_ac, String disparos_tot, String muertes, double tiempo, String fecha) {
 
-        this.cod_u = cod_u;
+        this.nick = nick;
         this.fecha_h = fecha;
         this.puntuacion = puntuacion;
         this.nivel = nivel;
@@ -63,12 +63,12 @@ public class Partida {
         this.tiempo = tiempo;
     }
 
-    public String getCod_u() {
-        return cod_u;
+    public String getNick() {
+        return nick;
     }
 
-    public void setCod_u(String cod_u) {
-        this.cod_u = cod_u;
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     public Timestamp getFecha_hora() {
@@ -144,6 +144,6 @@ public class Partida {
     }
 
     public String print() {
-        return ("COD_U: " + this.getCod_u() + "; PUNTUACION: " + this.getPuntuacion());
+        return ("NICK: " + this.getNick() + "; PUNTUACION: " + this.getPuntuacion());
     }
 }
