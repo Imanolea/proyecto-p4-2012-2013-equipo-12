@@ -101,12 +101,12 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next()) {
-                String cod_u = "" + rs.getString("COD_U");
-                System.out.println("COD_U: " + cod_u);
+                String name = "" + rs.getString("NAME");
+                System.out.println("NOMBRE: " + name);
                 String nick = "" + rs.getString("NICK");
                 System.out.println("NICK: " + nick);
-                String name = "" + rs.getString("NOMBRE");
-                System.out.println("NOMBRE: " + name);
+                String pass = "" + rs.getString("PASSWORD");
+                System.out.println("PASS: " + pass);
                 System.out.println("--");
             }
             rs.close();
@@ -118,7 +118,96 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         desconectar();
     }
 
-    public static String listarTop10(int pos) {
+    public String comprobarJugador(String insertedNick, String insertedPassword) {
+        String name = "";
+        conectar();
+        boolean encontrado = false;
+        try {
+            String query = "SELECT * FROM JUGADOR;";
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
+            // y recorremos lo obtenido
+            while (rs.next() && !encontrado) {
+                String nick = "" + rs.getString("NICK");
+                String pass = "" + rs.getString("PASSWORD");
+                name = "" + rs.getString("NAME");
+                if (insertedNick.equals(nick) && insertedPassword.equals(pass)) {
+                    encontrado = true;
+                    return name;
+                }
+            }
+            rs.close();
+            statement.close();
+            desconectar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
+    public static String comprobarJugadorStatic(String insertedNick, String insertedPassword) {
+        Connection connection = null;
+        Statement statement;
+        ResultSet rs;
+        String name = "";
+        boolean encontrado = false;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
+            String query = "SELECT * FROM JUGADOR;";
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            // y recorremos lo obtenido
+            while (rs.next() && !encontrado) {
+                String nick = "" + rs.getString("NICK");
+                String pass = "" + rs.getString("PASSWORD");
+                name = "" + rs.getString("NAME");
+                if (insertedNick.equals(nick) && insertedPassword.equals(pass)) {
+                    encontrado = true;
+                    return name;
+                }
+            }
+            rs.close();
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public String listarTop10(int pos) {
+        String string = "";
+        try {
+            String query = "SELECT * FROM TOP;";
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
+            int i = 0;
+            // y recorremos lo obtenido
+            while (rs.next() && i < 10) {
+                if (pos == i) {
+                    return string;
+                } else {
+                    String nick = "" + rs.getString("NICK");
+                    String punt = "" + rs.getString("PUNTUACION");
+                    String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                    String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                    String tiempo = "" + rs.getString("TIEMPO");
+                    int prec = (Integer.parseInt(disparos_ac) * 100) / Integer.parseInt(disparos_tot);
+                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
+                    i++;
+                }
+            }
+            rs.close();
+            statement.close();
+            desconectar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
+    
+    public static String listarTop10Static(int pos) {
         String[] array = new String[10];
         Connection connection = null;
         Statement statement;
@@ -163,46 +252,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
         desconectar(connection);
         return string;
     }
-
-    public void listarTop10() {
-        conectar();
-        Connection connection = null;
-        Statement statement;
-        ResultSet rs;
-        String string = "";
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-            String query = "SELECT * FROM TOP;";
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-            int i = 0;
-            // y recorremos lo obtenido
-            while (rs.next() && i < 10) {
-
-                String nick = "" + rs.getString("NICK");
-                System.out.println("NICK: " + nick);
-                String punt = "" + rs.getString("PUNTUACION");
-                System.out.println("PUNTUACION: " + punt);
-                String disparos_ac = "" + rs.getString("DISPAROS_AC");
-                System.out.println("DISPAROS_AC: " + disparos_ac);
-                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
-                System.out.println("DISPAROS_TOT: " + disparos_tot);
-                String tiempo = "" + rs.getString("TIEMPO");
-                System.out.println("TIEMPO: " + tiempo);
-                System.out.println("   ---   ");
-                //System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
-                //System.out.println("--");                
-            }
-            rs.close();
-            statement.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        desconectar();
-    }
-
+    
     public void mostrarDisparosTopPorciento() {
         conectar();
         try {
@@ -230,14 +280,14 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
 
     public void agregarPerfil(Jugador jugador) {
         conectar();
-        String cod_u = jugador.getCod_u();
+        String password = jugador.getPassword();
         String nick = jugador.getNick();
-        String nombre = jugador.getNombre();
+        String name = jugador.getNombre();
         try {
             ps = conn.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
-            ps.setString(1, cod_u);
-            ps.setString(2, nick);
-            ps.setString(3, nombre);
+            ps.setString(1, nick);
+            ps.setString(2, password);
+            ps.setString(3, name);
             ps.executeUpdate();
             ps.close();
             desconectar();
@@ -250,51 +300,28 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
     public static void agregarPerfilStatic(Jugador jugador) {
         Connection connection;
         PreparedStatement ps;
-        String cod_u = jugador.getCod_u();
+        String password = jugador.getPassword();
         String nick = jugador.getNick();
-        String nombre = jugador.getNombre();
+        String name = jugador.getNombre();
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
             ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
-            ps.setString(1, cod_u);
-            ps.setString(2, nick);
-            ps.setString(3, nombre);
+            ps.setString(1, nick);
+            ps.setString(2, password);
+            ps.setString(3, name);
             ps.executeUpdate();
             ps.close();
             desconectar(connection);
         } catch (Exception e) {
-            System.out.print("Exceptioc");
+            System.out.print("Exception");
             e.printStackTrace();
         }
-    }
-
-    public static String ultimoCod_uAsignado() {
-        Connection connection = conectarStatic();
-        conectar(connection);
-        String cod_u = "";
-        try {
-            // Ahora utilizamos las sentencias de BD
-            String query = "SELECT COD_U FROM JUGADOR ORDER BY COD_U DESC;";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-
-
-            cod_u = "" + rs.getString("COD_U");
-
-            rs.close();
-            statement.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        desconectar(connection);
-        return cod_u;
-    }
+    }  
 
     public void agregarPartida(Partida partida) {
         conectar();
-        String cod_u = partida.getCod_u();
+        String nick = partida.getNick();
         Timestamp fecha_hora = partida.getFecha_hora();
         String fecha_horaS = fecha_hora.toString();
         String puntuacion = partida.getPuntuacion();
@@ -306,7 +333,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
 
         try {
             ps = conn.prepareStatement("INSERT INTO PARTIDA VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            ps.setString(1, cod_u);
+            ps.setString(1, nick);
             ps.setString(2, fecha_horaS);
             ps.setString(3, puntuacion);
             ps.setString(4, nivel);
@@ -321,6 +348,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error ejecutando una PARTIDAS", "La conexi��n no pudo ser establecida", 2);
         }
     }
+    
 
     public static ArrayList listarEstadisticasPartidas() {
 
@@ -334,10 +362,10 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             ResultSet rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next()) {
-                String cod_u = "" + rs.getString("COD_U");
-                System.out.println("COD_U: " + cod_u);
-                String nick = "" + rs.getString("FECHA_HORA");
-                System.out.println("FECHA_HORA: " + nick);
+                String nick = "" + rs.getString("NICK");
+                System.out.println("NICK: " + nick);
+                String time = "" + rs.getString("FECHA_HORA");
+                System.out.println("FECHA_HORA: " + time);
                 String punt = "" + rs.getString("PUNTUACION");
                 System.out.println("PUNTUACION: " + punt);
                 String nivel = "" + rs.getString("NIVEL");
@@ -351,7 +379,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
 
-                Partida p = new Partida(cod_u, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
+                Partida p = new Partida(nick, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
                 aP.add(p);
             }
             statement.close();
@@ -379,10 +407,10 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
             ResultSet rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next() && j != i) {
-                String cod_u = "" + rs.getString("COD_U");
-                System.out.println("COD_U: " + cod_u);
-                String nick = "" + rs.getString("FECHA_HORA");
-                System.out.println("FECHA_HORA: " + nick);
+                String nick = "" + rs.getString("NICK");
+                System.out.println("NICK: " + nick);
+                String time = "" + rs.getString("FECHA_HORA");
+                System.out.println("FECHA_HORA: " + time);
                 String punt = "" + rs.getString("PUNTUACION");
                 System.out.println("PUNTUACION: " + punt);
                 String nivel = "" + rs.getString("NIVEL");
@@ -396,7 +424,7 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
 
-                Partida p = new Partida(cod_u, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
+                Partida p = new Partida(nick, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
                 r = p.print();
                 j++;
             }
@@ -413,14 +441,17 @@ public class GestorEstadisticasLocal extends JPanel implements Conectable {
     }
 
     public static void main(String[] args) {
-        Jugador Imanol = new Jugador("3", "Jesus", "jesuspereira");
-        getInstance().agregarPerfil(Imanol);
+        getInstance().listarEstadisticasJugares();
+        //getInstance().comprobarJugador("e", "Jesus");
 
-        Partida partidita = new Partida("3", "1230", "3", "900", "50", "9", "12800");
-        getInstance().agregarPartida(partidita);
-        //getInstance().listarEstadisticasPartidas();
-        getInstance().listarTop10();
-        //getInstance().mostrarDisparosTopporciento();
-        //getInstance().listarEstadisticasJugares();
+        /*Jugador Imanol = new Jugador("3", "Jesus", "jesuspereira");
+         getInstance().agregarPerfil(Imanol);
+
+         Partida partidita = new Partida("3", "1230", "3", "900", "50", "9", "12800");
+         getInstance().agregarPartida(partidita);
+         //getInstance().listarEstadisticasPartidas();
+         getInstance().listarTop10();
+         //getInstance().mostrarDisparosTopporciento();
+         //getInstance().listarEstadisticasJugares();*/
     }
 }
