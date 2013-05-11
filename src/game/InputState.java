@@ -43,7 +43,6 @@ public class InputState extends AbstractAppState implements ScreenController {
     private AppStateManager stateManager;
     private InputManager inputManager;
     private ViewPort viewPort;
-    
     private MainApp game = null;
     private AudioRenderer audioRenderer;
     private ViewPort guiViewPort;
@@ -53,7 +52,7 @@ public class InputState extends AbstractAppState implements ScreenController {
     private String titulos[][] = {{"Comienzo", "Start"},
         {"Estadísticas", "Statistics"}, {"¿?", "?¿"}, {"Salir", "Quit"}};
     private int i = 0;
-    public static boolean b=false;
+    public static boolean b = false;
 
     public InputState(MainApp game) {
         this.game = game;
@@ -102,7 +101,7 @@ public class InputState extends AbstractAppState implements ScreenController {
         this.flyCam = new FlyByCamera(game.getCamera());
 
         // enable depth test and back-face culling for performance
-       game.getRenderer().applyRenderState(RenderState.DEFAULT);
+        game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
 
         // Init input
@@ -111,11 +110,11 @@ public class InputState extends AbstractAppState implements ScreenController {
         }
 
 
-        
-            niftyDisplay = new NiftyJmeDisplay(
-                    assetManager, inputManager, audioRenderer, guiViewPort);
 
-        
+        niftyDisplay = new NiftyJmeDisplay(
+                assetManager, inputManager, audioRenderer, guiViewPort);
+
+
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
@@ -141,19 +140,8 @@ public class InputState extends AbstractAppState implements ScreenController {
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("15%");
+                                height("35%");
                                 width("50%");
-
-                                // add text
-
-                                text(new TextBuilder() {
-                                    {
-                                        text("SIGN UP");
-                                        font("Interface/Fonts/Default.fnt");
-                                        height("100%");
-                                        width("100%");
-                                    }
-                                });
                             }
                         }); // </panel_1>
 
@@ -163,7 +151,15 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 alignCenter();
                                 height("10%");
                                 width("50%");
-
+                                
+                                text(new TextBuilder() {
+                                    {
+                                        text("SIGN UP");
+                                        font("Interface/Fonts/Default.fnt");
+                                        height("100%");
+                                        width("100%");
+                                    }
+                                });
 
                             }
                         }); // </panel_1>
@@ -178,39 +174,25 @@ public class InputState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_EMPTY2") {
                                     {
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("55%");
+                                        childLayoutHorizontal();
+                                        height("7%");
+                                        width("40%");
                                         alignCenter();
                                         valignCenter();
-
+                                        
                                         text(new TextBuilder() {
                                             {
-                                                alignCenter();
-                                                valignCenter();
                                                 text("Insert name:");
                                                 font("Interface/Fonts/Default.fnt");
-                                                height("100%");
-                                                width("100%");
+                                                height("50%");
+                                                width("50%");
                                             }
                                         });
-
-                                    }
-                                });
-
-                                panel(new PanelBuilder("Panel_START2") {
-                                    {
-                                        alignCenter();
-                                        valignCenter();
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("55%");
-
 
                                         control(new TextFieldBuilder("NameInput", "nombre") {
                                             {
                                                 interactOnMouseOver("borrarTextoName()");
-                                                width("200px");
+                                                width("55%");
                                             }
                                         });
 
@@ -220,49 +202,61 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 // <panel_2.2>
                                 panel(new PanelBuilder("Panel_STATISTICS2") {
                                     {
-                                        childLayoutCenter();
+                                        childLayoutHorizontal();
+                                        height("7%");
+                                        width("40%");
                                         alignCenter();
                                         valignCenter();
-                                        height("16%");
-                                        width("55%");
 
                                         text(new TextBuilder() {
                                             {
-                                                alignCenter();
-                                                valignCenter();
                                                 text("Insert nickname:");
                                                 font("Interface/Fonts/Default.fnt");
-                                                height("100%");
-                                                width("100%");
+                                                height("50%");
+                                                width("50%");
                                             }
                                         });
-                                    }
-                                });// </panel_2.2>
-
-                                // <panel_2.3>
-                                panel(new PanelBuilder("Panel_2") {
-                                    {
-                                        childLayoutCenter();
-                                        alignCenter();
-                                        valignCenter();
-                                        height("16%");
-                                        width("55%");
-
 
                                         control(new TextFieldBuilder("NickInput", "nick") {
                                             {
                                                 interactOnMouseOver("borrarTextoNick()");
-                                                width("200px");
+                                                width("55%");
                                             }
                                         });
 
+                                    }
+                                });// </panel_2.2>
 
+                                // <panel_2.3>
+                                panel(new PanelBuilder("Panel_STATISTICS3") {
+                                    {
+                                        childLayoutHorizontal();
+                                        height("7%");
+                                        width("40%");
+                                        alignCenter();
+                                        valignCenter();
+
+                                        text(new TextBuilder() {
+                                            {
+                                                text("Insert pass:");
+                                                font("Interface/Fonts/Default.fnt");
+                                                height("50%");
+                                                width("50%");
+                                            }
+                                        });
+
+                                        control(new TextFieldBuilder("PassInput", "pass") {
+                                            {
+                                                interactOnMouseOver("borrarTextoPass()");
+                                                width("55%");
+                                            }
+                                        });
 
                                     }
                                 });// </panel_2.3>
 
                                 // <panel_2.4>
-                                panel(new PanelBuilder("Panel_QUIT2") {
+                                panel(new PanelBuilder("Panel_Buttons") {
                                     {
                                         childLayoutHorizontal();
                                         alignCenter();
@@ -280,7 +274,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 width("40%");
                                                 visibleToMouse(true);
                                                 interactOnClick("insertarUsuario()");
-                                                //interactOnRelease("loadMenu2()");
+                                                //interactOnRelease("loadMenuFromInput()");
                                             }
                                         });
 
@@ -289,7 +283,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 childLayoutHorizontal();
                                                 alignCenter();
                                                 valignCenter();
-                                                height("16%");
+                                                height("4%");
                                                 width("20%");
                                             }
                                         });
@@ -302,7 +296,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("40%");
                                                 visibleToMouse(true);
-                                                interactOnClick("loadMenu2()");
+                                                interactOnClick("loadMenuFromInput()");
 
                                             }
                                         });
@@ -408,8 +402,8 @@ public class InputState extends AbstractAppState implements ScreenController {
             }
         }.build(nifty));
         // </screen>
- 
-     game.getGUIViewPort().addProcessor(niftyDisplay);
+
+        game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("InputScreen"); // it is used to start the screen
     }
 
@@ -433,9 +427,8 @@ public class InputState extends AbstractAppState implements ScreenController {
         //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
-        if (b==true)
-        {
-        game.getGUIViewPort().addProcessor(niftyDisplay);
+        if (b == true) {
+            game.getGUIViewPort().addProcessor(niftyDisplay);
         }
 //      
     }
@@ -456,7 +449,7 @@ public class InputState extends AbstractAppState implements ScreenController {
         //nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
-        
+
 
     }
 
@@ -467,6 +460,4 @@ public class InputState extends AbstractAppState implements ScreenController {
     public void loadInput() {
         game.loadInput();
     }
-
-   
 }
