@@ -3,22 +3,22 @@ package database;
 
 public class Jugador {
 	
-	private String cod_u;
+	private String password;
 	private String nick;
 	private String nombre;
 	
-	public Jugador(String c, String ni, String no){
-		cod_u = c;
+	public Jugador(String ni, String c, String no){
+		password = c;
 		nick = ni;
 		nombre = no;
 	}
 
-	public String getCod_u() {
-		return cod_u;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setCod_u(String cod_u) {
-		this.cod_u = cod_u;
+	public void setPassword(String cod_u) {
+		this.password = cod_u;
 	}
 
 	public String getNick() {
@@ -38,7 +38,7 @@ public class Jugador {
 	}
         
         public void printJugador(Jugador j){
-            System.out.println("COD_U: "+j.getCod_u());
+            System.out.println("PASSWORD: "+j.getPassword());
             System.out.println("NAME: "+j.getNombre());
             System.out.println("NICK: "+j.getNick());
         }
