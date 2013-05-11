@@ -4,7 +4,6 @@
  */
 package game;
 
-
 import com.jme3.app.Application;
 import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
@@ -13,49 +12,53 @@ import com.jme3.system.Timer;
 
 public class MainApp extends Application {
 
-   private GameState te = null;
-   private MenuState ms = null;
-   private AppSettings s;
-   private InputState is = null;
-   private StatisticsState ss= null;
-   
-   public MainApp() { }
+    private GameState te = null;
+    private MenuState ms = null;
+    private AppSettings s;
+    private InputState is = null;
+    private StatisticsState ss = null;
+    private LogInState ls = null;
+    private LogInState2 ls2 = null;
 
-    public void start(){
+    public MainApp() {
+    }
+
+    public void start() {
         // set some default settings in-case
         // settings dialog is not shown
-      
-        
-        if (settings == null)
-        {
-            s= new AppSettings(true);
-        s.setSettingsDialogImage("/Pictures/Portada.jpg");
-        
+
+
+        if (settings == null) {
+            s = new AppSettings(true);
+            s.setSettingsDialogImage("/Pictures/Portada.jpg");
+
             setSettings(s);
         }
 
         // show settings dialog
-        if (!JmeSystem.showSettingsDialog(settings,true))
-           return;
+        if (!JmeSystem.showSettingsDialog(settings, true)) {
+            return;
+        }
 
         super.start();
     }
-   
+
     public void initialize() {
-      // initialize the standard environment first
-      super.initialize();
-      
-      // Create the States
-      ms = new MenuState(this);
-      te = new GameState(this);
-      is = new InputState(this);
-      ss= new StatisticsState(this);
-      
-      // Attach MenuState
-      getStateManager().attach(ms);
+        // initialize the standard environment first
+        super.initialize();
+
+        // Create the States
+        ms = new MenuState(this);
+        te = new GameState(this);
+        is = new InputState(this);
+        ss = new StatisticsState(this);
+        ls = new LogInState(this);
+        ls2 = new LogInState2(this);
+
+        // Attach the fisrt screen to be shown
+        getStateManager().attach(ls);
     }
-   
-   
+
     public void update() {
         super.update();
         float tpf = timer.getTimePerFrame() * speed;
@@ -66,68 +69,82 @@ public class MainApp extends Application {
         // render states
         stateManager.render(renderManager);
 
-        renderManager.render(tpf,true);
+        renderManager.render(tpf, true);
     }
-   
+    
+    public void reLoadMenu() {
+        getStateManager().detach(ms);
+        getStateManager().attach(ms);
+    }
 
-   public void loadMenu() {
-      getStateManager().detach(te);
-      getStateManager().attach(ms);
-   }
-   
-   public void loadInput() {
-       
-      getStateManager().detach(ms);
-      getStateManager().attach(is);
-   }
-      public void loadMenu2() {
-      getStateManager().detach(is);
-      getStateManager().attach(ms);
-   }
-         public void loadMenu3() {
-      getStateManager().detach(ss);
-      getStateManager().attach(ms);
-   }
-   
-   public AppSettings getSettings()
-   {
-       
-       return settings;
-   }
-   
-   public void loadGame() {
-      getStateManager().detach(ms);
-      getStateManager().attach(te);
-   }
-   
-   
-   
-   public ViewPort getViewPort() {
-      return viewPort;
-   }
-   
-   public ViewPort getGUIViewPort() {
-      return guiViewPort;
-   }
-   
-   
-   public Timer getTimer() {
-      return timer;
-   }
-   
-   
-   public static void main(String... args) {
-      new MainApp().start();
-   }
+    public void loadMenu() {
+        getStateManager().detach(te);
+        getStateManager().attach(ms);
+    }
+
+    public void loadInput() {
+
+        getStateManager().detach(ms);
+        getStateManager().attach(is);
+    }
+
+    public void loadMenuFromInput() {
+        getStateManager().detach(is);
+        getStateManager().attach(ms);
+    }
+
+    public void loadMenuFromStatistics(){
+        getStateManager().detach(ss);
+        getStateManager().attach(ms);
+    }
+    
+    public void loadMenuFromLogIn(){
+        getStateManager().detach(ls);
+        getStateManager().attach(ms);
+    }
+    public void loadLogInFromMenu(){
+        getStateManager().detach(ms);
+        getStateManager().attach(ls);
+    }
+    
+    public void loadMenuFromLogIn2(){
+        getStateManager().detach(ls2);
+        getStateManager().attach(ms);
+    }
+    public void loadLogIn2FromMenu(){
+        getStateManager().detach(ms);
+        getStateManager().attach(ls2);
+    }
+
+    public AppSettings getSettings() {
+
+        return settings;
+    }
+
+    public void loadGame() {
+        getStateManager().detach(ms);
+        getStateManager().attach(te);
+    }
+
+    public ViewPort getViewPort() {
+        return viewPort;
+    }
+
+    public ViewPort getGUIViewPort() {
+        return guiViewPort;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public static void main(String... args) {
+        new MainApp().start();
+    }
 
     public void loadStatistics() {
-       
-          getStateManager().detach(ms);
-      getStateManager().attach(ss);
+
+        getStateManager().detach(ms);
+        getStateManager().attach(ss);
     }
-
-   
-
 }
-
-
