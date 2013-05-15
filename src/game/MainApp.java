@@ -14,6 +14,7 @@ public class MainApp extends Application {
 
     private GameState te = null;
     private MenuState ms = null;
+    private MenuStateGame ms2 = null;
     private AppSettings s;
     private InputState is = null;
     private StatisticsState ss = null;
@@ -54,6 +55,7 @@ public class MainApp extends Application {
         ss = new StatisticsState(this);
         ls = new LogInState(this);
         ls2 = new LogInState2(this);
+        ms2 = new MenuStateGame(this);
 
         // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
@@ -83,7 +85,6 @@ public class MainApp extends Application {
     }
 
     public void loadInput() {
-
         getStateManager().detach(ms);
         getStateManager().attach(is);
     }
@@ -117,13 +118,26 @@ public class MainApp extends Application {
     }
 
     public AppSettings getSettings() {
-
         return settings;
     }
 
     public void loadGame() {
         getStateManager().detach(ms);
         getStateManager().attach(te);
+    }
+    
+    public void loadGameFromMenuGame() {
+         getStateManager().detach(ms2);
+        //getStateManager().attach(te);
+       te.pause = false;
+      
+        inputManager.setCursorVisible(false);
+        
+    }
+    
+    public void loadMenuGameFromGame() {
+        //getStateManager().detach(te);
+        getStateManager().attach(ms2);
     }
 
     public ViewPort getViewPort() {
