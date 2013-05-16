@@ -189,7 +189,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             }
                                         });
 
-                                        control(new TextFieldBuilder("NameInput", "nombre") {
+                                        control(new TextFieldBuilder("NameInput", "") {
                                             {
                                                 interactOnMouseOver("borrarTextoName()");
                                                 width("55%");
@@ -217,7 +217,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             }
                                         });
 
-                                        control(new TextFieldBuilder("NickInput", "nick") {
+                                        control(new TextFieldBuilder("NickInput", "") {
                                             {
                                                 interactOnMouseOver("borrarTextoNick()");
                                                 width("55%");
@@ -245,7 +245,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             }
                                         });
 
-                                        control(new TextFieldBuilder("PassInput", "pass") {
+                                        control(new TextFieldBuilder("PassInput", "") {
                                             {
                                                 interactOnMouseOver("borrarTextoPass()");
                                                 width("55%");
