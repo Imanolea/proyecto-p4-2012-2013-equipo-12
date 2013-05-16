@@ -31,7 +31,6 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -42,6 +41,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.Spatial.CullHint;
+import com.jme3.scene.control.CameraControl;
+import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 
@@ -259,8 +260,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         cleanerRay.setOrigin(cam.getLocation());
         cleanerRay.setDirection(cam.getDirection());
 
-        Vector3f camLeft = cam.getLeft().clone().multLocal(0.33f);
-        Vector3f camForward = cam.getDirection().clone().multLocal(0.5f);
+        Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f);
+        Vector3f camForward = cam.getDirection().clone().multLocal(0.4f);
         camForward.y = 0;
         walkDirection.set(0, 0, 0);
 
@@ -297,10 +298,14 @@ public class GameState extends AbstractAppState implements ActionListener {
         cam.setLocation(player.getPhysicsLocation());
         cleanerShape.setLocalTranslation(player.getPhysicsLocation());
 
-        if (cam.getDirection().y > 0.9439419f) {
+        /*if (cam.getDirection().y > 0.9439419f) {
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1509075f, cam.getLocation().z), new Vector3f(cam.getLeft().x, 7.916242E-9f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.33011156f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.9439419f, cam.getDirection().z));
         } else if (cam.getDirection().y < -0.93508357) {
             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1510572f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.2441149E-5f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.3544274f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.93508357f, cam.getDirection().z));
+        }*/
+        
+        if(cam.getUp().y < 0){
+            cam.lookAtDirection( new Vector3f(0,cam.getDirection().y,0),new Vector3f(cam.getUp().x,0, cam.getUp().z));
         }
 
         for (int i = 0; i < pow.length; i++) {
