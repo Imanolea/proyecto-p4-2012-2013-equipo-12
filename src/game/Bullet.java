@@ -10,7 +10,7 @@ class Bullet extends ParticleEmitter{
     
     private boolean shooted;
     private Vector3f direction;
-    private float vel = 30f;
+    private float vel = 40f;
     
     public Bullet(){
         super();
