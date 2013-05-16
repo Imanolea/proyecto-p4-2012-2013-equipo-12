@@ -4,6 +4,12 @@
  */
 package game;
 
+import states.MenuStateGame;
+import states.StatisticsState;
+import states.LogInState;
+import states.LogInState2;
+import states.MenuState;
+import states.InputState;
 import com.jme3.app.Application;
 import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
