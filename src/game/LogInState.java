@@ -408,14 +408,14 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         height("47%");
                                         width("16%");
                                         
-                                        text(new TextBuilder() {
+                                        /*text(new TextBuilder() {
                                             {
                                                 text("© Copyright. All rights reserved");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("100%");
                                                 width("100%");
                                             }
-                                        });
+                                        });*/
                                     }
                                 });
                                 panel(new PanelBuilder("Panel_Botones") {
