@@ -382,10 +382,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                 if (rScene.size() > 0) {
                     fire[i].setParticlesPerSec(0f);
                     fire[i].setShooted(false);
+                    rootNode.detachChild(fire[i]);
                 }
                 if (rEnemy.size() > 0) {
                     fire[i].setParticlesPerSec(0f);
                     fire[i].setShooted(false);
+                    rootNode.detachChild(fire[i]);
                     String[] words = getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getName().split("-");
                     pow[Integer.parseInt(words[0])].setHealth(pow[Integer.parseInt(words[0])].getHealth() - 1);
                     getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
@@ -562,8 +564,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                 rootNode.attachChild(fire[i]);
                 fire[i].setShooted(true);
                 fire[i].setParticlesPerSec(20);
-                fire[i].setDirection(cam.getDirection());
                 fire[i].setLocalTranslation(cam.getLocation());
+                fire[i].setDirection(cam.getDirection());
                 i = fire.length;
             }
         }
