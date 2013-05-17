@@ -43,7 +43,7 @@ public class Enemy {
         return spatial;
     }
 
-    Material getMaterial() {
+    public Material getMaterial() {
         CollisionResults rMaterial = new CollisionResults();
         getSpatial().collideWith(getSpatial().getWorldBound(), rMaterial);
         rMaterial.toString();

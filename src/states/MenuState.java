@@ -22,8 +22,8 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import database.GestorEstadisticasLocal;
-import database.Jugador;
+import database.LocalStatsHandler;
+import database.Player;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -542,10 +542,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nick = nick.substring(1);
         }
         
-        Jugador j = new Jugador(nick, pass, name);
+        Player j = new Player(nick, pass, name);
         j.printJugador(j);
         
-        database.GestorEstadisticasLocal.agregarPerfilStatic(j);
+        database.LocalStatsHandler.agregarPerfilStatic(j);
         
         loadMenuFromInput();
     }
@@ -556,7 +556,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         
         String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
         
-        nameJugador = database.GestorEstadisticasLocal.comprobarJugadorStatic(nick, password);
+        nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
         
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn();
@@ -569,7 +569,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         
         String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
         
-        nameJugador = database.GestorEstadisticasLocal.comprobarJugadorStatic(nick, password);
+        nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
         
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn2();

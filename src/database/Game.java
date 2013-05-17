@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
  * @author Team 12
  *
  */
-public class Partida {
+public class Game {
 
     private String nick;
     private Timestamp fecha_hora;
@@ -30,7 +30,7 @@ public class Partida {
         this.fecha_h = fecha_h;
     }
 
-    public Partida(String nick, String puntuacion, String nivel,
+    public Game(String nick, String puntuacion, String nivel,
             String disparos_ac, String disparos_tot, String muertes, String tiempos) {
         this.nick = nick;
         //Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -50,7 +50,7 @@ public class Partida {
         this.tiempos = tiempos;
     }
 
-    public Partida(String nick, String puntuacion, String nivel,
+    public Game(String nick, String puntuacion, String nivel,
             String disparos_ac, String disparos_tot, String muertes, double tiempo, String fecha) {
 
         this.nick = nick;

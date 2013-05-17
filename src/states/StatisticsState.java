@@ -17,8 +17,8 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import database.GestorEstadisticasLocal;
-import database.Partida;
+import database.LocalStatsHandler;
+import database.Game;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -122,7 +122,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
         inputManager.setCursorVisible(true);
 
-        final String s = GestorEstadisticasLocal.listarTop10Static(0);
+        final String s = LocalStatsHandler.listarTop10Static(0);
 
         nifty.addScreen("StatisticsScreen", new ScreenBuilder("SScreen") {
             {
@@ -151,7 +151,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        String s = GestorEstadisticasLocal.listarTop10Static(1);
+                                        String s = LocalStatsHandler.listarTop10Static(1);
                                         text(s);
                                     }
                                 });
@@ -175,7 +175,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(2)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(2);
+                                            String s = LocalStatsHandler.listarTop10Static(2);
                                             text(s);
                                         }
                                     }
@@ -200,7 +200,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(3)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(3);
+                                            String s = LocalStatsHandler.listarTop10Static(3);
                                             text(s);
                                         }
                                     }
@@ -225,7 +225,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(4)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(4);
+                                            String s = LocalStatsHandler.listarTop10Static(4);
                                             text(s);
                                         }
                                     }
@@ -250,7 +250,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(5)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(5);
+                                            String s = LocalStatsHandler.listarTop10Static(5);
                                             text(s);
                                         }
                                     }
@@ -275,7 +275,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(6)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(6);
+                                            String s = LocalStatsHandler.listarTop10Static(6);
                                             text(s);
                                         }
                                     }
@@ -300,7 +300,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(7)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(7);
+                                            String s = LocalStatsHandler.listarTop10Static(7);
                                             text(s);
                                         }
                                     }
@@ -325,7 +325,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(8)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(8);
+                                            String s = LocalStatsHandler.listarTop10Static(8);
                                             text(s);
                                         }
                                     }
@@ -350,7 +350,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(9)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(9);
+                                            String s = LocalStatsHandler.listarTop10Static(9);
                                             text(s);
                                         }
                                     }
@@ -375,7 +375,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
                                         if (noHayMasPartidas(10)) {
-                                            String s = GestorEstadisticasLocal.listarTop10Static(10);
+                                            String s = LocalStatsHandler.listarTop10Static(10);
                                             text(s);
                                         }
                                     }
@@ -447,8 +447,8 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
     public static boolean noHayMasPartidas(int i) {
         if (i != 0) {
-            String nueva = GestorEstadisticasLocal.listarTop10Static(i);
-            String deAntes = GestorEstadisticasLocal.listarTop10Static(i - 1);
+            String nueva = LocalStatsHandler.listarTop10Static(i);
+            String deAntes = LocalStatsHandler.listarTop10Static(i - 1);
             if (nueva.equals(deAntes)) {
                 return false;
             } else {

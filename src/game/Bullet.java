@@ -6,7 +6,7 @@ import com.jme3.effect.ParticleMesh.Type;
 import com.jme3.math.Vector3f;
 
 
-class Bullet extends ParticleEmitter{
+public class Bullet extends ParticleEmitter{
     
     private boolean shooted;
     private Vector3f direction;
@@ -48,7 +48,7 @@ class Bullet extends ParticleEmitter{
         this.vel = vel;
     }
 
-    void move(float tpf) {
+    public void move(float tpf) {
         move(direction.x*tpf*getVel(), direction.y*tpf*getVel(), direction.z*tpf*getVel());
     }
 

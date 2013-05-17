@@ -4,6 +4,7 @@
  */
 package game;
 
+import states.GameState;
 import states.MenuStateGame;
 import states.StatisticsState;
 import states.LogInState;

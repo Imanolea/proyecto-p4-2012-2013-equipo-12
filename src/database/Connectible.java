@@ -1,7 +1,7 @@
 package database;
 
 
-public interface Conectable {
+public interface Connectible {
 
 	void conectar();
 	void desconectar();
