@@ -26,6 +26,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
@@ -331,6 +332,48 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
             }
         }.build(nifty));
         // </screen>
+        
+        new PopupBuilder("popupUserError") {
+            {
+                childLayoutCenter();
+                backgroundColor("#000a");
+
+
+                panel(new PanelBuilder("PanelPopup") {
+                    {
+                        childLayoutVertical();
+                        alignCenter();
+                        backgroundImage("/Pictures/FondoDialog.png");
+                        valignCenter();
+                        height("20%");
+                        width("40%");
+
+                        text(new TextBuilder() {
+                            {
+                                alignCenter();
+                                color("f043");
+                                text("Wrong nick or password.");
+                                font("Interface/Fonts/Default.fnt");
+                                height("50%");
+                                width("27%");
+                            }
+                        });
+
+                        control(new ButtonBuilder("Btn1", "OK") {
+                            {
+                                alignCenter();
+                                valignCenter();
+                                height("30%");
+                                width("40%");
+                                interactOnClick("closePopupUserError()");
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        }.registerPopup(nifty);
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("LogInScreen2"); // it is used to start the screen

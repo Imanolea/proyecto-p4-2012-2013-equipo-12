@@ -25,19 +25,13 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     private PreparedStatement ps;
     private static LocalStatsHandler instance = null;
 
-    @Override
-    public void conectar() {
+    public void conectar() throws Exception {
 
-        try {
-            // Cargar por refletividad el driver de JDBC SQLite
-            Class.forName("org.sqlite.JDBC");
-            // Ahora indicamos la URL para conectarse a la BD de SQLite
-            conn = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-        } catch (ClassNotFoundException e1) {
-            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Clase no encontrada.", "La conexi��n no pudo ser establecida", 2);
-        } catch (SQLException e2) {
-            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de sentencia SQL.", "La conexi��n no pudo ser establecida", 2);
-        }
+
+        // Cargar por refletividad el driver de JDBC SQLite
+        Class.forName("org.sqlite.JDBC");
+        // Ahora indicamos la URL para conectarse a la BD de SQLite
+        conn = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
     }
 
     public static Connection conectar(Connection con) {
@@ -92,7 +86,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         return instance;
     }
 
-    public void listarEstadisticasJugares() {
+    public void listarEstadisticasJugares() throws Exception {
         conectar();
         try {
             // Ahora utilizamos las sentencias de BD
@@ -118,11 +112,10 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         desconectar();
     }
 
-    public String comprobarJugador(String insertedNick, String insertedPassword) {
+    public String comprobarJugador(String insertedNick, String insertedPassword) throws Exception {
         String name = "";
         conectar();
         boolean encontrado = false;
-        try {
             String query = "SELECT * FROM JUGADOR;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
@@ -139,12 +132,9 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             rs.close();
             statement.close();
             desconectar();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return "";
     }
-    
+
     public static String comprobarJugadorStatic(String insertedNick, String insertedPassword) {
         Connection connection = null;
         Statement statement;
@@ -206,7 +196,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         }
         return string;
     }
-    
+
     public static String listarTop10Static(int pos) {
         String[] array = new String[10];
         Connection connection = null;
@@ -252,8 +242,8 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         desconectar(connection);
         return string;
     }
-    
-    public void mostrarDisparosTopPorciento() {
+
+    public void mostrarDisparosTopPorciento() throws Exception {
         conectar();
         try {
             // Ahora utilizamos las sentencias de BD
@@ -278,32 +268,28 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         desconectar();
     }
 
-    public void agregarPerfil(Player jugador) {
+    public void agregarPerfil(Player jugador) throws Exception {
         conectar();
         String password = jugador.getPassword();
         String nick = jugador.getNick();
         String name = jugador.getNombre();
-        try {
-            ps = conn.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
-            ps.setString(1, nick);
-            ps.setString(2, password);
-            ps.setString(3, name);
-            ps.executeUpdate();
-            ps.close();
-            desconectar();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error a la hora de arreglar un PERFIL.", "La conexi��n no pudo ser establecida", 2);
-        }
+        ps = conn.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
+        ps.setString(1, nick);
+        ps.setString(2, password);
+        ps.setString(3, name);
+        ps.executeUpdate();
+        ps.close();
+
+        desconectar();
+
     }
 
-    public static void agregarPerfilStatic(Player jugador) {
+    public static void agregarPerfilStatic(Player jugador) throws Exception{
         Connection connection;
         PreparedStatement ps;
         String password = jugador.getPassword();
         String nick = jugador.getNick();
         String name = jugador.getNombre();
-        try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
             ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
@@ -313,13 +299,10 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             ps.executeUpdate();
             ps.close();
             desconectar(connection);
-        } catch (Exception e) {
-            System.out.print("Exception");
-            e.printStackTrace();
-        }
-    }  
+        
+    }
 
-    public void agregarPartida(Game partida) {
+    public void agregarPartida(Game partida) throws Exception {
         conectar();
         String nick = partida.getNick();
         Timestamp fecha_hora = partida.getFecha_hora();
@@ -348,7 +331,6 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error ejecutando una PARTIDAS", "La conexi��n no pudo ser establecida", 2);
         }
     }
-    
 
     public static ArrayList listarEstadisticasPartidas() {
 
@@ -440,13 +422,13 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         getInstance().listarEstadisticasJugares();
         //getInstance().comprobarJugador("e", "Jesus");
 
-        /*Player Imanol = new Player("3", "Jesus", "jesuspereira");
-         getInstance().agregarPerfil(Imanol);
-
+       // Player Imanol = new Player("ima", "Ima", "ima");
+        //getInstance().agregarPerfil(Imanol);
+        /*
          Game partidita = new Game("3", "1230", "3", "900", "50", "9", "12800");
          getInstance().agregarPartida(partidita);
          //getInstance().listarEstadisticasPartidas();

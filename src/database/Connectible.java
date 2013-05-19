@@ -3,7 +3,7 @@ package database;
 
 public interface Connectible {
 
-	void conectar();
+	void conectar()  throws Exception;
 	void desconectar();
 
 }

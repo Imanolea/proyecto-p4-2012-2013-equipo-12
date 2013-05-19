@@ -26,13 +26,15 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
+import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
 
 public class LogInState extends AbstractAppState implements ScreenController {
@@ -179,7 +181,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                 childLayoutVertical(); // panel properties, add more...               
                                 alignCenter();
                                 valignCenter();
-                                height("50%");
+                                height("48%");
                                 width("60%");
 
                                 panel(new PanelBuilder("Panel_Text") {
@@ -291,18 +293,18 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         valignBottom();
                                         height("16%");
                                         width("50%");
-                                        
+
                                         /*
-                                        text(new TextBuilder("labelErrores") {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                text("- ");
-                                                font("Interface/Fonts/Default.fnt");
-                                                height("90%");
-                                                width("30%");
-                                            }
-                                        });*/
+                                         text(new TextBuilder("labelErrores") {
+                                         {
+                                         alignCenter();
+                                         valignCenter();
+                                         text("- ");
+                                         font("Interface/Fonts/Default.fnt");
+                                         height("90%");
+                                         width("30%");
+                                         }
+                                         });*/
 
                                     }
                                 }); // </panel_2>
@@ -351,7 +353,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                             }
                                         });
-                                        
+
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
                                                 childLayoutHorizontal(); // panel properties, add more...               
@@ -408,15 +410,15 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         valignBottom();
                                         height("47%");
                                         width("16%");
-                                        
+
                                         /*text(new TextBuilder() {
-                                            {
-                                                text("© Copyright. All rights reserved");
-                                                font("Interface/Fonts/Default.fnt");
-                                                height("100%");
-                                                width("100%");
-                                            }
-                                        });*/
+                                         {
+                                         text("© Copyright. All rights reserved");
+                                         font("Interface/Fonts/Default.fnt");
+                                         height("100%");
+                                         width("100%");
+                                         }
+                                         });*/
                                     }
                                 });
                                 panel(new PanelBuilder("Panel_Botones") {
@@ -435,9 +437,79 @@ public class LogInState extends AbstractAppState implements ScreenController {
                     }
                 });
                 // </layer>
+
+                layer(new LayerBuilder("Layer2LogIn") {
+                    {
+                        childLayoutCenter();
+                        alignCenter();
+                        valignCenter();
+                        control(new WindowBuilder("NoticeWindow", "WELCOME TO POWDERS.") {
+                            {
+                                width("320px"); // windows will need a size
+                                height("18px");
+                                alignCenter();
+                                valignBottom();
+                                closeable(false);
+                                backgroundColor("#000088ff");
+
+                                /*text(new TextBuilder() {
+                                 {
+                                 text("The nick you entered is already in use by another user.");
+                                 style("base-font");
+                                 color("#fffa");
+                                 valignCenter();
+                                 width("100%");
+                                 }
+                                 });*/
+                            }
+                        });
+                    }
+                });
             }
         }.build(nifty));
         // </screen>
+
+        new PopupBuilder("popupUserError") {
+            {
+                childLayoutCenter();
+                backgroundColor("#000a");
+
+
+                panel(new PanelBuilder("PanelPopup") {
+                    {
+                        childLayoutVertical();
+                        alignCenter();
+                        backgroundImage("/Pictures/FondoDialog.png");
+                        valignCenter();
+                        height("20%");
+                        width("40%");
+
+                        text(new TextBuilder() {
+                            {
+                                alignCenter();
+                                color("f043");
+                                text("Wrong nick or password.");
+                                font("Interface/Fonts/Default.fnt");
+                                height("50%");
+                                width("27%");
+                            }
+                        });
+
+                        control(new ButtonBuilder("Btn1", "OK") {
+                            {
+                                alignCenter();
+                                valignCenter();
+                                height("30%");
+                                width("40%");
+                                interactOnClick("closePopupUserError()");
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        }.registerPopup(nifty);
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("LogInScreen"); // it is used to start the screen
@@ -445,8 +517,6 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
     public void update(float tpf) {
         super.update(tpf);
-
-
 
         // simple update and root node
 

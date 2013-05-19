@@ -28,19 +28,26 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.Menu;
+import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.tools.Color;
+import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
+import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.tools.SizeValue;
 import game.MainApp;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import org.bushe.swing.event.EventTopicSubscriber;
 
 public class MenuState extends AbstractAppState implements ScreenController {
-    
+
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
     protected BitmapText menuText;
@@ -64,31 +71,33 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private boolean primeraVez2 = true;
     private boolean primeraVez3 = true;
     private String nameJugador;
-    
+    private Element popup;
+
     public MenuState(MainApp game) {
         this.game = game;
     }
-    
+
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
+
     }
-    
+
     public void onStartScreen() {
     }
-    
+
     public void onEndScreen() {
     }
-    
+
     private class AppActionListener implements ActionListener {
-        
+
         public void onAction(String name, boolean value, float tpf) {
             if (!value) {
                 return;
             }
-            
+
         }
     }
-    
+
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         menuText = new BitmapText(menuFont, false);
@@ -97,7 +106,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-    
+
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -119,19 +128,19 @@ public class MenuState extends AbstractAppState implements ScreenController {
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
-        
-        
+
+
         if (niftyDisplay == null) {
             niftyDisplay = new NiftyJmeDisplay(
                     assetManager, inputManager, audioRenderer, guiViewPort);
-            
+
         }
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
-        
+
         inputManager.setCursorVisible(true);
 
 
@@ -158,14 +167,14 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 // "Hi, user" text.
 
                                 /*text(new TextBuilder() {
-                                    {
-                                        alignRight();
-                                        text("Hi, " + nameJugador);
-                                        font("Interface/Fonts/Default.fnt");
-                                        height("100%");
-                                        width("27%");
-                                    }
-                                });*/
+                                 {
+                                 alignRight();
+                                 text("Hi, " + nameJugador);
+                                 font("Interface/Fonts/Default.fnt");
+                                 height("100%");
+                                 width("27%");
+                                 }
+                                 });*/
                             }
                         }); // </panel_1>
 
@@ -197,16 +206,16 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 alignCenter();
                                 height("70%");
                                 width("50%");
-                                
+
                                 panel(new PanelBuilder("Panel_EMPTY") {
                                     {
                                         childLayoutCenter();
                                         height("16%");
                                         width("55%");
-                                        
+
                                     }
                                 });
-                                
+
                                 panel(new PanelBuilder("Panel_START") {
                                     {
                                         alignCenter();
@@ -297,7 +306,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 width("80%");
                                                 visibleToMouse(true);
                                                 interactOnClick("loadLogIn2FromMenu()");
-                                                
+
                                             }
                                         });
                                     }
@@ -320,14 +329,14 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("80%");
                                                 visibleToMouse(true);
-                                                interactOnClick("exit()");
-                                                
+                                                interactOnClick("displayPopup()");
+
                                             }
                                         });
                                     }
                                 });
-                                
-                                
+
+
                             }
                         }); // </panel_2>
 
@@ -339,7 +348,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 valignTop();
                                 height("12%");
                                 width("100%");
-                                
+
                                 panel(new PanelBuilder("Panel_LANGUAGES") {
                                     {
                                         childLayoutOverlay();
@@ -349,8 +358,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         width("80%");
                                     }
                                 });
-                                
-                                
+
+
                                 image(new ImageBuilder() {
                                     {
                                         this.filename("/Pictures/Titulo.png");
@@ -358,25 +367,144 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         alignRight();
                                         height("75%");
                                         width("16%");
-                                        
+
                                     }
                                 });
-                                
-                                
+
                             }
                         });// </panel_3>
+
                     }
                 });
                 // </layer>
+
             }
         }.build(nifty));
         // </screen>
+
+        new PopupBuilder("popupExit") {
+            {
+                childLayoutCenter();
+                backgroundColor("#000a");
+
+                panel(new PanelBuilder("PanelPopup") {
+                    {
+                        childLayoutVertical();
+                        alignCenter();
+                        backgroundImage("/Pictures/FondoDialog.png");
+                        valignCenter();
+                        height("20%");
+                        width("40%");
+
+                        text(new TextBuilder() {
+                            {
+                                alignCenter();
+                                color("f043");
+                                text("Do you really want to EXIT?");
+                                font("Interface/Fonts/Default.fnt");
+                                height("50%");
+                                width("27%");
+                            }
+                        });
+                        panel(new PanelBuilder("PanelPopup") {
+                            {
+                                childLayoutHorizontal();
+                                height("50%");
+                                width("100%");
+                                alignCenter();
+                                valignCenter();
+                                panel(new PanelBuilder("PanelPopup") {
+                                    {
+                                        width("7%");
+                                    }
+                                });
+
+                                control(new ButtonBuilder("Btn1", "YES") {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("45%");
+                                        width("40%");
+                                        interactOnClick("exit()");
+                                    }
+                                });
+                                panel(new PanelBuilder("PanelPopup") {
+                                    {
+                                        width("6%");
+                                    }
+                                });
+                                control(new ButtonBuilder("Btn2", "NO") {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        height("45%");
+                                        width("40%");
+                                        interactOnClick("closePopupExit()");
+                                    }
+                                });
+                                panel(new PanelBuilder("PanelPopup") {
+                                    {
+                                        width("7%");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+            }
+        }.registerPopup(nifty);
+
+        new PopupBuilder("popupConnectionError") {
+            {
+                childLayoutCenter();
+                backgroundColor("#000a");
+
+
+                panel(new PanelBuilder("PanelPopup") {
+                    {
+                        childLayoutVertical();
+                        alignCenter();
+                        backgroundImage("/Pictures/FondoDialog.png");
+                        valignCenter();
+                        height("20%");
+                        width("40%");
+
+                        text(new TextBuilder() {
+                            {
+                                alignCenter();
+                                color("f043");
+                                text("Wrong nick or password.");
+                                font("Interface/Fonts/Default.fnt");
+                                height("50%");
+                                width("27%");
+                            }
+                        });
+
+                        control(new ButtonBuilder("Btn1", "OK") {
+                            {
+                                alignCenter();
+                                valignCenter();
+                                height("30%");
+                                width("40%");
+                                interactOnClick("closePopupConnectionError()");
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        }.registerPopup(nifty);
+        
+        nifty.registerScreenController(this);
+
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("MenuScreen"); // it is used to start the screen
 //loadMenu();
     }
-    
+
     @Override
     public void update(float tpf) {
         super.update(tpf);
@@ -389,18 +517,18 @@ public class MenuState extends AbstractAppState implements ScreenController {
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
         guiNode.updateGeometricState();
-        
+
     }
-    
+
     public void stateAttached(AppStateManager stateManager) {
         //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         super.stateAttached(stateManager);
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
-        
-        
+
+
     }
-    
+
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
@@ -408,171 +536,224 @@ public class MenuState extends AbstractAppState implements ScreenController {
         game.getGUIViewPort().detachScene(guiNode);
         //game.getGUIViewPort().removeProcessor(niftyDisplay);
     }
-    
+
     public void render(RenderManager rm) {
     }
-    
+
     public void startGame() {
 
         //nifty.exit();
         game.loadGame();
         nifty.removeScreen("MenuScreen");
-        
+
     }
-    
+
     public void quitGame() {
         game.stop();
     }
-    
+
     public void loadMenu() {
         game.loadMenu();
-        
+
     }
-    
+
     public void startStatistics() {
-        
+
         nifty.removeScreen("MenuScreen");
         game.loadStatistics();
-        
-        
+
+
     }
-    
+
     public void quitStatistics() {
         game.stop();
     }
-    
+
     public void loadStatistics() {
         game.loadInput();
     }
-    
+
     public void loadInputFromMenu() {
 
         // nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
     }
-    
+
     public void loadInputFromLogIn() {
 
         // nifty.exit();
         nifty.removeScreen("LogInScreen");
         game.loadInput();
     }
-    
+
+    public void displayPopup() {
+        showExit();
+    }
+
     public void exit() {
         System.exit(0);
     }
-    
+
     public void loadMenuFromInput() {
-        
+
         nifty.removeScreen("InputScreen");
-        
+
         game.loadMenuFromInput();
         niftyDisplay.cleanup();
     }
-    
+
     public void loadMenuFromStatistics() {
         nifty.removeScreen("StatisticsScreen");
         game.loadMenuFromStatistics();
     }
-    
+
     public void loadMenuFromLogIn() {
         nifty.removeScreen("LogInScreen");
         game.loadMenuFromLogIn();
     }
-    
+
     public void loadLogInFromMenu() {
         nifty.removeScreen("MenuScreen");
         game.loadLogInFromMenu();
     }
-    
+
     public void loadMenuFromLogIn2() {
         nifty.removeScreen("LogInScreen2");
         game.loadMenuFromLogIn2();
     }
-    
+
     public void loadLogIn2FromMenu() {
         nifty.removeScreen("MenuScreen");
         game.loadLogIn2FromMenu();
     }
-    
+
     public void leerTextFields() {
         String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
         System.out.print("Name : " + name);
-        
+
         String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
         System.out.print("Nick : " + nick);
     }
-    
+
     public void borrarTextoName() {
         if (primeraVez1) {
             nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).setText("");
             primeraVez1 = false;
         }
     }
-    
+
     public void borrarTextoNick() {
         if (primeraVez2) {
             nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).setText("");
             primeraVez2 = false;
         }
     }
-    
+
     public void borrarTextoPass() {
         if (primeraVez3) {
             nifty.getScreen("InputScreen").findNiftyControl("PassInput", TextField.class).setText("");
             primeraVez3 = false;
         }
     }
-    
+
     public void insertarUsuario() {
-        
+
         String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
-        
+
         String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
-        
+
         String pass = nifty.getScreen("InputScreen").findNiftyControl("PassInput", TextField.class).getText();
-        
-        
+
+
         while (name.substring(0, 1).equals(" ")) {
             name = name.substring(1);
         }
-        
+
         while (nick.substring(0, 1).equals(" ")) {
             nick = nick.substring(1);
         }
-        
+
         Player j = new Player(nick, pass, name);
         j.printJugador(j);
+
+        try{
+            database.LocalStatsHandler.agregarPerfilStatic(j);
+            loadMenuFromInput();
+
+        }catch(ClassNotFoundException e1){
+            showPopupConnectionError();
+        }catch(SQLException e2){
+            showPopupUserError();
+        }catch(Exception e3){
+            
+        }
         
-        database.LocalStatsHandler.agregarPerfilStatic(j);
-        
-        loadMenuFromInput();
     }
-    
+
     public void cargarUsuario() {
-        
+
         String nick = nifty.getScreen("LogInScreen").findNiftyControl("NickLogIn", TextField.class).getText();
-        
+
         String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
         
-        nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+        try{
+            nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+        } catch (Exception e) {
+            showPopupConnectionError();
+        }
         
+        //nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn();
+        } else {
+            showPopupUserError();
         }
     }
-    
+
     public void cargarUsuario2() {
-        
+
         String nick = nifty.getScreen("LogInScreen2").findNiftyControl("NickLogIn", TextField.class).getText();
-        
+
         String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
-        
-        nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
-        
+
+        try{
+            nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+        } catch (Exception e) {
+            showPopupConnectionError();
+        }
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn2();
+        } else {
+            showPopupUserError();
         }
+    }
+
+    public void showExit() {
+        popup = nifty.createPopup("popupExit");
+        nifty.showPopup(nifty.getCurrentScreen(), popup.getId(), null);
+    }
+
+    public void closePopupExit() {
+        nifty.closePopup(popup.getId());
+    }
+
+    public void showPopupUserError() {
+        popup = nifty.createPopup("popupUserError");
+        nifty.showPopup(nifty.getCurrentScreen(), popup.getId(), null);
+    }
+
+    public void closePopupUserError() {
+        nifty.closePopup(popup.getId());
+    }
+    
+    public void showPopupConnectionError() {
+        popup = nifty.createPopup("popupConnectionError");
+        nifty.showPopup(nifty.getCurrentScreen(), popup.getId(), null);
+    }
+
+    public void closePopupConnectionError() {
+        nifty.closePopup(popup.getId());
     }
 }

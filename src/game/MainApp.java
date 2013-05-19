@@ -35,7 +35,6 @@ public class MainApp extends Application {
         // set some default settings in-case
         // settings dialog is not shown
 
-
         if (settings == null) {
             s = new AppSettings(true);
             s.setSettingsDialogImage("/Pictures/Portada.jpg");
