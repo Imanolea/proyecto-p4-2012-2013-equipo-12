@@ -19,8 +19,6 @@ public class Game {
     private String muertes;
     private double tiempo;
     private String fecha_h;
-    private String tiempos;
-    //private String contraseña;
 
     public String getFecha_h() {
         return fecha_h;
@@ -31,7 +29,7 @@ public class Game {
     }
 
     public Game(String nick, String puntuacion, String nivel,
-            String disparos_ac, String disparos_tot, String muertes, String tiempos) {
+            String disparos_ac, String disparos_tot, String muertes, double tiempo) {
         this.nick = nick;
         //Timestamp ts = new Timestamp(System.currentTimeMillis());
         //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SS aaa");
@@ -40,18 +38,19 @@ public class Game {
         long lnMilisegundos = utilDate.getTime();
 
         java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(lnMilisegundos);
-
+        
+        this.nick = nick;
         this.fecha_hora = sqlTimestamp;
         this.puntuacion = puntuacion;
         this.nivel = nivel;
         this.disparos_ac = disparos_ac;
         this.disparos_tot = disparos_tot;
         this.muertes = muertes;
-        this.tiempos = tiempos;
+        this.tiempo = tiempo;
     }
 
-    public Game(String nick, String puntuacion, String nivel,
-            String disparos_ac, String disparos_tot, String muertes, double tiempo, String fecha) {
+    public Game(String nick, String fecha, String puntuacion, String nivel,
+            String disparos_ac, String disparos_tot, String muertes, double tiempo) {
 
         this.nick = nick;
         this.fecha_h = fecha;
