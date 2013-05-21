@@ -16,9 +16,6 @@ import javax.swing.JPanel;
 
 public class LocalStatsHandler extends JPanel implements Connectible {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = -6855550844603162276L;
     private Connection conn;
     private Statement statement;
@@ -97,7 +94,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             // y recorremos lo obtenido
             while (rs.next()) {
                 String name = "" + rs.getString("NAME");
-                System.out.println("NOMBRE: " + name);
+                System.out.println("PE: " + name);
                 String nick = "" + rs.getString("NICK");
                 System.out.println("NICK: " + nick);
                 String pass = "" + rs.getString("PASSWORD");
@@ -117,22 +114,22 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         String name = "";
         conectar();
         boolean encontrado = false;
-            String query = "SELECT * FROM JUGADOR;";
-            statement = conn.createStatement();
-            rs = statement.executeQuery(query);
-            // y recorremos lo obtenido
-            while (rs.next() && !encontrado) {
-                String nick = "" + rs.getString("NICK");
-                String pass = "" + rs.getString("PASSWORD");
-                name = "" + rs.getString("NAME");
-                if (insertedNick.equals(nick) && insertedPassword.equals(pass)) {
-                    encontrado = true;
-                    return name;
-                }
+        String query = "SELECT * FROM JUGADOR;";
+        statement = conn.createStatement();
+        rs = statement.executeQuery(query);
+        // y recorremos lo obtenido
+        while (rs.next() && !encontrado) {
+            String nick = "" + rs.getString("NICK");
+            String pass = "" + rs.getString("PASSWORD");
+            name = "" + rs.getString("NAME");
+            if (insertedNick.equals(nick) && insertedPassword.equals(pass)) {
+                encontrado = true;
+                return name;
             }
-            rs.close();
-            statement.close();
-            desconectar();
+        }
+        rs.close();
+        statement.close();
+        desconectar();
         return "";
     }
 
@@ -167,9 +164,70 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         return "";
     }
 
+    public String listarTop10() {
+        String string = "";
+        try {
+            conectar();
+            String query = "SELECT * FROM TOP;";
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
+            int i = 0;
+            // y recorremos lo obtenido
+            while (rs.next() && i < 10) {
+                String nick = "" + rs.getString("NICK");
+                String punt = "" + rs.getString("PUNTUACION");
+                String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                String tiempo = "" + rs.getString("TIEMPO");
+                int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
+                string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
+                i++;
+                System.out.println(string);
+            }
+            rs.close();
+            statement.close();
+            desconectar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
+    
+    public static String[] listarTop10Static() {
+        Connection conn = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        String string[] = new String[10];
+        try {
+            String query = "SELECT * FROM TOP;";
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
+            int i = 0;
+            // y recorremos lo obtenido
+            while (rs.next() && i < 10) {
+                String nick = "" + rs.getString("NICK");
+                String punt = "" + rs.getString("PUNTUACION");
+                String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                String tiempo = "" + rs.getString("TIEMPO");
+                int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
+                String s = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
+                string[i] = s;
+                i++;
+            }
+            rs.close();
+            statement.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
+
     public String listarTop10(int pos) {
         String string = "";
         try {
+            conectar();
             String query = "SELECT * FROM TOP;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
@@ -184,7 +242,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                     String disparos_ac = "" + rs.getString("DISPAROS_AC");
                     String disparos_tot = "" + rs.getString("DISPAROS_TOT");
                     String tiempo = "" + rs.getString("TIEMPO");
-                    int prec = (Integer.parseInt(disparos_ac) * 100) / Integer.parseInt(disparos_tot);
+                    int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
                     string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
                     i++;
                 }
@@ -199,7 +257,6 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     }
 
     public static String listarTop10Static(int pos) {
-        String[] array = new String[10];
         Connection connection = null;
         Statement statement;
         ResultSet rs;
@@ -229,9 +286,8 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                     //System.out.println("TIEMPO: " + tiempo);
                     //System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
                     //System.out.println("--");
-                    int prec = (Integer.parseInt(disparos_ac) * 100) / Integer.parseInt(disparos_tot);
+                    int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
                     string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
-                    array[i] = string;
                     i++;
                 }
             }
@@ -285,22 +341,22 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     }
 
-    public static void agregarPerfilStatic(Player jugador) throws Exception{
+    public static void agregarPerfilStatic(Player jugador) throws Exception {
         Connection connection;
         PreparedStatement ps;
         String password = jugador.getPassword();
         String nick = jugador.getNick();
         String name = jugador.getNombre();
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-            ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
-            ps.setString(1, nick);
-            ps.setString(2, password);
-            ps.setString(3, name);
-            ps.executeUpdate();
-            ps.close();
-            desconectar(connection);
-        
+        Class.forName("org.sqlite.JDBC");
+        connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
+        ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
+        ps.setString(1, nick);
+        ps.setString(2, password);
+        ps.setString(3, name);
+        ps.executeUpdate();
+        ps.close();
+        desconectar(connection);
+
     }
 
     public void agregarPartida(Game partida) throws Exception {
@@ -332,8 +388,8 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error ejecutando una PARTIDAS", "La conexi��n no pudo ser establecida", 2);
         }
     }
-    
-     public static void agregarPartidaStatic(Game partida) {
+
+    public static void agregarPartidaStatic(Game partida) {
         PreparedStatement ps;
         String nick = partida.getNick();
         Timestamp fecha_hora = partida.getFecha_hora();
@@ -455,18 +511,18 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     }
 
     public static void main(String[] args) throws Exception {
-        
+
         //getInstance().listarEstadisticasJugares();
         //getInstance().comprobarJugador("e", "Jesus");
 
-       // Player Imanol = new Player("ima", "Ima", "ima");
+        // Player Imanol = new Player("ima", "Ima", "ima");
         //getInstance().agregarPerfil(Imanol);
-        
-         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
-         //getInstance().agregarPartida(partidita);
-         getInstance().listarEstadisticasPartidas();
-         //getInstance().listarTop10();
-         //getInstance().mostrarDisparosTopporciento();
-         //getInstance().listarEstadisticasJugares();*/
+
+        //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
+        //getInstance().agregarPartida(partidita);
+        //getInstance().listarEstadisticasPartidas();
+        getInstance().listarTop10();        
+        //getInstance().mostrarDisparosTopporciento();
+        //getInstance().listarEstadisticasJugares();*/
     }
 }
