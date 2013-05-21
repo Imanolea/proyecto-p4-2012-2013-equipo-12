@@ -9,6 +9,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
@@ -75,6 +76,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private boolean primeraVez3 = true;
     private String nameJugador;
     private Element popup;
+
 
     public MenuState(MainApp game) {
         this.game = game;
@@ -145,8 +147,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nifty.loadControlFile("nifty-default-controls.xml");
 
         inputManager.setCursorVisible(true);
-
-
 
         // <screen>
         nifty.addScreen("MenuScreen", new ScreenBuilder("Menu") {
@@ -333,7 +333,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                                 width("80%");
                                                 visibleToMouse(true);
                                                 interactOnClick("displayPopup()");
-
                                             }
                                         });
                                     }
@@ -508,7 +507,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("MenuScreen"); // it is used to start the screen
-//loadMenu();
+        
     }
 
     @Override
@@ -831,4 +830,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
             }
         }
     }
+    
+
 }
