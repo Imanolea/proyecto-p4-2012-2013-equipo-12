@@ -9,6 +9,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bounding.BoundingVolume;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
@@ -45,6 +46,8 @@ import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import database.Game;
+import database.Player;
 import game.Bullet;
 import game.Enemy;
 import game.MainApp;
@@ -89,7 +92,20 @@ public class GameState extends AbstractAppState implements ActionListener {
     private int enemiesCleaned;
     private float spawnTimer;
     private boolean left = false, right = false, up = false, down = false, aspire = false;
-    public boolean pause = false;
+    public boolean pause = true;
+    // atributos para la gestión del audio
+    private AudioNode gunAudio;
+    private AudioNode backgroundAudio;
+    private AudioNode throwAudio;
+    private AudioNode aspireAudio;
+    private AudioNode aspireAudioEnd;
+    private AudioNode chargeAudio;
+    private boolean aspireFirstTime = false;
+    private float timeStartGame;
+    private float puntuacion;
+    private float successfulShot;
+    private float totalShots;
+    private float deaths;
 
     public GameState(MainApp game) {
         this.game = game;
@@ -101,8 +117,6 @@ public class GameState extends AbstractAppState implements ActionListener {
             if (!value) {
                 return;
             }
-
-
         }
     }
 
@@ -237,181 +251,188 @@ public class GameState extends AbstractAppState implements ActionListener {
         bulletAppState.getPhysicsSpace().add(landscape);
         bulletAppState.getPhysicsSpace().add(player);
 
+        initAudio();
+        timeStartGame = System.currentTimeMillis();
+        pause = false;
+        
+        
     }
 
     public void update(float tpf) {
-        if(!pause){
-        super.update(tpf);
+        if (!pause) {
+            super.update(tpf);
 
-        int fps = (int) game.getTimer().getFrameRate();
-        fpsText.setText("Frames per second: " + fps);
+            int fps = (int) game.getTimer().getFrameRate();
+            fpsText.setText("Frames per second: " + fps);
 
-        initCrossHairs();
-        guiNode.setQueueBucket(Bucket.Gui);
-        guiNode.setCullHint(CullHint.Never);
+            initCrossHairs();
+            guiNode.setQueueBucket(Bucket.Gui);
+            guiNode.setCullHint(CullHint.Never);
 
-        // guiNode.center();
+            // guiNode.center();
 
 
-        spawnTimer += tpf;
+            spawnTimer += tpf;
 
-        if (spawnTimer > 15) {
-            spawnTimer = 0;
-            spawn();
-        }
-
-        cleanerRay.setOrigin(cam.getLocation());
-        cleanerRay.setDirection(cam.getDirection());
-
-        Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f);
-        Vector3f camForward = cam.getDirection().clone().multLocal(0.4f);
-        camForward.y = 0;
-        walkDirection.set(0, 0, 0);
-
-        if (left && !up && !down) {
-            walkDirection.addLocal(camLeft);
-        }
-        if (right && !up && !down) {
-            walkDirection.addLocal(camLeft.negate());
-        }
-        if (up && !right && !left) {
-            walkDirection.addLocal(camForward);
-        }
-        if (down && !right && !left) {
-            walkDirection.addLocal(camForward.negate());
-        }
-        if (left && up) {
-            walkDirection.addLocal(camLeft.add(camForward).divide(1.5f));
-        }
-        if (left && down) {
-            walkDirection.addLocal(camLeft.add(camForward.negate()).divide(1.5f));
-        }
-        if (right && up) {
-            walkDirection.addLocal(camLeft.negate().add(camForward).divide(1.5f));
-        }
-        if (right && down) {
-            walkDirection.addLocal(camLeft.negate().add(camForward.negate()).divide(1.5f));
-        }
-        if (aspire) {
-            aspire();
-        } else {
-            notAspire();
-        }
-        player.setWalkDirection(walkDirection);
-        cam.setLocation(player.getPhysicsLocation());
-        cleanerShape.setLocalTranslation(player.getPhysicsLocation());
-
-        /*if (cam.getDirection().y > 0.9439419f) {
-            cam.setFrame(new Vector3f(cam.getLocation().x, 4.1509075f, cam.getLocation().z), new Vector3f(cam.getLeft().x, 7.916242E-9f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.33011156f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.9439419f, cam.getDirection().z));
-        } else if (cam.getDirection().y < -0.93508357) {
-            cam.setFrame(new Vector3f(cam.getLocation().x, 4.1510572f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.2441149E-5f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.3544274f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.93508357f, cam.getDirection().z));
-        }*/
-        
-        if(cam.getUp().y < 0){
-            cam.lookAtDirection( new Vector3f(0,cam.getDirection().y,0),new Vector3f(cam.getUp().x,0, cam.getUp().z));
-        }
-
-        for (int i = 0; i < pow.length; i++) {
-            if (!pow[i].isActive()) {
-                pow[i].getSpatial().scale(1 + tpf * 3);
-                if (pow[i].getSpatial().getWorldBound().getVolume() >= boundEnemy.getVolume()) {
-                    pow[i].setActive(true);
-                    shootables.attachChild(pow[i].getSpatial());
-                }
+            if (spawnTimer > 15) {
+                spawnTimer = 0;
+                spawn();
             }
-            Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
-            if (!pow[i].isDeath()) {
-                pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
 
-                if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
-                    pow[i].getSpatial().setMaterial(enemyMaterial[1]);
-                } else if (pow[i].isActive()) {
-                    pow[i].setTimer(pow[i].getTimer() + tpf);
-                    if (pow[i].getTimer() > 7) {
-                        pow[i].getSpatial().setMaterial(enemyMaterial[2]);
-                        if (pow[i].getTimer() > 7.1) {
-                            pow[i].setTimer(1);
-                        }
-                    } else {
-                        if (pow[i].getHealth() > pow[i].getOriginalHealth() / 2) {
-                            pow[i].getSpatial().setMaterial(enemyMaterial[0]);
-                        } else {
-                            pow[i].getSpatial().setMaterial(enemyMaterial[3]);
-                        }
-                    }
-                }
+            cleanerRay.setOrigin(cam.getLocation());
+            cleanerRay.setDirection(cam.getDirection());
+
+            Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f);
+            Vector3f camForward = cam.getDirection().clone().multLocal(0.4f);
+            camForward.y = 0;
+            walkDirection.set(0, 0, 0);
+
+            if (left && !up && !down) {
+                walkDirection.addLocal(camLeft);
+            }
+            if (right && !up && !down) {
+                walkDirection.addLocal(camLeft.negate());
+            }
+            if (up && !right && !left) {
+                walkDirection.addLocal(camForward);
+            }
+            if (down && !right && !left) {
+                walkDirection.addLocal(camForward.negate());
+            }
+            if (left && up) {
+                walkDirection.addLocal(camLeft.add(camForward).divide(1.5f));
+            }
+            if (left && down) {
+                walkDirection.addLocal(camLeft.add(camForward.negate()).divide(1.5f));
+            }
+            if (right && up) {
+                walkDirection.addLocal(camLeft.negate().add(camForward).divide(1.5f));
+            }
+            if (right && down) {
+                walkDirection.addLocal(camLeft.negate().add(camForward.negate()).divide(1.5f));
+            }
+            if (aspire) {
+                aspire();
             } else {
-                CollisionResults rEnemyCleaner = new CollisionResults();
-                inhalables.collideWith(cleanerShape.getWorldBound(), rEnemyCleaner);
-                rEnemyCleaner.toString();
-                CollisionResults rEnemyPortal = new CollisionResults();
-                inhalables.collideWith(portal.getWorldBound(), rEnemyPortal);
-                rEnemyPortal.toString();
-                if (rEnemyCleaner.size() > 0) {
-                    String[] words = getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).getName().split("-");
-                    if (pow[Integer.parseInt(words[0])].isHasBeenAspired() && enemiesCleaned < CLEANER_CAPACITY) {
-                        pow[Integer.parseInt(words[0])].getfDeathEnemy().setLinearVelocity(Vector3f.ZERO);
-                        pow[Integer.parseInt(words[0])].getSpatial().removeControl(pow[Integer.parseInt(words[0])].getfDeathEnemy());
-                        pow[Integer.parseInt(words[0])].getSpatial().move(0, 30, 0);
-                        bulletAppState.getPhysicsSpace().remove(pow[Integer.parseInt(words[0])].getfDeathEnemy());
-                        aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
-                        enemiesCleaned++;
+                notAspire();
+            }
+            player.setWalkDirection(walkDirection);
+            cam.setLocation(player.getPhysicsLocation());
+            cleanerShape.setLocalTranslation(player.getPhysicsLocation());
+
+            /*if (cam.getDirection().y > 0.9439419f) {
+             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1509075f, cam.getLocation().z), new Vector3f(cam.getLeft().x, 7.916242E-9f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.33011156f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.9439419f, cam.getDirection().z));
+             } else if (cam.getDirection().y < -0.93508357) {
+             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1510572f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.2441149E-5f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.3544274f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.93508357f, cam.getDirection().z));
+             }*/
+
+            if (cam.getUp().y < 0) {
+                cam.lookAtDirection(new Vector3f(0, cam.getDirection().y, 0), new Vector3f(cam.getUp().x, 0, cam.getUp().z));
+            }
+
+            for (int i = 0; i < pow.length; i++) {
+                if (!pow[i].isActive()) {
+                    pow[i].getSpatial().scale(1 + tpf * 3);
+                    if (pow[i].getSpatial().getWorldBound().getVolume() >= boundEnemy.getVolume()) {
+                        pow[i].setActive(true);
+                        shootables.attachChild(pow[i].getSpatial());
                     }
                 }
-                if (rEnemyPortal.size() > 0) {
-                    String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
-                    pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
-                }
-                if (pow[i].isAspired()) {
-                    pow[i].getfDeathEnemy().setGravity(Vector3f.ZERO);
+                Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
+                if (!pow[i].isDeath()) {
+                    pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
+
+                    if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
+                        pow[i].getSpatial().setMaterial(enemyMaterial[1]);
+                    } else if (pow[i].isActive()) {
+                        pow[i].setTimer(pow[i].getTimer() + tpf);
+                        if (pow[i].getTimer() > 7) {
+                            pow[i].getSpatial().setMaterial(enemyMaterial[2]);
+                            if (pow[i].getTimer() > 7.1) {
+                                pow[i].setTimer(1);
+                            }
+                        } else {
+                            if (pow[i].getHealth() > pow[i].getOriginalHealth() / 2) {
+                                pow[i].getSpatial().setMaterial(enemyMaterial[0]);
+                            } else {
+                                pow[i].getSpatial().setMaterial(enemyMaterial[3]);
+                            }
+                        }
+                    }
                 } else {
-                    pow[i].getfDeathEnemy().setGravity(new Vector3f(0, -9.81f, 0));
-                }
-            }
-        }
+                    CollisionResults rEnemyCleaner = new CollisionResults();
+                    inhalables.collideWith(cleanerShape.getWorldBound(), rEnemyCleaner);
+                    rEnemyCleaner.toString();
+                    CollisionResults rEnemyPortal = new CollisionResults();
+                    inhalables.collideWith(portal.getWorldBound(), rEnemyPortal);
+                    rEnemyPortal.toString();
+                    if (rEnemyCleaner.size() > 0) {
+                        String[] words = getGeometrySpatial(rEnemyCleaner.getClosestCollision().getGeometry()).getName().split("-");
+                        if (pow[Integer.parseInt(words[0])].isHasBeenAspired() && enemiesCleaned < CLEANER_CAPACITY) {
+                            pow[Integer.parseInt(words[0])].getfDeathEnemy().setLinearVelocity(Vector3f.ZERO);
+                            pow[Integer.parseInt(words[0])].getSpatial().removeControl(pow[Integer.parseInt(words[0])].getfDeathEnemy());
+                            pow[Integer.parseInt(words[0])].getSpatial().move(0, 30, 0);
+                            bulletAppState.getPhysicsSpace().remove(pow[Integer.parseInt(words[0])].getfDeathEnemy());
+                            aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
+                            enemiesCleaned++;
+                            chargeAudio.playInstance();
 
-        for (int i = 0; i < fire.length; i++) {
-            if (fire[i].isShooted()) {
-                fire[i].move(tpf);
-                Box ball = new Box(1f, 1f, 1f);
-                Geometry theBall = new Geometry("Ball", ball);
-                theBall.move(fire[i].getWorldTranslation().x, fire[i].getWorldTranslation().y, fire[i].getWorldTranslation().z);
-                CollisionResults rScene = new CollisionResults();
-                sceneModel.collideWith(theBall.getWorldBound(), rScene);
-                rScene.toString();
-                CollisionResults rEnemy = new CollisionResults();
-                shootables.collideWith(theBall.getWorldBound(), rEnemy);
-                rEnemy.toString();
-                if (rScene.size() > 0) {
-                    fire[i].setParticlesPerSec(0f);
-                    fire[i].setShooted(false);
-                    rootNode.detachChild(fire[i]);
-                }
-                if (rEnemy.size() > 0) {
-                    fire[i].setParticlesPerSec(0f);
-                    fire[i].setShooted(false);
-                    rootNode.detachChild(fire[i]);
-                    String[] words = getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getName().split("-");
-                    pow[Integer.parseInt(words[0])].setHealth(pow[Integer.parseInt(words[0])].getHealth() - 1);
-                    getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
-                    getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(4);
-                    if (pow[Integer.parseInt(words[0])].getHealth() == 0) {
-                        getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).removeFromParent();
-                        death(getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()), Integer.parseInt(words[0]));
-                        pow[Integer.parseInt(words[0])].setDeath(true);
+                        }
+                    }
+                    if (rEnemyPortal.size() > 0) {
+                        String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
+                        pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
+                    }
+                    if (pow[i].isAspired()) {
+                        pow[i].getfDeathEnemy().setGravity(Vector3f.ZERO);
+                    } else {
+                        pow[i].getfDeathEnemy().setGravity(new Vector3f(0, -9.81f, 0));
                     }
                 }
             }
-        }
 
-        rootNode.updateLogicalState(tpf);
+            for (int i = 0; i < fire.length; i++) {
+                if (fire[i].isShooted()) {
+                    fire[i].move(tpf);
+                    Box ball = new Box(1f, 1f, 1f);
+                    Geometry theBall = new Geometry("Ball", ball);
+                    theBall.move(fire[i].getWorldTranslation().x, fire[i].getWorldTranslation().y, fire[i].getWorldTranslation().z);
+                    CollisionResults rScene = new CollisionResults();
+                    sceneModel.collideWith(theBall.getWorldBound(), rScene);
+                    rScene.toString();
+                    CollisionResults rEnemy = new CollisionResults();
+                    shootables.collideWith(theBall.getWorldBound(), rEnemy);
+                    rEnemy.toString();
+                    if (rScene.size() > 0) {
+                        fire[i].setParticlesPerSec(0f);
+                        fire[i].setShooted(false);
+                        rootNode.detachChild(fire[i]);
+                    }
+                    if (rEnemy.size() > 0) {
+                        fire[i].setParticlesPerSec(0f);
+                        fire[i].setShooted(false);
+                        rootNode.detachChild(fire[i]);
+                        String[] words = getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getName().split("-");
+                        pow[Integer.parseInt(words[0])].setHealth(pow[Integer.parseInt(words[0])].getHealth() - 1);
+                        getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
+                        getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setTopUp(4);
+                        if (pow[Integer.parseInt(words[0])].getHealth() == 0) {
+                            getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).removeFromParent();
+                            death(getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()), Integer.parseInt(words[0]));
+                            pow[Integer.parseInt(words[0])].setDeath(true);
+                        }
+                    }
+                }
+            }
 
-        guiNode.updateLogicalState(tpf);
+            rootNode.updateLogicalState(tpf);
+
+            guiNode.updateLogicalState(tpf);
 
 
-        rootNode.updateGeometricState();
+            rootNode.updateGeometricState();
 
-        guiNode.updateGeometricState();
+            guiNode.updateGeometricState();
         }
     }
 
@@ -472,6 +493,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                 pow[i].getfDeathEnemy().setLinearVelocity(cam.getDirection().mult(30));
                 enemiesCleaned -= 1;
                 i = pow.length;
+                throwAudio.playInstance();
+                successfulShot++;
             }
         }
     }
@@ -560,6 +583,43 @@ public class GameState extends AbstractAppState implements ActionListener {
         // rootNode.attachChild(guiNode);
     }
 
+    public void initAudio() {
+        // the second parameter lets you choose the song you want to play
+        backgroundAudio = new AudioNode(assetManager, "/Audio/loop.ogg", false); // true means stream audio 
+        backgroundAudio.setLooping(true); // continuous playing == true
+        /* this methods are used to make the sound come froma  certain place (3d audio)
+         backgroundAudio.setPositional(true);
+         backgroundAudio.setLocalTranslation(Vector3f.ZERO.clone());*/
+        backgroundAudio.setVolume(2);
+        rootNode.attachChild(backgroundAudio);
+        backgroundAudio.play();
+
+        gunAudio = new AudioNode(assetManager, "/Audio/fire1.wav", false); // false means buffered audio
+        gunAudio.setLooping(false);
+        gunAudio.setVolume(2);
+        rootNode.attachChild(gunAudio);
+
+        aspireAudio = new AudioNode(assetManager, "/Audio/aspire.wav", false); // false means buffered audio
+        aspireAudio.setLooping(true);
+        aspireAudio.setVolume(2);
+        rootNode.attachChild(aspireAudio);
+
+        aspireAudioEnd = new AudioNode(assetManager, "/Audio/aspireEnd.wav", false); // false means buffered audio
+        aspireAudioEnd.setLooping(true);
+        aspireAudioEnd.setVolume(2);
+        rootNode.attachChild(aspireAudioEnd);
+
+        throwAudio = new AudioNode(assetManager, "/Audio/lanzar.wav", false); // false means buffered audio
+        throwAudio.setLooping(true);
+        throwAudio.setVolume(2);
+        rootNode.attachChild(throwAudio);
+        
+        chargeAudio = new AudioNode(assetManager, "/Audio/cargar.wav", false); // false means buffered audio
+        chargeAudio.setLooping(true);
+        chargeAudio.setVolume(2);
+        rootNode.attachChild(chargeAudio);
+    }
+
     public void shootFire() {
 
         for (int i = 0; i < fire.length; i++) {
@@ -591,6 +651,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         s.addControl(pow[index].getfDeathEnemy());
         inhalables.attachChild(s);
         bulletAppState.getPhysicsSpace().add(pow[index].getfDeathEnemy());
+        deaths++;
     }
 
     private void aspire() {
@@ -650,14 +711,25 @@ public class GameState extends AbstractAppState implements ActionListener {
         if (!pause) {
             if (name.equals("Shoot") && !isPressed) {
                 shootFire();
+                totalShots++;
+                gunAudio.playInstance(); // just once
             }
             if (name.equals("Throw") && !isPressed) {
                 throwEnemies();
             }
             if (name.equals("Aspire")) {
                 if (isPressed) {
+                    if (!aspireFirstTime) {
+                        aspireAudio.play();
+                        aspireFirstTime = true;
+                    }
                     aspire = true;
                 } else {
+                    if (aspireFirstTime) {
+                        aspireAudioEnd.playInstance();
+                        aspireFirstTime = false;
+                        aspireAudio.stop();
+                    }
                     aspire = false;
                 }
             }
@@ -696,5 +768,13 @@ public class GameState extends AbstractAppState implements ActionListener {
     }
 
     public void render(RenderManager rm) {
+    }
+    
+    // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
+    public void recordStatistics(){
+        double tiempo = System.currentTimeMillis() - timeStartGame; // calcula el tiempo jugado
+        Player player = MenuState.readFile(); // lee el player registrado que ha jugado, desde un file
+        Game game = new Game(player.getNick(), ""+puntuacion, ""+1, ""+successfulShot, ""+totalShots, ""+deaths, tiempo);
+        database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
 }
