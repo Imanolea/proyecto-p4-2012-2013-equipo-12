@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -331,6 +332,37 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error ejecutando una PARTIDAS", "La conexi��n no pudo ser establecida", 2);
         }
     }
+    
+     public static void agregarPartidaStatic(Game partida) {
+        PreparedStatement ps;
+        String nick = partida.getNick();
+        Timestamp fecha_hora = partida.getFecha_hora();
+        String fecha_horaString = fecha_hora.toString();
+        String puntuacion = partida.getPuntuacion();
+        String nivel = partida.getNivel();
+        String disparos_ac = partida.getDisparos_ac();
+        String disparos_tot = partida.getDisparos_tot();
+        String muertes = partida.getMuertes();
+        double tiempo = partida.getTiempo();
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
+            ps = connection.prepareStatement("INSERT INTO PARTIDA VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, nick);
+            ps.setString(2, fecha_horaString);
+            ps.setString(3, puntuacion);
+            ps.setString(4, nivel);
+            ps.setString(5, disparos_ac);
+            ps.setString(6, disparos_tot);
+            ps.setString(7, muertes);
+            ps.setDouble(8, tiempo);
+            ps.executeUpdate();
+            ps.close();
+            desconectar(connection);
+        } catch (Exception e) {
+        }
+    }
 
     public static ArrayList listarEstadisticasPartidas() {
 
@@ -361,7 +393,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
 
-                Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
+                Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, Double.parseDouble(tiempo));
                 aP.add(p);
             }
             statement.close();
@@ -406,7 +438,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
 
-                Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, tiempo);
+                Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, Double.parseDouble(tiempo));
                 r = p.print();
                 j++;
             }
@@ -423,16 +455,17 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     }
 
     public static void main(String[] args) throws Exception {
-        getInstance().listarEstadisticasJugares();
+        
+        //getInstance().listarEstadisticasJugares();
         //getInstance().comprobarJugador("e", "Jesus");
 
        // Player Imanol = new Player("ima", "Ima", "ima");
         //getInstance().agregarPerfil(Imanol);
-        /*
-         Game partidita = new Game("3", "1230", "3", "900", "50", "9", "12800");
-         getInstance().agregarPartida(partidita);
-         //getInstance().listarEstadisticasPartidas();
-         getInstance().listarTop10();
+        
+         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
+         //getInstance().agregarPartida(partidita);
+         getInstance().listarEstadisticasPartidas();
+         //getInstance().listarTop10();
          //getInstance().mostrarDisparosTopporciento();
          //getInstance().listarEstadisticasJugares();*/
     }
