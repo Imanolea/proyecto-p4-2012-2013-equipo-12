@@ -254,8 +254,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         initAudio();
         timeStartGame = System.currentTimeMillis();
         pause = false;
-        
-        
+
+
     }
 
     public void update(float tpf) {
@@ -341,7 +341,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                 Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
                 if (!pow[i].isDeath()) {
                     pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
-
                     if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
@@ -376,7 +375,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                             aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
                             enemiesCleaned++;
                             chargeAudio.playInstance();
-
+                        }else if(enemiesCleaned >= CLEANER_CAPACITY){
+                            recordStatistics();
                         }
                     }
                     if (rEnemyPortal.size() > 0) {
@@ -409,6 +409,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                         rootNode.detachChild(fire[i]);
                     }
                     if (rEnemy.size() > 0) {
+                        successfulShot++;
                         fire[i].setParticlesPerSec(0f);
                         fire[i].setShooted(false);
                         rootNode.detachChild(fire[i]);
@@ -494,7 +495,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                 enemiesCleaned -= 1;
                 i = pow.length;
                 throwAudio.playInstance();
-                successfulShot++;
             }
         }
     }
@@ -613,7 +613,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         throwAudio.setLooping(true);
         throwAudio.setVolume(2);
         rootNode.attachChild(throwAudio);
-        
+
         chargeAudio = new AudioNode(assetManager, "/Audio/cargar.wav", false); // false means buffered audio
         chargeAudio.setLooping(true);
         chargeAudio.setVolume(2);
@@ -769,12 +769,12 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     public void render(RenderManager rm) {
     }
-    
+
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
-    public void recordStatistics(){
-        double tiempo = System.currentTimeMillis() - timeStartGame; // calcula el tiempo jugado
+    public void recordStatistics() {
+        double tiempo= System.currentTimeMillis()/1000 - timeStartGame/1000; // calcula el tiempo jugado
         Player player = MenuState.readFile(); // lee el player registrado que ha jugado, desde un file
-        Game game = new Game(player.getNick(), ""+puntuacion, ""+1, ""+successfulShot, ""+totalShots, ""+deaths, tiempo);
+        Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, tiempo);
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
 }
