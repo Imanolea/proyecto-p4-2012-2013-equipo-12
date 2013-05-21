@@ -41,6 +41,9 @@ import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.tools.SizeValue;
 import game.MainApp;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -452,6 +455,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                     }
                 });
 
+
             }
         }.registerPopup(nifty);
 
@@ -494,9 +498,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
                     }
                 });
 
+
+
             }
         }.registerPopup(nifty);
-        
+
         nifty.registerScreenController(this);
 
 
@@ -677,18 +683,17 @@ public class MenuState extends AbstractAppState implements ScreenController {
         Player j = new Player(nick, pass, name);
         j.printJugador(j);
 
-        try{
+        try {
             database.LocalStatsHandler.agregarPerfilStatic(j);
             loadMenuFromInput();
 
-        }catch(ClassNotFoundException e1){
+        } catch (ClassNotFoundException e1) {
             showPopupConnectionError();
-        }catch(SQLException e2){
+        } catch (SQLException e2) {
             showPopupUserError();
-        }catch(Exception e3){
-            
+        } catch (Exception e3) {
         }
-        
+
     }
 
     public void cargarUsuario() {
@@ -696,17 +701,19 @@ public class MenuState extends AbstractAppState implements ScreenController {
         String nick = nifty.getScreen("LogInScreen").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
-        
-        try{
+
+        try {
             nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
         } catch (Exception e) {
             showPopupConnectionError();
         }
-        
+
         //nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
 
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn();
+            Player player = new Player(nick, password, nameJugador);
+            writeFile(player);
         } else {
             showPopupUserError();
         }
@@ -718,13 +725,15 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
 
-        try{
+        try {
             nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
         } catch (Exception e) {
             showPopupConnectionError();
         }
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn2();
+            Player player = new Player(nick, password, nameJugador);
+            writeFile(player);
         } else {
             showPopupUserError();
         }
@@ -747,7 +756,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     public void closePopupUserError() {
         nifty.closePopup(popup.getId());
     }
-    
+
     public void showPopupConnectionError() {
         popup = nifty.createPopup("popupConnectionError");
         nifty.showPopup(nifty.getCurrentScreen(), popup.getId(), null);
@@ -755,5 +764,71 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void closePopupConnectionError() {
         nifty.closePopup(popup.getId());
+    }
+
+    public static Player readFile() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        String nick="";
+        String pass="";
+        String name="";
+
+        try {
+            // Apertura del fichero y creacion de BufferedReader para poder
+            // hacer una lectura comoda (disponer del metodo readLine()).
+            archivo = new File("loggedPlayer.txt");
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+
+            nick = br.readLine();
+            pass = br.readLine();
+            name = br.readLine();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta 
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        Player p = new Player(nick, pass, name);
+        return p;
+    }
+
+    public static void writeFile(Player j) {
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter("loggedPlayer.txt");
+            pw = new PrintWriter(fichero);
+
+            pw.println(j.getNick());
+            pw.println(j.getPassword());
+            pw.println(j.getNombre());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // Nuevamente aprovechamos el finally para 
+                // asegurarnos que se cierra el fichero.
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
     }
 }
