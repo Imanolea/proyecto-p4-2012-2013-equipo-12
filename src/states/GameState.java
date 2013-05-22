@@ -52,6 +52,7 @@ import database.Player;
 import game.Bullet;
 import game.Enemy;
 import game.MainApp;
+import java.text.DecimalFormat;
 
 public class GameState extends AbstractAppState implements ActionListener {
 
@@ -96,6 +97,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Vector3f walkDirection = new Vector3f();
     private int enemiesCleaned;
     private float spawnTimer;
+    private float gameTimer;
     private boolean left = false, right = false, up = false, down = false, aspire = false;
     public boolean pause = true;
     // atributos para la gestión del audio
@@ -173,6 +175,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         enemiesCleaned = 0;
         spawnTimer = 0;
+        gameTimer = 20;
 
         inputManager.deleteMapping("FLYCAM_ZoomIn");
         inputManager.deleteMapping("FLYCAM_ZoomOut");
@@ -289,7 +292,14 @@ public class GameState extends AbstractAppState implements ActionListener {
 
             // guiNode.center();
 
-
+            gameTimer-=tpf;
+            
+            if (gameTimer<0){
+                /*
+                 * Muerte, Game Over
+                 */
+            }
+            
             spawnTimer += tpf;
 
             if (spawnTimer > 15) {
@@ -400,6 +410,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (rEnemyPortal.size() > 0) {
                         String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
                         explosion(pow[Integer.parseInt(words[0])].getSpatial());
+                        gameTimer+=5;
                         pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
                     }
                     if (pow[i].isAspired()) {
@@ -632,12 +643,23 @@ public class GameState extends AbstractAppState implements ActionListener {
         BitmapText ch2 = new BitmapText(guiFont, false);
 
         ch2.setColor(ColorRGBA.White);
-        ch2.setSize(40);
+        ch2.setSize(settings.getWidth()/25);
         ch2.setText("Enemigos aspirados: " + enemiesCleaned + "/" + CLEANER_CAPACITY);
         ch2.setLocalTranslation(
                 settings.getWidth() / 25,
                 settings.getHeight() / 10, 0);
         guiNode.attachChild(ch2);
+        
+        BitmapText ch3 = new BitmapText(guiFont, false);
+
+        ch3.setColor(ColorRGBA.White);
+        ch3.setSize(settings.getWidth()/25);
+        DecimalFormat df = new DecimalFormat("0.00"); 
+        ch3.setText("Tiempo restante: " + df.format(gameTimer));
+        ch3.setLocalTranslation(
+                settings.getWidth() - settings.getWidth()/2,
+                settings.getHeight() / 10, 0);
+        guiNode.attachChild(ch3);
 
         // rootNode.attachChild(guiNode);
     }
