@@ -141,8 +141,32 @@ public class GameState extends AbstractAppState implements ActionListener {
         // guiNode.attachChild(menuText);
     }
 
+    
+     @Override
+    public void cleanup() {
+      super.cleanup();
+      // unregister all my listeners, detach all my nodes, etc...
+      // called when we erase the state, used for saving game state properties
+     
+    }
+ 
+    @Override
+    public void setEnabled(boolean enabled) {
+      // Pause and unpause
+      super.setEnabled(enabled);
+      if(enabled){
+        // init stuff that is in use while this state is RUNNING
+        
+      } else {
+        // take away everything not needed while this state is PAUSED
+      
+      }
+    }
+    
+    
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        // init stuff that is independent of whether state is PAUSED or RUNNING
 
         this.game = (MainApp) game; // can cast Application to something more specific
         // this.rootNode = this.rootNode;
