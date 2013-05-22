@@ -521,7 +521,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
         //getInstance().agregarPartida(partidita);
         //getInstance().listarEstadisticasPartidas();
-        getInstance().listarTop10();        
+        //getInstance().listarTop10();        
         //getInstance().mostrarDisparosTopporciento();
         //getInstance().listarEstadisticasJugares();*/
     }
