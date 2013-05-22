@@ -16,6 +16,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
+import states.GameOverState;
 
 public class MainApp extends Application {
 
@@ -27,6 +28,7 @@ public class MainApp extends Application {
     private StatisticsState ss = null;
     private LogInState ls = null;
     private LogInState2 ls2 = null;
+    private GameOverState gos=null;
 
     public MainApp() {
     }
@@ -62,9 +64,11 @@ public class MainApp extends Application {
         ls = new LogInState(this);
         ls2 = new LogInState2(this);
         ms2 = new MenuStateGame(this);
+        gos= new GameOverState(this);
 
         // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
+        
     }
 
     public void update() {
@@ -167,4 +171,18 @@ public class MainApp extends Application {
         getStateManager().detach(ms);
         getStateManager().attach(ss);
     }
+    
+
+    public void loadMenuFromGaveOver() {
+
+        getStateManager().detach(gos);
+        getStateManager().attach(ms);
+    }
+     public void  restartGame() {
+
+        getStateManager().detach(gos);
+        getStateManager().attach(te);
+    }
+    
+    
 }
