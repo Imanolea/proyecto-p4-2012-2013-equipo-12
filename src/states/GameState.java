@@ -18,6 +18,7 @@ import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResults;
+import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
@@ -74,13 +75,17 @@ public class GameState extends AbstractAppState implements ActionListener {
     private final int NUMBER_CHARGES = 5;
     private final int CLEANER_CAPACITY = 5;
     private Spatial sceneModel;
+    private Spatial portalStructure;
     private Spatial portal;
     private Geometry cleanerShape;
     private Enemy[] pow = new Enemy[NUMBER_ENEMIES];
+    private ParticleEmitter [] explosion = new ParticleEmitter [NUMBER_CHARGES];
+    private double [] exTimer = new double [NUMBER_CHARGES];
     private Bullet[] fire = new Bullet[NUMBER_CHARGES];
     private Material[] enemyMaterial = new Material[5];
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
+    private RigidBodyControl portalscape;
     private CharacterControl player;
     private Ray cleanerRay;
     private BoundingVolume boundEnemy;
@@ -193,6 +198,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         setUpLight();
 
         for (int i = 0; i < fire.length; i++) {
+            explosion[i]=null;
             fire[i] = createFire();
         }
 
@@ -223,11 +229,23 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         boundEnemy = pow[0].getSpatial().getWorldBound();
 
+        portalStructure = assetManager.loadModel("Models/Portal/PortalStructure.j3o");
+        portalStructure.setLocalTranslation(-22.46f, 0, 14.3f);
+        portalStructure.rotate(0, 110, 0);
+        portalStructure.scale(4f);
+        
+        CollisionShape portalShape =
+                CollisionShapeFactory.createMeshShape((Node) portalStructure);
+        portalscape = new RigidBodyControl(portalShape, 0);
+        portalStructure.addControl(portalscape);
+        
         portal = assetManager.loadModel("Models/Portal/Portal.j3o");
-        portal.setLocalTranslation(-22.46f, 0, 13.617f);
+        portal.setLocalTranslation(-22.46f, 0, 14.617f);
         portal.rotate(0, 110, 0);
         portal.scale(4f);
+        
         rootNode.attachChild(portal);
+        rootNode.attachChild(portalStructure);
 
         Enemy powHurt = new Enemy(assetManager.loadModel("Models/Pow/PowHurt.j3o"));
         Enemy powEyesClosed = new Enemy(assetManager.loadModel("Models/Pow/PowEyesClosed.j3o"));
@@ -245,17 +263,17 @@ public class GameState extends AbstractAppState implements ActionListener {
         player.setGravity(30);
         player.setPhysicsLocation(new Vector3f(0, 10, 0));
 
-
         rootNode.attachChild(sceneModel);
 
         bulletAppState.getPhysicsSpace().add(landscape);
+        bulletAppState.getPhysicsSpace().add(portalStructure);
         bulletAppState.getPhysicsSpace().add(player);
 
         initAudio();
         timeStartGame = System.currentTimeMillis();
         pause = false;
-
-
+        
+        
     }
 
     public void update(float tpf) {
@@ -341,6 +359,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                 Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
                 if (!pow[i].isDeath()) {
                     pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
+
                     if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
@@ -375,12 +394,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                             aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
                             enemiesCleaned++;
                             chargeAudio.playInstance();
-                        }else if(enemiesCleaned >= CLEANER_CAPACITY){
-                            recordStatistics();
+
                         }
                     }
                     if (rEnemyPortal.size() > 0) {
                         String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
+                        explosion(pow[Integer.parseInt(words[0])].getSpatial());
                         pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
                     }
                     if (pow[i].isAspired()) {
@@ -392,6 +411,16 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
 
             for (int i = 0; i < fire.length; i++) {
+                if (exTimer[i]>0)
+					exTimer[i]+=tpf;
+
+				if (exTimer[i]>1.25){
+					explosion[i].setParticlesPerSec(0f);
+                    if (exTimer[i]>(2.5)){
+                        explosion[i]=null;
+					    exTimer[i]=0;
+                    }
+				}
                 if (fire[i].isShooted()) {
                     fire[i].move(tpf);
                     Box ball = new Box(1f, 1f, 1f);
@@ -409,7 +438,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                         rootNode.detachChild(fire[i]);
                     }
                     if (rEnemy.size() > 0) {
-                        successfulShot++;
                         fire[i].setParticlesPerSec(0f);
                         fire[i].setShooted(false);
                         rootNode.detachChild(fire[i]);
@@ -495,9 +523,40 @@ public class GameState extends AbstractAppState implements ActionListener {
                 enemiesCleaned -= 1;
                 i = pow.length;
                 throwAudio.playInstance();
+                successfulShot++;
             }
         }
     }
+    
+    	private void explosion(Spatial s){
+		int i=0;
+		
+		while (explosion[i]!=null){
+			i++;
+		}
+		explosion[i] = 
+				new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
+		Material mat_red = new Material(assetManager, 
+				"Common/MatDefs/Misc/Particle.j3md");
+		mat_red.setTexture("Texture", assetManager.loadTexture(
+				"Effects/Explosion/flame.png"));
+		explosion[i].setMaterial(mat_red);
+		explosion[i].setImagesX(2);
+		explosion[i].setImagesY(2);
+		explosion[i].setEndColor(new ColorRGBA(0.129f, 0.43f, 0.72f, 1f));
+		explosion[i].setStartColor(new ColorRGBA(0.129f, 0.43f, 0.72f, 1f));
+		explosion[i].getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
+		explosion[i].setStartSize(1.5f);
+		explosion[i].setEndSize(0.1f);
+		explosion[i].setGravity(0, 0, 0);
+		explosion[i].setLowLife(1f);
+		explosion[i].setHighLife(3f);
+		explosion[i].getParticleInfluencer().setVelocityVariation(0.3f);
+		explosion[i].killAllParticles();
+		rootNode.attachChild(explosion[i]);
+		explosion[i].move(s.getLocalTranslation().x, s.getLocalTranslation().y, s.getLocalTranslation().z);
+		exTimer[i]++;
+	}
 
     private Bullet createFire() {
 
@@ -613,7 +672,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         throwAudio.setLooping(true);
         throwAudio.setVolume(2);
         rootNode.attachChild(throwAudio);
-
+        
         chargeAudio = new AudioNode(assetManager, "/Audio/cargar.wav", false); // false means buffered audio
         chargeAudio.setLooping(true);
         chargeAudio.setVolume(2);
@@ -624,6 +683,8 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         for (int i = 0; i < fire.length; i++) {
             if (!fire[i].isShooted()) {
+                totalShots++;
+                gunAudio.playInstance();
                 rootNode.attachChild(fire[i]);
                 fire[i].setShooted(true);
                 fire[i].setParticlesPerSec(20);
@@ -711,8 +772,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         if (!pause) {
             if (name.equals("Shoot") && !isPressed) {
                 shootFire();
-                totalShots++;
-                gunAudio.playInstance(); // just once
             }
             if (name.equals("Throw") && !isPressed) {
                 throwEnemies();
@@ -769,12 +828,12 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     public void render(RenderManager rm) {
     }
-
+    
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
-    public void recordStatistics() {
-        double tiempo= System.currentTimeMillis()/1000 - timeStartGame/1000; // calcula el tiempo jugado
+    public void recordStatistics(){
+        double tiempo = System.currentTimeMillis() - timeStartGame; // calcula el tiempo jugado
         Player player = MenuState.readFile(); // lee el player registrado que ha jugado, desde un file
-        Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, tiempo);
+        Game game = new Game(player.getNick(), ""+puntuacion, ""+1, ""+successfulShot, ""+totalShots, ""+deaths, tiempo);
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
 }
