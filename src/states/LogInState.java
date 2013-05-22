@@ -326,7 +326,6 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 width("30%");
                                                 visibleToMouse(true);
                                                 interactOnClick("loadInputFromLogIn()");
-
                                             }
                                         });
 
@@ -350,7 +349,6 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 width("30%");
                                                 visibleToMouse(true);
                                                 interactOnClick("cargarUsuario()");
-
                                             }
                                         });
 
