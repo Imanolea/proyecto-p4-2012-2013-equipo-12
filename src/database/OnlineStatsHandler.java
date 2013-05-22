@@ -210,9 +210,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
                 double numero = Double.valueOf(tiempod).doubleValue();
 
 
-                Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, numero, fecha_hora);
+             //   Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, numero, fecha_hora);
 
-                a.add(p);
+              //  a.add(p);
 
 
             }
