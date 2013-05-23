@@ -40,7 +40,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 
 public class MenuStateGame extends AbstractAppState implements ScreenController {
-    
+
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
     protected BitmapText menuText;
@@ -64,30 +64,30 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
     private boolean primeraVez2 = true;
     private boolean primeraVez3 = true;
     private String nameJugador;
-    
+
     public MenuStateGame(MainApp game) {
         this.game = game;
     }
-    
+
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
     }
-    
+
     public void onStartScreen() {
     }
-    
+
     public void onEndScreen() {
     }
-    
+
     private class AppActionListener implements ActionListener {
-        
+
         public void onAction(String name, boolean value, float tpf) {
             if (!value) {
                 return;
             }
         }
     }
-    
+
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         menuText = new BitmapText(menuFont, false);
@@ -96,8 +96,7 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-    
-    @Override
+
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.game = (MainApp) game; // can cast Application to something more specific
@@ -118,19 +117,19 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
-        
-        
+
+
         if (niftyDisplay == null) {
             niftyDisplay = new NiftyJmeDisplay(
                     assetManager, inputManager, audioRenderer, guiViewPort);
-            
+
         }
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
-        
+
         inputManager.setCursorVisible(true);
 
 
@@ -139,152 +138,168 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
         nifty.addScreen("MenuScreenGame", new ScreenBuilder("Menu") {
             {
                 controller(new MenuStateGame(game)); // This connects the Java class StartingScreen and the GUI screen.     
-
-                // <layer>
                 layer(new LayerBuilder("Layer_ID") {
+                    {
+                        
+                        backgroundColor(Color.BLACK);                    
+                    }
+                });
+            // <layer>
+
+            layer( 
+                
+                    new LayerBuilder("Layer_ID") {
                     {
                         childLayoutVertical(); // layer properties, add more...
 
-                        // <panel_1>
-                        panel(new PanelBuilder("Panel_TITLE") {
-                            {
-                                childLayoutCenter();
-                                alignRight();
-                                valignBottom();
-                                height("10%");
-                                width("95%");
+                    // <panel_1>
+                    panel(new PanelBuilder("Panel_TITLE") {
+                        {
+                            childLayoutCenter();
+                            alignRight();
+                            valignBottom();
+                            height("10%");
+                            width("95%");
 
-                                // "Hi, user" text.
+                            // "Hi, user" text.
 
-                                /*text(new TextBuilder() {
-                                    {
-                                        alignRight();
-                                        text("Hi, " + nameJugador);
-                                        font("Interface/Fonts/Default.fnt");
-                                        height("100%");
-                                        width("27%");
-                                    }
-                                });*/
-                            }
-                        }); // </panel_1>
+                            /*text(new TextBuilder() {
+                             {
+                             alignRight();
+                             text("Hi, " + nameJugador);
+                             font("Interface/Fonts/Default.fnt");
+                             height("100%");
+                             width("27%");
+                             }
+                             });*/
+                        }
+                    }); // </panel_1>
 
-                        // <panel_1>
-                        panel(new PanelBuilder("Panel_TITLE") {
-                            {
-                                childLayoutCenter();
-                                alignCenter();
-                                height("5%");
-                                width("90%");
+                    // <panel_1>
+                    panel(new PanelBuilder("Panel_TITLE") {
+                        {
+                            childLayoutCenter();
+                            alignCenter();
+                            height("5%");
+                            width("90%");
 
-                                // add text
+                            // add text
 
-                                text(new TextBuilder() {
-                                    {
-                                        text("PAUSE");
-                                        font("Interface/Fonts/Default.fnt");
-                                        height("100%");
-                                        width("100%");
-                                    }
-                                });
-                            }
-                        }); // </panel_1>
+                            text(new TextBuilder() {
+                                {
+                                    text("PAUSE");
+                                    font("Interface/Fonts/Default.fnt");
+                                    height("100%");
+                                    width("100%");
+                                }
+                            });
+                        }
+                    }); // </panel_1>
 
-                        // <panel_2>
-                        panel(new PanelBuilder("Panel_BUTTONS") {
-                            {
-                                childLayoutVertical(); // panel properties, add more...               
-                                alignCenter();
-                                height("70%");
-                                width("50%");
-                                
-                                panel(new PanelBuilder("Panel_EMPTY") {
-                                    {
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("55%");
-                                        
-                                    }
-                                });
-                                
-                                panel(new PanelBuilder("Panel_START") {
-                                    {
-                                        alignCenter();
-                                        valignCenter();
-                                        childLayoutCenter();
-                                        height("16%");
-                                        width("55%");
+                    // <panel_2>
+                    panel(new PanelBuilder("Panel_BUTTONS") {
+                        {
+                            childLayoutVertical(); // panel properties, add more...               
+                            alignCenter();
+                            height("70%");
+                            width("50%");
 
-                                        
-                                    }
-                                });// </panel_2.1>
+                            panel(new PanelBuilder("Panel_EMPTY") {
+                                {
+                                    childLayoutCenter();
+                                    height("16%");
+                                    width("55%");
 
-                                // <panel_2.2>
-                                panel(new PanelBuilder("Panel_STATISTICS") {
-                                    {
-                                        childLayoutCenter();
-                                        alignCenter();
-                                        valignCenter();
-                                        height("16%");
-                                        width("55%");
+                                }
+                            });
 
-                                      // GUI element
-                                        control(new ButtonBuilder("Button_continue", titulos[0][i]) {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                backgroundColor("#f108");
-                                                height("50%");
-                                                width("80%");
-                                                visibleToMouse(true);
-                                                interactOnClick("unpauseGame()");
-                                            }
-                                        });
-                                    }
-                                });// </panel_2.2>
+                            panel(new PanelBuilder("Panel_START") {
+                                {
+                                    alignCenter();
+                                    valignCenter();
+                                    childLayoutCenter();
+                                    height("16%");
+                                    width("55%");
 
 
-                                panel(new PanelBuilder("Panel_EXIT") {
-                                    {
-                                        childLayoutCenter();
-                                        height("30%");
-                                        width("55%");
-                                        alignCenter();
-                                        valignCenter();
+                                }
+                            });// </panel_2.1>
 
-                                        // GUI element
-                                        control(new ButtonBuilder("Button_QUIT", titulos[4][i]) {
-                                            {
-                                                alignCenter();
-                                                valignCenter();
-                                                backgroundColor("#f108");
-                                                height("28%");
-                                                width("80%");
-                                                visibleToMouse(true);
-                                                interactOnClick("exit()");
-                                                
-                                            }
-                                        });
-                                    }
-                                });
-                                
-                                
-                            }
-                        }); // </panel_2>
+                            // <panel_2.2>
+                            panel(new PanelBuilder("Panel_STATISTICS") {
+                                {
+                                    childLayoutCenter();
+                                    alignCenter();
+                                    valignCenter();
+                                    height("16%");
+                                    width("55%");
 
-                    }
-                });
-                // </layer>
+                                    // GUI element
+                                    control(new ButtonBuilder("Button_continue", titulos[0][i]) {
+                                        {
+                                            alignCenter();
+                                            valignCenter();
+                                            backgroundColor("#f108");
+                                            height("50%");
+                                            width("80%");
+                                            visibleToMouse(true);
+                                            interactOnClick("unpauseGame()");
+                                        }
+                                    });
+                                }
+                            });// </panel_2.2>
+
+
+                            panel(new PanelBuilder("Panel_EXIT") {
+                                {
+                                    childLayoutCenter();
+                                    height("30%");
+                                    width("55%");
+                                    alignCenter();
+                                    valignCenter();
+
+                                    // GUI element
+                                    control(new ButtonBuilder("Button_QUIT", titulos[4][i]) {
+                                        {
+                                            alignCenter();
+                                            valignCenter();
+                                            backgroundColor("#f108");
+                                            height("28%");
+                                            width("80%");
+                                            visibleToMouse(true);
+                                            interactOnClick("exit()");
+
+                                        }
+                                    });
+                                }
+                            });
+
+
+                        }
+                    }); // </panel_2>
+
+                }
             }
-        }.build(nifty));
+        );
+        // </layer>
+    }
+
+    }.build(nifty)
+
+    );
         // </screen>
 
-        game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("MenuScreenGame"); // it is used to start the screen
+        game.getGUIViewPort ()
+
+    .addProcessor(niftyDisplay);
+        nifty.gotoScreen (
+
+"MenuScreenGame"); // it is used to start the screen
 //loadMenu();
     }
     
     @Override
-    public void update(float tpf) {
+        public void update(float tpf) {
         super.update(tpf);
 
 
@@ -308,7 +323,7 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
     }
     
     @Override
-    public void stateDetached(AppStateManager stateManager) {
+        public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
@@ -316,6 +331,7 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
     }
     
     public void render(RenderManager rm) {
+        
     }
     
     
@@ -325,8 +341,10 @@ public class MenuStateGame extends AbstractAppState implements ScreenController 
     
     public void unpauseGame() {
         nifty.removeScreen("MenuScreenGame");
+        
         game.loadGameFromMenuGame();
-             
+        
+       
         //niftyDisplay.cleanup();
         
         
