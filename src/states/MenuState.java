@@ -9,7 +9,6 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioRenderer;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
@@ -23,7 +22,6 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
-import database.LocalStatsHandler;
 import database.Player;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
@@ -725,7 +723,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
             Player p = new Player(nick, password, nameJugador);
             game.setPlayer(p);
-            MenuState.writeFile(p);
+            System.out.println("AAAAAAAAAAAAAAAAAAAA"+game.getPlayer().getNick());
+           
         } catch (Exception e) {
             showPopupConnectionError();
         }
@@ -735,7 +734,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn();
             Player player = new Player(nick, password, nameJugador);
-            writeFile(player);
+           game.setPlayer(player);
         } else {
             showPopupUserError();
         }
@@ -755,7 +754,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
         if (!nameJugador.equals("")) {
             loadMenuFromLogIn2();
             Player player = new Player(nick, password, nameJugador);
-            writeFile(player);
+            game.setPlayer(player);
+            System.out.println("LOOOOOG 222"+game.getPlayer().getNick());
         } else {
             showPopupUserError();
         }
@@ -828,7 +828,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         return p;
     }
 
-    public static void writeFile(Player j) {
+    /*public static void writeFile(Player j) {
         FileWriter fichero = null;
         PrintWriter pw = null;
         try {
@@ -853,6 +853,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             }
         }
     }
+    */
     
 
 }
