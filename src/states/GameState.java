@@ -107,6 +107,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private boolean left = false, right = false, up = false, down = false, aspire = false;
     public boolean pause;
     private boolean gameOver;
+    public boolean gameOverFirstTime;
     // atributos para la gestión del audio
     private AudioNode gunAudio;
     private AudioNode backgroundAudio;
@@ -207,7 +208,8 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         pause = false;
         gameOver = false;
-
+        gameOverFirstTime = true;
+        
         enemiesCleaned = 0;
         spawnTimer = 0;
 
@@ -877,8 +879,10 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
         }
 
-        if (gameOver) {
+        if (gameOver && gameOverFirstTime) {
             gameOverFunction();
+            gameOverFirstTime = false;
+            rootNode.detachAllChildren();
         } else if (name.equals("Menu")) {
             setEnabled(false);
         }
@@ -890,14 +894,18 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
     public void recordStatistics() {
-        Player player = game.getPlayer(); // lee el player actual
-        System.out.println(game.getPlayer().getNick());
+        Player player = game.getPlayer(); // lee el player actual 
         Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, timeGame);
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
 
     public void gameOverFunction() {
         backgroundAudio.stop();
+        aspireAudio.stop();
+        aspireAudioEnd.stop();
+        throwAudio.stop();
+        chargeAudio.stop();
+        gunAudio.stop();
         recordStatistics();
         game.loadGameOverFromGame();
     }
