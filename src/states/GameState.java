@@ -52,7 +52,13 @@ import database.Player;
 import game.Bullet;
 import game.Enemy;
 import game.MainApp;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameState extends AbstractAppState implements ActionListener {
 
@@ -99,7 +105,8 @@ public class GameState extends AbstractAppState implements ActionListener {
     private float spawnTimer;
     private float gameTimer;
     private boolean left = false, right = false, up = false, down = false, aspire = false;
-    public boolean pause = true;
+    public boolean pause;
+    private boolean gameOver;
     // atributos para la gestión del audio
     private AudioNode gunAudio;
     private AudioNode backgroundAudio;
@@ -108,7 +115,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private AudioNode aspireAudioEnd;
     private AudioNode chargeAudio;
     private boolean aspireFirstTime = false;
-    private float timeStartGame;
+    private float timeGame;
     private float puntuacion;
     private float successfulShot;
     private float totalShots;
@@ -141,28 +148,25 @@ public class GameState extends AbstractAppState implements ActionListener {
         // guiNode.attachChild(menuText);
     }
 
-    @Override
     public void cleanup() {
         super.cleanup();
-        // unregister all my listeners, detach all my nodes, etc...
-        // called when we erase the state, used for saving game state properties
 
     }
 
-    @Override
     public void setEnabled(boolean enabled) {
-        // Pause and unpause
-        super.setEnabled(enabled);
+        //super.setEnabled(enabled);
         if (enabled) {
-            // init stuff that is in use while this state is RUNNING
+            backgroundAudio.play();
+            pause = false;
         } else {
-            // take away everything not needed while this state is PAUSED
+            backgroundAudio.pause();
+            game.loadMenuGameFromGame();
+            pause = true;
         }
     }
 
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        // init stuff that is independent of whether state is PAUSED or RUNNING
 
         this.game = (MainApp) game; // can cast Application to something more specific
         // this.rootNode = this.rootNode;
@@ -192,10 +196,12 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         // app.setDisplayFps(false);
         //setDisplayStatView(false);
+        
+        pause=false;
+        gameOver=false;
 
         enemiesCleaned = 0;
         spawnTimer = 0;
-        gameTimer = 20;
 
         inputManager.deleteMapping("FLYCAM_ZoomIn");
         inputManager.deleteMapping("FLYCAM_ZoomOut");
@@ -223,6 +229,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         for (int i = 0; i < fire.length; i++) {
             explosion[i] = null;
             fire[i] = createFire();
+            fire[i].move(0, -30, 0);
+            rootNode.attachChild(fire[i]);
         }
 
         sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario.j3o");
@@ -293,10 +301,9 @@ public class GameState extends AbstractAppState implements ActionListener {
         bulletAppState.getPhysicsSpace().add(player);
 
         initAudio();
-        timeStartGame = System.currentTimeMillis();
+        timeGame = 0;
         pause = false;
-
-
+        gameTimer = 20;
     }
 
     public void update(float tpf) {
@@ -313,12 +320,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             // guiNode.center();
 
             gameTimer -= tpf;
-
-            if (gameTimer < 0) {
-                /*
-                 * Muerte, Game Over
-                 */
-            }
+            timeGame += tpf;
 
             spawnTimer += tpf;
 
@@ -326,6 +328,18 @@ public class GameState extends AbstractAppState implements ActionListener {
                 spawnTimer = 0;
                 spawn();
             }
+            if (gameTimer < 0) {
+                pause=true;
+                gameOver=true;
+                Robot robot;
+                try {
+                    robot = new Robot();
+                    robot.mousePress(InputEvent.BUTTON1_MASK);
+                } catch (AWTException ex) {
+                    Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
 
             cleanerRay.setOrigin(cam.getLocation());
             cleanerRay.setDirection(cam.getDirection());
@@ -467,12 +481,10 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (rScene.size() > 0) {
                         fire[i].setParticlesPerSec(0f);
                         fire[i].setShooted(false);
-                        rootNode.detachChild(fire[i]);
                     }
                     if (rEnemy.size() > 0) {
                         fire[i].setParticlesPerSec(0f);
                         fire[i].setShooted(false);
-                        rootNode.detachChild(fire[i]);
                         String[] words = getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getName().split("-");
                         pow[Integer.parseInt(words[0])].setHealth(pow[Integer.parseInt(words[0])].getHealth() - 1);
                         getGeometrySpatial(rEnemy.getClosestCollision().getGeometry()).getControl(LevitationControl.class).setSpeed(100);
@@ -485,16 +497,16 @@ public class GameState extends AbstractAppState implements ActionListener {
                     }
                 }
             }
+            
+        }
 
             rootNode.updateLogicalState(tpf);
 
             guiNode.updateLogicalState(tpf);
 
-
-            rootNode.updateGeometricState();
-
             guiNode.updateGeometricState();
-        }
+
+            rootNode.updateGeometricState();  
     }
 
     public void stateAttached(AppStateManager stateManager) {
@@ -728,7 +740,6 @@ public class GameState extends AbstractAppState implements ActionListener {
             if (!fire[i].isShooted()) {
                 totalShots++;
                 gunAudio.playInstance();
-                rootNode.attachChild(fire[i]);
                 fire[i].setShooted(true);
                 fire[i].setParticlesPerSec(20);
                 fire[i].setLocalTranslation(cam.getLocation());
@@ -862,9 +873,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                 }
             }
         }
+        
         if (name.equals("Menu")) {
-            game.loadMenuGameFromGame();
-            pause = true;
+            setEnabled(false);
+        }
+        if (gameOver){
+            gameOverFunction();
         }
 
     }
@@ -874,7 +888,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
     public void recordStatistics() {
-        double tiempo = System.currentTimeMillis() - timeStartGame; // calcula el tiempo jugado
+        double tiempo = System.currentTimeMillis() - timeGame; // calcula el tiempo jugado
         Player player = MenuState.readFile(); // lee el player registrado que ha jugado, desde un file
         Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, tiempo);
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
