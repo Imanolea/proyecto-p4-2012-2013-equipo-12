@@ -178,10 +178,17 @@ public class MainApp extends Application {
         getStateManager().detach(gos);
         getStateManager().attach(ms);
     }
-     public void  restartGame() {
+    
+    public void  loadGameFromGameOver() {
 
         getStateManager().detach(gos);
         getStateManager().attach(te);
+    }
+     
+    public void  loadGameOverFromGame() {
+
+        getStateManager().detach(te);
+        getStateManager().attach(gos);
     }
     
     
