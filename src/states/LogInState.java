@@ -441,6 +441,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                         childLayoutCenter();
                         alignCenter();
                         valignCenter();
+                        
                         /*control(new WindowBuilder("NoticeWindow", "WELCOME TO POWDERS.") {
                             {
                                 width("320px"); // windows will need a size
