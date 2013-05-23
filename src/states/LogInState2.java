@@ -22,6 +22,7 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import database.Player;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -54,6 +55,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
     private FlyByCamera flyCam;
     private Nifty nifty;
     public static boolean b = false;
+    private Player player;
 
     public LogInState2(MainApp game) {
         this.game = game;
@@ -100,6 +102,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
+        this.player=this.game.getPlayer();
 
         // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
