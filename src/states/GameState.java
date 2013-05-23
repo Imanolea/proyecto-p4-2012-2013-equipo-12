@@ -80,8 +80,8 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Spatial portal;
     private Geometry cleanerShape;
     private Enemy[] pow = new Enemy[NUMBER_ENEMIES];
-    private ParticleEmitter [] explosion = new ParticleEmitter [NUMBER_CHARGES];
-    private double [] exTimer = new double [NUMBER_CHARGES];
+    private ParticleEmitter[] explosion = new ParticleEmitter[NUMBER_CHARGES];
+    private double[] exTimer = new double[NUMBER_CHARGES];
     private Bullet[] fire = new Bullet[NUMBER_CHARGES];
     private Material[] enemyMaterial = new Material[5];
     private BulletAppState bulletAppState;
@@ -141,29 +141,25 @@ public class GameState extends AbstractAppState implements ActionListener {
         // guiNode.attachChild(menuText);
     }
 
-    
-     @Override
+    @Override
     public void cleanup() {
-      super.cleanup();
-      // unregister all my listeners, detach all my nodes, etc...
-      // called when we erase the state, used for saving game state properties
-     
+        super.cleanup();
+        // unregister all my listeners, detach all my nodes, etc...
+        // called when we erase the state, used for saving game state properties
+
     }
- 
+
     @Override
     public void setEnabled(boolean enabled) {
-      // Pause and unpause
-      super.setEnabled(enabled);
-      if(enabled){
-        // init stuff that is in use while this state is RUNNING
-        
-      } else {
-        // take away everything not needed while this state is PAUSED
-      
-      }
+        // Pause and unpause
+        super.setEnabled(enabled);
+        if (enabled) {
+            // init stuff that is in use while this state is RUNNING
+        } else {
+            // take away everything not needed while this state is PAUSED
+        }
     }
-    
-    
+
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         // init stuff that is independent of whether state is PAUSED or RUNNING
@@ -225,7 +221,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         setUpLight();
 
         for (int i = 0; i < fire.length; i++) {
-            explosion[i]=null;
+            explosion[i] = null;
             fire[i] = createFire();
         }
 
@@ -260,17 +256,17 @@ public class GameState extends AbstractAppState implements ActionListener {
         portalStructure.setLocalTranslation(-22.46f, 0, 14.3f);
         portalStructure.rotate(0, 110, 0);
         portalStructure.scale(4f);
-        
+
         CollisionShape portalShape =
                 CollisionShapeFactory.createMeshShape((Node) portalStructure);
         portalscape = new RigidBodyControl(portalShape, 0);
         portalStructure.addControl(portalscape);
-        
+
         portal = assetManager.loadModel("Models/Portal/Portal.j3o");
         portal.setLocalTranslation(-22.46f, 0, 14.617f);
         portal.rotate(0, 110, 0);
         portal.scale(4f);
-        
+
         rootNode.attachChild(portal);
         rootNode.attachChild(portalStructure);
 
@@ -299,8 +295,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         initAudio();
         timeStartGame = System.currentTimeMillis();
         pause = false;
-        
-        
+
+
     }
 
     public void update(float tpf) {
@@ -316,14 +312,14 @@ public class GameState extends AbstractAppState implements ActionListener {
 
             // guiNode.center();
 
-            gameTimer-=tpf;
-            
-            if (gameTimer<0){
+            gameTimer -= tpf;
+
+            if (gameTimer < 0) {
                 /*
                  * Muerte, Game Over
                  */
             }
-            
+
             spawnTimer += tpf;
 
             if (spawnTimer > 15) {
@@ -434,7 +430,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (rEnemyPortal.size() > 0) {
                         String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
                         explosion(pow[Integer.parseInt(words[0])].getSpatial());
-                        gameTimer+=5;
+                        gameTimer += 5;
                         pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
                     }
                     if (pow[i].isAspired()) {
@@ -446,16 +442,17 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
 
             for (int i = 0; i < fire.length; i++) {
-                if (exTimer[i]>0)
-					exTimer[i]+=tpf;
+                if (exTimer[i] > 0) {
+                    exTimer[i] += tpf;
+                }
 
-				if (exTimer[i]>1.25){
-					explosion[i].setParticlesPerSec(0f);
-                    if (exTimer[i]>(2.5)){
-                        explosion[i]=null;
-					    exTimer[i]=0;
+                if (exTimer[i] > 1.25) {
+                    explosion[i].setParticlesPerSec(0f);
+                    if (exTimer[i] > (2.5)) {
+                        explosion[i] = null;
+                        exTimer[i] = 0;
                     }
-				}
+                }
                 if (fire[i].isShooted()) {
                     fire[i].move(tpf);
                     Box ball = new Box(1f, 1f, 1f);
@@ -562,36 +559,36 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
         }
     }
-    
-    	private void explosion(Spatial s){
-		int i=0;
-		
-		while (explosion[i]!=null){
-			i++;
-		}
-		explosion[i] = 
-				new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
-		Material mat_red = new Material(assetManager, 
-				"Common/MatDefs/Misc/Particle.j3md");
-		mat_red.setTexture("Texture", assetManager.loadTexture(
-				"Effects/Explosion/flame.png"));
-		explosion[i].setMaterial(mat_red);
-		explosion[i].setImagesX(2);
-		explosion[i].setImagesY(2);
-		explosion[i].setEndColor(new ColorRGBA(0.129f, 0.43f, 0.72f, 1f));
-		explosion[i].setStartColor(new ColorRGBA(0.129f, 0.43f, 0.72f, 1f));
-		explosion[i].getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
-		explosion[i].setStartSize(1.5f);
-		explosion[i].setEndSize(0.1f);
-		explosion[i].setGravity(0, 0, 0);
-		explosion[i].setLowLife(1f);
-		explosion[i].setHighLife(3f);
-		explosion[i].getParticleInfluencer().setVelocityVariation(0.3f);
-		explosion[i].killAllParticles();
-		rootNode.attachChild(explosion[i]);
-		explosion[i].move(s.getLocalTranslation().x, s.getLocalTranslation().y, s.getLocalTranslation().z);
-		exTimer[i]++;
-	}
+
+    private void explosion(Spatial s) {
+        int i = 0;
+
+        while (explosion[i] != null) {
+            i++;
+        }
+        explosion[i] =
+                new ParticleEmitter("Emitter", ParticleMesh.Type.Triangle, 30);
+        Material mat_red = new Material(assetManager,
+                "Common/MatDefs/Misc/Particle.j3md");
+        mat_red.setTexture("Texture", assetManager.loadTexture(
+                "Effects/Explosion/flame.png"));
+        explosion[i].setMaterial(mat_red);
+        explosion[i].setImagesX(2);
+        explosion[i].setImagesY(2);
+        explosion[i].setEndColor(new ColorRGBA(0.129f, 0.43f, 0.72f, 1f));
+        explosion[i].setStartColor(new ColorRGBA(0.129f, 0.43f, 0.72f, 1f));
+        explosion[i].getParticleInfluencer().setInitialVelocity(new Vector3f(0, 2, 0));
+        explosion[i].setStartSize(1.5f);
+        explosion[i].setEndSize(0.1f);
+        explosion[i].setGravity(0, 0, 0);
+        explosion[i].setLowLife(1f);
+        explosion[i].setHighLife(3f);
+        explosion[i].getParticleInfluencer().setVelocityVariation(0.3f);
+        explosion[i].killAllParticles();
+        rootNode.attachChild(explosion[i]);
+        explosion[i].move(s.getLocalTranslation().x, s.getLocalTranslation().y, s.getLocalTranslation().z);
+        exTimer[i]++;
+    }
 
     private Bullet createFire() {
 
@@ -667,21 +664,21 @@ public class GameState extends AbstractAppState implements ActionListener {
         BitmapText ch2 = new BitmapText(guiFont, false);
 
         ch2.setColor(ColorRGBA.White);
-        ch2.setSize(settings.getWidth()/25);
+        ch2.setSize(settings.getWidth() / 25);
         ch2.setText("Enemigos aspirados: " + enemiesCleaned + "/" + CLEANER_CAPACITY);
         ch2.setLocalTranslation(
                 settings.getWidth() / 25,
                 settings.getHeight() / 10, 0);
         guiNode.attachChild(ch2);
-        
+
         BitmapText ch3 = new BitmapText(guiFont, false);
 
         ch3.setColor(ColorRGBA.White);
-        ch3.setSize(settings.getWidth()/25);
-        DecimalFormat df = new DecimalFormat("0.00"); 
+        ch3.setSize(settings.getWidth() / 25);
+        DecimalFormat df = new DecimalFormat("0.00");
         ch3.setText("Tiempo restante: " + df.format(gameTimer));
         ch3.setLocalTranslation(
-                settings.getWidth() - settings.getWidth()/2,
+                settings.getWidth() - settings.getWidth() / 2,
                 settings.getHeight() / 10, 0);
         guiNode.attachChild(ch3);
 
@@ -718,7 +715,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         throwAudio.setLooping(true);
         throwAudio.setVolume(2);
         rootNode.attachChild(throwAudio);
-        
+
         chargeAudio = new AudioNode(assetManager, "/Audio/cargar.wav", false); // false means buffered audio
         chargeAudio.setLooping(true);
         chargeAudio.setVolume(2);
@@ -874,12 +871,19 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     public void render(RenderManager rm) {
     }
-    
+
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
-    public void recordStatistics(){
+    public void recordStatistics() {
         double tiempo = System.currentTimeMillis() - timeStartGame; // calcula el tiempo jugado
         Player player = MenuState.readFile(); // lee el player registrado que ha jugado, desde un file
-        Game game = new Game(player.getNick(), ""+puntuacion, ""+1, ""+successfulShot, ""+totalShots, ""+deaths, tiempo);
+        Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, tiempo);
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
+
+    public void gameOverFunction() {
+        backgroundAudio.stop();
+        recordStatistics();
+        game.loadGameOverFromGame();
+    }
+ 
 }
