@@ -120,21 +120,22 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
 
 
-        nifty.addScreen("GameOverScreen", new ScreenBuilder("LogInScreen") {
+        nifty.addScreen("GameOverScreen", new ScreenBuilder("GameOverScreen") {
             {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
 
 
-                layer(new LayerBuilder("LayerLogIn") {
+                layer(new LayerBuilder("LayerGmaeOver") {
                     {
                         childLayoutVertical(); // layer properties, add more...
 
-                       panel(new PanelBuilder("Panel_TITLE") {
+                        panel(new PanelBuilder("Panel_TITLE") {
                             {
                                 childLayoutCenter();
                                 alignCenter();
-                                height("5%");
+                                valignBottom();
+                                height("10%");
                                 width("90%");
 
                                 // add text
@@ -149,121 +150,98 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 });
                             }
                         }); // </panel_1>
-                       panel(new PanelBuilder("Panel_Buttons") {
+
+                        panel(new PanelBuilder("Panel_Buttons") {
+                            {
+                                childLayoutVertical(); // panel properties, add more...               
+                                alignCenter();
+                                valignCenter();
+                                height("20%");
+                                width("100%");
+                            }
+                        }); // </panel_1>
+
+                        panel(new PanelBuilder("Panel_Buttons") {
+                            {
+                                childLayoutVertical(); // panel properties, add more...               
+                                alignCenter();
+                                valignCenter();
+                                height("60%");
+                                width("100%");
+
+                                control(new ButtonBuilder("PLAY AGAIN", "PLAY AGAIN") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        alignCenter();
+                                        valignTop();
+                                        backgroundColor("#f108");
+                                        height("15%");
+                                        width("30%");
+                                        visibleToMouse(true);
+                                        interactOnClick("loadGameFromGameOver()");
+
+                                    }
+                                });
+                                panel(new PanelBuilder("Panel_Buttons") {
+                                    {
+                                        childLayoutVertical(); // panel properties, add more...               
                                         alignCenter();
                                         valignCenter();
-                                        height("12%");
+                                        height("20%");
                                         width("100%");
+                                    }
+                                }); // </panel_1>
 
-                                        control(new ButtonBuilder("PLAY AGAIN", "PLAY AGAIN") {
-                                            {
-                                                alignCenter();
-                                                valignBottom();
-                                                backgroundColor("#f108");
-                                                height("75%");
-                                                width("30%");
-                                                visibleToMouse(true);
-                                                interactOnClick("restartGame()");
 
-                                            }
-                                        });
+                                control(new ButtonBuilder("BACK TO MENU", "BACK TO MENU") {
+                                    {
+                                        alignCenter();
+                                        valignCenter();
+                                        backgroundColor("#f108");
+                                        height("15%");
+                                        width("30%");
+                                        visibleToMouse(true);
+                                        interactOnClick("loadMenuFromGaveOver()");
 
-                                       /* panel(new PanelBuilder("Panel_Space") {
-                                            {
-                                                childLayoutHorizontal(); // panel properties, add more...               
-                                                alignCenter();
-                                                valignCenter();
-                                                height("2%");
-                                                width("6%");
-
-                                            }
-                                        });
-
-                                     
-
-                                        panel(new PanelBuilder("Panel_Space") {
-                                            {
-                                                childLayoutHorizontal(); // panel properties, add more...               
-                                                alignCenter();
-                                                valignCenter();
-                                                height("2%");
-                                                width("6%");
-
-                                            }
-                                        });
-                                        * */
-
-                                        control(new ButtonBuilder("BACK TO MENU", "BACK TO MENU") {
-                                            {
-                                                alignCenter();
-                                                valignBottom();
-                                                backgroundColor("#f108");
-                                                height("75%");
-                                                width("30%");
-                                                visibleToMouse(true);
-                                                interactOnClick("loadMenuFromGaveOver()");
-
-                                            }
-                                        });
-
+                                    }
+                                });
                                 
+                                panel(new PanelBuilder("Panel_Buttons") {
+                                    {
+                                        childLayoutVertical(); // panel properties, add more...               
+                                        alignCenter();
+                                        valignCenter();
+                                        height("20%");
+                                        width("100%");
+                                    }
+                                }); // </panel_1>
+                                
+                                control(new ButtonBuilder("EXIT", "EXIT") {
+                                    {
+                                        alignCenter();
+                                        valignBottom();
+                                        backgroundColor("#f108");
+                                        height("15%");
+                                        width("30%");
+                                        visibleToMouse(true);
+                                        interactOnClick("exit()");
+
+                                    }
+                                });
+
+
 
                             }
                         }); // </panel_2>
-                        
+
 
                     }
                 });
             }
         }.build(nifty));
-        // </screen>
 
-       /* new PopupBuilder("popupUserError") {
-            {
-                childLayoutCenter();
-                backgroundColor("#000a");
-
-
-                panel(new PanelBuilder("PanelPopup") {
-                    {
-                        childLayoutVertical();
-                        alignCenter();
-                        backgroundImage("/Pictures/FondoDialog.png");
-                        valignCenter();
-                        height("20%");
-                        width("40%");
-
-                        text(new TextBuilder() {
-                            {
-                                alignCenter();
-                                color("f043");
-                                text("Wrong nick or password.");
-                                font("Interface/Fonts/Default.fnt");
-                                height("50%");
-                                width("27%");
-                            }
-                        });
-
-                        control(new ButtonBuilder("Btn1", "OK") {
-                            {
-                                alignCenter();
-                                valignCenter();
-                                height("30%");
-                                width("40%");
-                                interactOnClick("closePopupUserError()");
-                            }
-                        });
-
-                    }
-                });
-
-            }
-        }.registerPopup(nifty);*/
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("LogInScreen"); // it is used to start the screen
+        nifty.gotoScreen("GameOverScreen"); // it is used to start the screen
     }
 
     public void update(float tpf) {
@@ -300,7 +278,4 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
     public void render(RenderManager rm) {
     }
-
-   
 }
-
