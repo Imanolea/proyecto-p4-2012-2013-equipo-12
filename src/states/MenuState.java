@@ -702,6 +702,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         try {
             database.LocalStatsHandler.agregarPerfilStatic(j);
+            cargarUsuarioFromSignUp(j);
             loadMenuFromInput();
 
         } catch (ClassNotFoundException e1) {
@@ -710,6 +711,18 @@ public class MenuState extends AbstractAppState implements ScreenController {
             showPopupUserError();
         } catch (Exception e3) {
         }
+
+    }
+    
+    public void cargarUsuarioFromSignUp(Player p) {
+
+        String nick = p.getNick();
+
+        String password = p.getPassword();
+
+        nameJugador = p.getNombre();
+        
+        game.setPlayer(p);
 
     }
 
@@ -723,7 +736,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
             Player p = new Player(nick, password, nameJugador);
             game.setPlayer(p);
-            System.out.println("AAAAAAAAAAAAAAAAAAAA"+game.getPlayer().getNick());
            
         } catch (Exception e) {
             showPopupConnectionError();
@@ -739,6 +751,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
             showPopupUserError();
         }
     }
+    
+    
 
     public void cargarUsuario2() {
 
@@ -755,7 +769,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
             loadMenuFromLogIn2();
             Player player = new Player(nick, password, nameJugador);
             game.setPlayer(player);
-            System.out.println("LOOOOOG 222"+game.getPlayer().getNick());
         } else {
             showPopupUserError();
         }

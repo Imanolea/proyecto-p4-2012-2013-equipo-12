@@ -512,7 +512,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     public static void main(String[] args) throws Exception {
 
-        getInstance().listarEstadisticasJugares();
+        //getInstance().listarEstadisticasJugares();
         //getInstance().comprobarJugador("e", "Jesus");
 
         // Player Imanol = new Player("ima", "Ima", "ima");
