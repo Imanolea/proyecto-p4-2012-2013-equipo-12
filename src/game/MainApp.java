@@ -70,7 +70,6 @@ public class MainApp extends Application {
 
         // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
-        
     }
 
     public void update() {
@@ -142,7 +141,7 @@ public class MainApp extends Application {
          getStateManager().detach(ms2);
         //getStateManager().attach(te);
         te.setEnabled(true);
-      
+        te.gameOverFirstTime = true;
         inputManager.setCursorVisible(false);
         
     }
