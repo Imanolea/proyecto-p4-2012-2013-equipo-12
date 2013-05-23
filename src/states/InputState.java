@@ -153,7 +153,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 alignCenter();
                                 height("10%");
                                 width("50%");
-                                
+
                                 text(new TextBuilder() {
                                     {
                                         text("SIGN UP");
@@ -177,11 +177,11 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 panel(new PanelBuilder("Panel_EMPTY2") {
                                     {
                                         childLayoutHorizontal();
-                                        height("7%");
+                                        height("10%");
                                         width("40%");
                                         alignCenter();
                                         valignCenter();
-                                        
+
                                         text(new TextBuilder() {
                                             {
                                                 text("Insert name:");
@@ -191,10 +191,20 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             }
                                         });
 
+                                        panel(new PanelBuilder("Panel_TITLE2") {
+                                            {
+                                                childLayoutCenter();
+                                                alignCenter();
+                                                height("1%");
+                                                width("28%");
+                                            }
+                                        }); // </panel_1>
+
                                         control(new TextFieldBuilder("NameInput", "") {
                                             {
                                                 //interactOnMouseOver("borrarTextoName()");
-                                                width("55%");
+                                                alignLeft();
+                                                width("65%");
                                             }
                                         });
 
@@ -205,7 +215,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 panel(new PanelBuilder("Panel_STATISTICS2") {
                                     {
                                         childLayoutHorizontal();
-                                        height("7%");
+                                        height("10%");
                                         width("40%");
                                         alignCenter();
                                         valignCenter();
@@ -218,11 +228,20 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 width("50%");
                                             }
                                         });
+                                        
+                                         panel(new PanelBuilder("Panel_TITLE2") {
+                                            {
+                                                childLayoutCenter();
+                                                alignCenter();
+                                                height("1%");
+                                                width("28%");
+                                            }
+                                        }); // </panel_1>
 
                                         control(new TextFieldBuilder("NickInput", "") {
                                             {
                                                 //interactOnMouseOver("borrarTextoNick()");
-                                                width("55%");
+                                                width("65%");
                                             }
                                         });
 
@@ -233,7 +252,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 panel(new PanelBuilder("Panel_STATISTICS3") {
                                     {
                                         childLayoutHorizontal();
-                                        height("7%");
+                                        height("10%");
                                         width("40%");
                                         alignCenter();
                                         valignCenter();
@@ -246,11 +265,20 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 width("50%");
                                             }
                                         });
+                                        
+                                         panel(new PanelBuilder("Panel_TITLE2") {
+                                            {
+                                                childLayoutCenter();
+                                                alignCenter();
+                                                height("1%");
+                                                width("28%");
+                                            }
+                                        }); // </panel_1>
 
                                         control(new TextFieldBuilder("PassInput", "") {
                                             {
                                                 //interactOnMouseOver("borrarTextoPass()");
-                                                width("55%");
+                                                width("65%");
                                             }
                                         });
 
@@ -404,7 +432,7 @@ public class InputState extends AbstractAppState implements ScreenController {
             }
         }.build(nifty));
         // </screen>
-        
+
         new PopupBuilder("popupConnectionError") {
             {
                 childLayoutCenter();
@@ -446,7 +474,7 @@ public class InputState extends AbstractAppState implements ScreenController {
 
             }
         }.registerPopup(nifty);
-        
+
         new PopupBuilder("popupUserError") {
             {
                 childLayoutCenter();
@@ -488,7 +516,7 @@ public class InputState extends AbstractAppState implements ScreenController {
 
             }
         }.registerPopup(nifty);
-        
+
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("InputScreen"); // it is used to start the screen
