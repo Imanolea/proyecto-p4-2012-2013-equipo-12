@@ -141,7 +141,7 @@ public class MainApp extends Application {
     public void loadGameFromMenuGame() {
          getStateManager().detach(ms2);
         //getStateManager().attach(te);
-       te.pause = false;
+        te.setEnabled(true);
       
         inputManager.setCursorVisible(false);
         
