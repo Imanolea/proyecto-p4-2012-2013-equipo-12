@@ -723,6 +723,9 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         try {
             nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+            Player p = new Player(nick, password, nameJugador);
+            game.setPlayer(p);
+            MenuState.writeFile(p);
         } catch (Exception e) {
             showPopupConnectionError();
         }

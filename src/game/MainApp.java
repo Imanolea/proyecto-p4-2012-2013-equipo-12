@@ -16,6 +16,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
+import database.Player;
 import states.GameOverState;
 
 public class MainApp extends Application {
@@ -29,6 +30,7 @@ public class MainApp extends Application {
     private LogInState ls = null;
     private LogInState2 ls2 = null;
     private GameOverState gos=null;
+    private Player player;
 
     public MainApp() {
     }
@@ -189,6 +191,14 @@ public class MainApp extends Application {
 
         getStateManager().detach(te);
         getStateManager().attach(gos);
+    }
+    
+    public void setPlayer(Player p) {
+        this.player = p;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
     
     
