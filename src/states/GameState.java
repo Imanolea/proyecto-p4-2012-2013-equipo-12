@@ -875,7 +875,8 @@ public class GameState extends AbstractAppState implements ActionListener {
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
     public void recordStatistics() {
         double tiempo = System.currentTimeMillis() - timeStartGame; // calcula el tiempo jugado
-        Player player = MenuState.readFile(); // lee el player registrado que ha jugado, desde un file
+        Player player = game.getPlayer(); // lee el player actual
+        System.out.println(game.getPlayer().getNick());
         Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, tiempo);
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
