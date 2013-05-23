@@ -104,7 +104,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private int enemiesCleaned;
     private float spawnTimer;
     private float gameTimer;
-    private boolean left = false, right = false, up = false, down = false, aspire = false;
+    private boolean left, right , up , down , aspire;
     public boolean pause;
     private boolean gameOver;
     // atributos para la gestión del audio
@@ -114,7 +114,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private AudioNode aspireAudio;
     private AudioNode aspireAudioEnd;
     private AudioNode chargeAudio;
-    private boolean aspireFirstTime = false;
+    private boolean aspireFirstTime;
     private float timeGame;
     private float puntuacion;
     private float successfulShot;
@@ -162,8 +162,10 @@ public class GameState extends AbstractAppState implements ActionListener {
             backgroundAudio.play();
             player.setPhysicsLocation(playerLocation);
             cam.lookAtDirection(playerDirection, playerUp);
+            
             pause = false;
         } else {
+            guiNode.detachAllChildren();
             backgroundAudio.pause();
             playerLocation = player.getPhysicsLocation();
             playerDirection = cam.getDirection();
@@ -175,9 +177,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        
 
-        this.game = (MainApp) game; // can cast Application to something more specific
-        // this.rootNode = this.rootNode;
+        this.game = (MainApp) game;
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
         this.inputManager = this.game.getInputManager();
@@ -185,9 +187,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         this.cam = this.game.getCamera();
         this.settings = this.game.getSettings();
         this.physics = this.stateManager.getState(BulletAppState.class);
-        // settings.setResolution(1024,720);
-
-        // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
         //guiNode = ((SimpleApplication) app).getGuiNode();
 
@@ -197,9 +196,6 @@ public class GameState extends AbstractAppState implements ActionListener {
             flyCam = new FlyByCamera(game.getCamera());
             flyCam.setMoveSpeed(1f);
             flyCam.registerWithInput(game.getInputManager());
-
-            //game.getInputManager().addMapping("menu", new KeyTrigger(KeyInput.KEY_ESCAPE));
-            //game.getInputManager().addMapping("SIMPLEAPP_Memory", new KeyTrigger(KeyInput.KEY_M));
         }
 
         // app.setDisplayFps(false);
@@ -207,6 +203,13 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         pause = false;
         gameOver = false;
+        
+        left = false; 
+        right = false;
+        up = false;
+        down = false;
+        aspire = false;
+        aspireFirstTime = false;
 
         enemiesCleaned = 0;
         spawnTimer = 0;
@@ -312,11 +315,11 @@ public class GameState extends AbstractAppState implements ActionListener {
         bulletAppState.getPhysicsSpace().add(portalStructure);
         bulletAppState.getPhysicsSpace().add(player);
 
-        
     }
 
     public void update(float tpf) {
         if (!pause) {
+            
             super.update(tpf);
 
             int fps = (int) game.getTimer().getFrameRate();
@@ -899,6 +902,8 @@ public class GameState extends AbstractAppState implements ActionListener {
     public void gameOverFunction() {
         backgroundAudio.stop();
         recordStatistics();
+        cam.lookAtDirection(new Vector3f(0,0,-1), new Vector3f(0,1,0));
+        rootNode.detachAllChildren();
         game.loadGameOverFromGame();
     }
 }
