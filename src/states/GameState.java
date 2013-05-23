@@ -204,7 +204,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         pause = false;
         gameOver = false;
-        
+        gameOverFirstTime = false;
         left = false; 
         right = false;
         up = false;
