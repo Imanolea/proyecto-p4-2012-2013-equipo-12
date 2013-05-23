@@ -120,6 +120,9 @@ public class GameState extends AbstractAppState implements ActionListener {
     private float successfulShot;
     private float totalShots;
     private float deaths;
+    private Vector3f playerLocation;
+    private Vector3f playerDirection;
+    private Vector3f playerUp;
 
     public GameState(MainApp game) {
         this.game = game;
@@ -154,12 +157,17 @@ public class GameState extends AbstractAppState implements ActionListener {
     }
 
     public void setEnabled(boolean enabled) {
-        //super.setEnabled(enabled);
+        
         if (enabled) {
             backgroundAudio.play();
+            player.setPhysicsLocation(playerLocation);
+            cam.lookAtDirection(playerDirection, playerUp);
             pause = false;
         } else {
             backgroundAudio.pause();
+            playerLocation = player.getPhysicsLocation();
+            playerDirection = cam.getDirection();
+            playerUp = cam.getUp();
             game.loadMenuGameFromGame();
             pause = true;
         }
@@ -196,9 +204,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         // app.setDisplayFps(false);
         //setDisplayStatView(false);
-        
-        pause=false;
-        gameOver=false;
+
+        pause = false;
+        gameOver = false;
 
         enemiesCleaned = 0;
         spawnTimer = 0;
@@ -288,6 +296,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[2] = powEyesClosed.getMaterial();
         enemyMaterial[3] = powWeak.getMaterial();
         enemyMaterial[4] = powDeath.getMaterial();
+        
+        initAudio();
+        timeGame = 0;
+        gameTimer = 20;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -300,10 +312,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         bulletAppState.getPhysicsSpace().add(portalStructure);
         bulletAppState.getPhysicsSpace().add(player);
 
-        initAudio();
-        timeGame = 0;
-        pause = false;
-        gameTimer = 20;
+        
     }
 
     public void update(float tpf) {
@@ -329,8 +338,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                 spawn();
             }
             if (gameTimer < 0) {
-                pause=true;
-                gameOver=true;
+                pause = true;
+                gameOver = true;
                 Robot robot;
                 try {
                     robot = new Robot();
@@ -339,7 +348,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                     Logger.getLogger(GameState.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
 
             cleanerRay.setOrigin(cam.getLocation());
             cleanerRay.setDirection(cam.getDirection());
@@ -381,12 +390,6 @@ public class GameState extends AbstractAppState implements ActionListener {
             player.setWalkDirection(walkDirection);
             cam.setLocation(player.getPhysicsLocation());
             cleanerShape.setLocalTranslation(player.getPhysicsLocation());
-
-            /*if (cam.getDirection().y > 0.9439419f) {
-             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1509075f, cam.getLocation().z), new Vector3f(cam.getLeft().x, 7.916242E-9f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.33011156f, cam.getUp().z), new Vector3f(cam.getDirection().x, 0.9439419f, cam.getDirection().z));
-             } else if (cam.getDirection().y < -0.93508357) {
-             cam.setFrame(new Vector3f(cam.getLocation().x, 4.1510572f, cam.getLocation().z), new Vector3f(cam.getLeft().x, -2.2441149E-5f, cam.getLeft().z), new Vector3f(cam.getUp().x, 0.3544274f, cam.getUp().z), new Vector3f(cam.getDirection().x, -0.93508357f, cam.getDirection().z));
-             }*/
 
             if (cam.getUp().y < 0) {
                 cam.lookAtDirection(new Vector3f(0, cam.getDirection().y, 0), new Vector3f(cam.getUp().x, 0, cam.getUp().z));
@@ -497,16 +500,16 @@ public class GameState extends AbstractAppState implements ActionListener {
                     }
                 }
             }
-            
+
         }
 
-            rootNode.updateLogicalState(tpf);
+        rootNode.updateLogicalState(tpf);
 
-            guiNode.updateLogicalState(tpf);
+        guiNode.updateLogicalState(tpf);
 
-            guiNode.updateGeometricState();
+        guiNode.updateGeometricState();
 
-            rootNode.updateGeometricState();  
+        rootNode.updateGeometricState();
     }
 
     public void stateAttached(AppStateManager stateManager) {
@@ -873,12 +876,11 @@ public class GameState extends AbstractAppState implements ActionListener {
                 }
             }
         }
-        
-        if (name.equals("Menu")) {
-            setEnabled(false);
-        }
-        if (gameOver){
+
+        if (gameOver) {
             gameOverFunction();
+        } else if (name.equals("Menu")) {
+            setEnabled(false);
         }
 
     }
@@ -899,5 +901,4 @@ public class GameState extends AbstractAppState implements ActionListener {
         recordStatistics();
         game.loadGameOverFromGame();
     }
- 
 }
