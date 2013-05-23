@@ -600,25 +600,25 @@ public class MenuState extends AbstractAppState implements ScreenController {
         System.exit(0);
     }
     
-    public void restartGame() {
+    public void loadGameFromGameOver() {
 
-        //nifty.exit();
         nifty.removeScreen("GameOverScreen");
-        game.restartGame();
-
+        game.loadGameFromGameOver();
 
     }
+    
     public void loadMenuFromGaveOver() {
 
-        //nifty.exit();
         nifty.removeScreen("GameOverScreen");
         game.loadMenuFromGaveOver();
 
-
     }
     
+    public void loadGameOverFromGame() {
+
+        game.loadGameOverFromGame();
+    }
     
-   
 
     public void loadMenuFromInput() {
 
