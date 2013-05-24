@@ -168,12 +168,12 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         String string = "";
         try {
             conectar();
-            String query = "SELECT * FROM TOP;";
+            String query = "SELECT * FROM TOP ORDER BY PUNTUACION DESC;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
             // y recorremos lo obtenido
-            while (rs.next() && i < 10) {
+            while (rs.next()) {
                 String nick = "" + rs.getString("NICK");
                 String punt = "" + rs.getString("PUNTUACION");
                 String disparos_ac = "" + rs.getString("DISPAROS_AC");
@@ -181,7 +181,6 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 String tiempo = "" + rs.getString("TIEMPO");
                 int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
                 string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
-                i++;
                 System.out.println(string);
             }
             rs.close();
@@ -243,6 +242,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                     String disparos_tot = "" + rs.getString("DISPAROS_TOT");
                     String tiempo = "" + rs.getString("TIEMPO");
                     int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
+                    int prec2 = (prec * 100) / 50;
                     string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
                     i++;
                 }
@@ -512,7 +512,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     public static void main(String[] args) throws Exception {
 
-        //getInstance().listarEstadisticasJugares();
+        getInstance().listarEstadisticasJugares();
         //getInstance().comprobarJugador("e", "Jesus");
 
         // Player Imanol = new Player("ima", "Ima", "ima");
@@ -521,7 +521,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
         //getInstance().agregarPartida(partidita);
         //getInstance().listarEstadisticasPartidas();
-        //getInstance().listarTop10();        
+        getInstance().listarTop10();        
         //getInstance().mostrarDisparosTopporciento();
         //getInstance().listarEstadisticasJugares();*/
     }
