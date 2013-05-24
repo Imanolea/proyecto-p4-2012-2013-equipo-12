@@ -4,13 +4,6 @@
  */
 package game;
 
-import states.GameState;
-import states.MenuStateGame;
-import states.StatisticsState;
-import states.LogInState;
-import states.LogInState2;
-import states.MenuState;
-import states.InputState;
 import com.jme3.app.Application;
 import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
@@ -18,6 +11,13 @@ import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
 import database.Player;
 import states.GameOverState;
+import states.GameState;
+import states.InputState;
+import states.LogInState;
+import states.LogInState2;
+import states.MenuState;
+import states.MenuStateGame;
+import states.StatisticsState;
 
 public class MainApp extends Application {
 
@@ -141,7 +141,6 @@ public class MainApp extends Application {
          getStateManager().detach(ms2);
         //getStateManager().attach(te);
         te.setEnabled(true);
-        te.gameOverFirstTime = true;
         inputManager.setCursorVisible(false);
         
     }
@@ -183,12 +182,14 @@ public class MainApp extends Application {
     public void  loadGameFromGameOver() {
 
         getStateManager().detach(gos);
+         te = new GameState(this);
         getStateManager().attach(te);
     }
      
     public void  loadGameOverFromGame() {
 
         getStateManager().detach(te);
+        te.cleanup();
         getStateManager().attach(gos);
     }
     

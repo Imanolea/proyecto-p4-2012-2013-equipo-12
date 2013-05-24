@@ -344,6 +344,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             if (gameTimer < 0) {
                 pause = true;
                 gameOver = true;
+                gameOverFirstTime=true;
                 Robot robot;
                 try {
                     robot = new Robot();
@@ -902,6 +903,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     }
 
     public void gameOverFunction() {
+         game.loadGameOverFromGame();
         backgroundAudio.stop();
         aspireAudio.stop();
         aspireAudioEnd.stop();
@@ -911,6 +913,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         recordStatistics();
         cam.lookAtDirection(new Vector3f(0,0,-1), new Vector3f(0,1,0));
         rootNode.detachAllChildren();
-        game.loadGameOverFromGame();
+       
     }
 }
