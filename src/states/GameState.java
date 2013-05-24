@@ -116,8 +116,8 @@ public class GameState extends AbstractAppState implements ActionListener {
     private AudioNode aspireAudioEnd;
     private AudioNode chargeAudio;
     private boolean aspireFirstTime;
-    private float timeGame;
-    private float puntuacion;
+    private float timeGame = 0;
+    private float puntuacion = 100;
     private float successfulShot;
     private float totalShots;
     private float deaths;
@@ -302,7 +302,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        timeGame = 0;
         gameTimer = 20;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
@@ -898,12 +897,14 @@ public class GameState extends AbstractAppState implements ActionListener {
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
     public void recordStatistics() {
         Player player = game.getPlayer(); // lee el player actual 
-        Game game = new Game(player.getNick(), "" + puntuacion, "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, timeGame);
+        Game game = new Game(player.getNick(), "" + (int)(puntuacion*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
+        System.out.println(timeGame);
+        System.out.println((int)(puntuacion*timeGame));
         database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
     }
 
     public void gameOverFunction() {
-         game.loadGameOverFromGame();
+        game.loadGameOverFromGame();
         backgroundAudio.stop();
         aspireAudio.stop();
         aspireAudioEnd.stop();
