@@ -134,6 +134,7 @@ public class MainApp extends Application {
 
     public void loadGame() {
         getStateManager().detach(ms);
+         te = new GameState(this);
         getStateManager().attach(te);
     }
     
