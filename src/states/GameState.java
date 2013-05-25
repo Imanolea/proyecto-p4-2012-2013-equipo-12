@@ -118,23 +118,13 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Vector3f playerLocation; // Localización relativa del jugador
     private Vector3f playerDirection; // Dirección en la que apunta el jugador
     private Vector3f playerUp; // Vector vertical del jugador
-
+    
+    /**
+     * Método constructor de la clase
+     * @param game aplicación tomada como parámetro
+     */
     public GameState(MainApp game) {
         this.game = game;
-    }
-
-    private class AppActionListener implements ActionListener {
-
-        public void onAction(String name, boolean value, float tpf) {
-            if (!value) {
-                return;
-            }
-        }
-    }
-
-    public void cleanup() {
-        super.cleanup();
-
     }
 
     public void setEnabled(boolean enabled) {
