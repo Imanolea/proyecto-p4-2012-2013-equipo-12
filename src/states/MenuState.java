@@ -22,6 +22,8 @@ import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import database.LocalStatsHandler;
+import database.OnlineStatsHandler;
 import database.Player;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
@@ -126,7 +128,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nameJugador = "";
         // enable depth test and back-face culling for performance
         app.getRenderer().applyRenderState(RenderState.DEFAULT);
-        
+
         // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
@@ -377,6 +379,75 @@ public class MenuState extends AbstractAppState implements ScreenController {
                     }
                 });
                 // </layer>
+                layer(new LayerBuilder("Layer_ID") {
+                    {
+                        childLayoutHorizontal(); // layer properties, add more...
+
+                        panel(new PanelBuilder("Panel_LANGUAGES") {
+                            {
+                                childLayoutHorizontal();
+                                alignLeft();
+                                valignTop();
+                                height("20%");
+                                width("86%");
+                            }
+                        });
+
+                        panel(new PanelBuilder("Panel_LANGUAGES") {
+                            {
+                                childLayoutVertical();
+                                alignRight();
+                                valignTop();
+                                height("92%");
+                                width("11%");
+
+                                panel(new PanelBuilder("Panel_LANGUAGES") {
+                                    {
+                                        childLayoutHorizontal();
+                                        alignRight();
+                                        valignTop();
+                                        height("4%");
+                                        width("30%");
+                                    }
+                                });
+
+                                text(new TextBuilder() {
+                                    {
+                                        font("Interface/Fonts/Jokerman18.fnt");
+                                        String welcome = "" + game.getNombre();
+                                        text(welcome);
+                                        style("base-font");
+                                        color("#fffa");
+                                        valignCenter();
+                                        width("75%");
+                                    }
+                                });
+                                text(new TextBuilder() {
+                                    {
+                                        font("Interface/Fonts/Default.fnt");
+                                        String score = "";
+                                        if(game.getOnline()){
+                                           String string = OnlineStatsHandler.searchPosition(game.getPlayer().getNick());
+                                           if(string.equals("")) score = "Best score: " + 0 + ".";
+                                           else score = "Best score: " + string + ".";
+                                        }else{
+                                           String string = LocalStatsHandler.searchPosition(game.getPlayer().getNick());
+                                           if(string.equals("")) score = "Best score: " + 0 + ".";
+                                           else score = "Best score: " + string + ".";
+                                        }
+                                        text(score);
+                                        style("base-font");
+                                        color("#fffa");
+                                        valignCenter();
+                                        width("100%");
+                                    }
+                                });
+
+
+                            }
+                        });
+                    }
+                });
 
             }
         }.build(nifty));
@@ -682,7 +753,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     public void insertarUsuario() {
 
         boolean enlinea = game.getOnline();
-        
+
         String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
 
         String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
@@ -700,14 +771,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         Player j = new Player(nick, pass, name);
         j.printJugador(j);
+        game.setNombre(j.getNombre());
 
         if (!enlinea) {
-
             try {
                 database.LocalStatsHandler.agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
                 loadMenuFromInput();
-
             } catch (ClassNotFoundException e1) {
                 showPopupConnectionError();
             } catch (SQLException e2) {
@@ -715,7 +785,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             } catch (Exception e3) {
             }
         } else {
-            
+
             try {
                 database.OnlineStatsHandler.agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
@@ -745,18 +815,16 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void cargarUsuario() {
-                                
+
         boolean enlinea = game.getOnline();
-        
+
         String nick = nifty.getScreen("LogInScreen").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
+
         if (!enlinea) {
             try {
                 nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
-                Player p = new Player(nick, password, nameJugador);
-                game.setPlayer(p);
-
             } catch (Exception e) {
                 showPopupConnectionError();
             }
@@ -764,9 +832,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
             //nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
 
             if (!nameJugador.equals("")) {
-                loadMenuFromLogIn();
+                game.setNombre(nameJugador);
                 Player player = new Player(nick, password, nameJugador);
                 game.setPlayer(player);
+                loadMenuFromLogIn();
             } else {
                 showPopupUserError();
             }
@@ -775,9 +844,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
         } else {
             try {
                 nameJugador = database.OnlineStatsHandler.comprobarJugadorStatic(nick, password);
-                Player p = new Player(nick, password, nameJugador);
-                game.setPlayer(p);
-
             } catch (Exception e) {
                 showPopupConnectionError();
             }
@@ -785,9 +851,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
 
             if (!nameJugador.equals("")) {
-                loadMenuFromLogIn();
+                game.setNombre(nameJugador);
                 Player player = new Player(nick, password, nameJugador);
                 game.setPlayer(player);
+                loadMenuFromLogIn();
             } else {
                 showPopupUserError();
             }
@@ -799,10 +866,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
     public void cargarUsuario2() {
 
         boolean enlinea = game.getOnline();
-        
+
         String nick = nifty.getScreen("LogInScreen2").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
+
         if (!enlinea) {
             try {
                 nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
@@ -810,9 +878,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
                 showPopupConnectionError();
             }
             if (!nameJugador.equals("")) {
-                loadMenuFromLogIn2();
+                game.setNombre(nameJugador);
                 Player player = new Player(nick, password, nameJugador);
                 game.setPlayer(player);
+                loadMenuFromLogIn2();
             } else {
                 showPopupUserError();
             }
@@ -824,9 +893,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
                 showPopupConnectionError();
             }
             if (!nameJugador.equals("")) {
-                loadMenuFromLogIn2();
+                game.setNombre(nameJugador);
                 Player player = new Player(nick, password, nameJugador);
                 game.setPlayer(player);
+                loadMenuFromLogIn2();
             } else {
                 showPopupUserError();
             }
@@ -927,14 +997,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
      }
      }
      */
-    
-    public void setOnline(){
+    public void setOnline() {
         game.setOnline(true);
         System.out.println("SET ONLINE DONE CORRECTLY");
 
     }
-    
-    public void setOffline(){
+
+    public void setOffline() {
         game.getOnline();
         System.out.println("SET LOCAL DONE CORRECTLY");
 
