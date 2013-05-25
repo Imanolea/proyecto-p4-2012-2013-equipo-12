@@ -182,7 +182,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                 childLayoutVertical(); // panel properties, add more...               
                                 alignCenter();
                                 valignCenter();
-                                height("48%");
+                                height("45%");
                                 width("60%");
 
                                 panel(new PanelBuilder("Panel_Text") {
@@ -327,6 +327,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 width("30%");
                                                 visibleToMouse(true);
                                                 interactOnClick("loadInputFromLogIn()");
+                                                interactOnRelease("initializaOnlineBoolean()");
                                             }
                                         });
 
@@ -350,6 +351,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 width("30%");
                                                 visibleToMouse(true);
                                                 interactOnClick("cargarUsuario()");
+                                                interactOnRelease("initializaOnlineBoolean()");
                                             }
                                         });
 
@@ -373,43 +375,57 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 width("30%");
                                                 visibleToMouse(true);
                                                 interactOnClick("exit()");
-
                                             }
                                         });
 
-                                        panel(new PanelBuilder("Panel_Space") {
-                                            {
-                                                childLayoutHorizontal(); // panel properties, add more...               
-                                                alignCenter();
-                                                valignCenter();
-                                                height("2%");
-                                                width("6%");
+                                    }
+                                });
 
-                                            }
-                                        });
+                                panel(new PanelBuilder("Panel_Space") {
+                                    {
+                                        childLayoutCenter(); // panel properties, add more...               
+                                        alignCenter();
+                                        valignCenter();
+                                        height("7%");
+                                        width("30%");
+                                    }
+                                });
+
+                                panel(new PanelBuilder("Panel_Space") {
+                                    {
+                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        alignCenter();
+                                        valignCenter();
+                                        height("18%");
+                                        width("18%");
 
                                         control(new RadioGroupBuilder("RadioGroup"));
                                         control(new LabelBuilder("LocalL", "Local"));
                                         control(new RadioButtonBuilder("LocalR") {
                                             {
+
                                                 group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
+                                                interactOnClick("setOffline()");
                                             }
                                         });
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
+
                                                 childLayoutHorizontal(); // panel properties, add more...               
                                                 alignCenter();
                                                 valignCenter();
                                                 height("2%");
-                                                width("6%");
+                                                width("30%");
 
                                             }
                                         });
                                         control(new LabelBuilder("OnlineL", "Online"));
                                         control(new RadioButtonBuilder("OnlineR") {
                                             {
+
                                                 group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
+                                                interactOnClick("setOnline()");
                                             }
                                         });
 
@@ -587,11 +603,9 @@ public class LogInState extends AbstractAppState implements ScreenController {
     }
 
     public void startInput() {
-
         //nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
-
 
     }
 
