@@ -32,6 +32,7 @@ import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.Menu;
 import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
+import de.lessvoid.nifty.controls.RadioButton;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -74,7 +75,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private boolean primeraVez3 = true;
     private String nameJugador;
     private Element popup;
-
+    public boolean online;
 
     public MenuState(MainApp game) {
         this.game = game;
@@ -505,7 +506,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("MenuScreen"); // it is used to start the screen
-        
+
     }
 
     @Override
@@ -597,26 +598,25 @@ public class MenuState extends AbstractAppState implements ScreenController {
     public void exit() {
         System.exit(0);
     }
-    
+
     public void loadGameFromGameOver() {
 
         nifty.removeScreen("GameOverScreen");
         game.loadGameFromGameOver();
 
     }
-    
+
     public void loadMenuFromGaveOver() {
 
         nifty.removeScreen("GameOverScreen");
         game.loadMenuFromGaveOver();
 
     }
-    
+
     public void loadGameOverFromGame() {
 
         game.loadGameOverFromGame();
     }
-    
 
     public void loadMenuFromInput() {
 
@@ -700,20 +700,36 @@ public class MenuState extends AbstractAppState implements ScreenController {
         Player j = new Player(nick, pass, name);
         j.printJugador(j);
 
-        try {
-            database.LocalStatsHandler.agregarPerfilStatic(j);
-            cargarUsuarioFromSignUp(j);
-            loadMenuFromInput();
+        if (!online) {
 
-        } catch (ClassNotFoundException e1) {
-            showPopupConnectionError();
-        } catch (SQLException e2) {
-            showPopupUserError();
-        } catch (Exception e3) {
+            try {
+                database.LocalStatsHandler.agregarPerfilStatic(j);
+                cargarUsuarioFromSignUp(j);
+                loadMenuFromInput();
+
+            } catch (ClassNotFoundException e1) {
+                showPopupConnectionError();
+            } catch (SQLException e2) {
+                showPopupUserError();
+            } catch (Exception e3) {
+            }
+        } else {
+            try {
+                database.OnlineStatsHandler.agregarPerfilStatic(j);
+                cargarUsuarioFromSignUp(j);
+                loadMenuFromInput();
+
+            } catch (ClassNotFoundException e1) {
+                showPopupConnectionError();
+            } catch (SQLException e2) {
+                showPopupUserError();
+            } catch (Exception e3) {
+            }
+
         }
 
     }
-    
+
     public void cargarUsuarioFromSignUp(Player p) {
 
         String nick = p.getNick();
@@ -721,56 +737,98 @@ public class MenuState extends AbstractAppState implements ScreenController {
         String password = p.getPassword();
 
         nameJugador = p.getNombre();
-        
+
         game.setPlayer(p);
 
     }
 
     public void cargarUsuario() {
 
+        online = nifty.getScreen("LogInScreen").findNiftyControl("OnlineR", RadioButton.class).isActivated();
+
         String nick = nifty.getScreen("LogInScreen").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
+        if (!online) {
+            try {
+                nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+                Player p = new Player(nick, password, nameJugador);
+                game.setPlayer(p);
 
-        try {
-            nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
-            Player p = new Player(nick, password, nameJugador);
-            game.setPlayer(p);
-           
-        } catch (Exception e) {
-            showPopupConnectionError();
-        }
+            } catch (Exception e) {
+                showPopupConnectionError();
+            }
 
-        //nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+            //nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
 
-        if (!nameJugador.equals("")) {
-            loadMenuFromLogIn();
-            Player player = new Player(nick, password, nameJugador);
-           game.setPlayer(player);
+            if (!nameJugador.equals("")) {
+                loadMenuFromLogIn();
+                Player player = new Player(nick, password, nameJugador);
+                game.setPlayer(player);
+            } else {
+                showPopupUserError();
+            }
+
+
         } else {
-            showPopupUserError();
+            try {
+                nameJugador = database.OnlineStatsHandler.comprobarJugadorStatic(nick, password);
+                Player p = new Player(nick, password, nameJugador);
+                game.setPlayer(p);
+
+            } catch (Exception e) {
+                showPopupConnectionError();
+            }
+
+
+
+            if (!nameJugador.equals("")) {
+                loadMenuFromLogIn();
+                Player player = new Player(nick, password, nameJugador);
+                game.setPlayer(player);
+            } else {
+                showPopupUserError();
+            }
         }
+
+
     }
-    
-    
 
     public void cargarUsuario2() {
+
+
 
         String nick = nifty.getScreen("LogInScreen2").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
+        if (!online) {
+            try {
+                nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+            } catch (Exception e) {
+                showPopupConnectionError();
+            }
+            if (!nameJugador.equals("")) {
+                loadMenuFromLogIn2();
+                Player player = new Player(nick, password, nameJugador);
+                game.setPlayer(player);
+            } else {
+                showPopupUserError();
+            }
 
-        try {
-            nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
-        } catch (Exception e) {
-            showPopupConnectionError();
-        }
-        if (!nameJugador.equals("")) {
-            loadMenuFromLogIn2();
-            Player player = new Player(nick, password, nameJugador);
-            game.setPlayer(player);
         } else {
-            showPopupUserError();
+            try {
+                nameJugador = database.OnlineStatsHandler.comprobarJugadorStatic(nick, password);
+            } catch (Exception e) {
+                showPopupConnectionError();
+            }
+            if (!nameJugador.equals("")) {
+                loadMenuFromLogIn2();
+                Player player = new Player(nick, password, nameJugador);
+                game.setPlayer(player);
+            } else {
+                showPopupUserError();
+            }
+
         }
     }
 
@@ -806,9 +864,9 @@ public class MenuState extends AbstractAppState implements ScreenController {
         FileReader fr = null;
         BufferedReader br = null;
 
-        String nick="";
-        String pass="";
-        String name="";
+        String nick = "";
+        String pass = "";
+        String name = "";
 
         try {
             // Apertura del fichero y creacion de BufferedReader para poder
@@ -842,31 +900,29 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     /*public static void writeFile(Player j) {
-        FileWriter fichero = null;
-        PrintWriter pw = null;
-        try {
-            fichero = new FileWriter("loggedPlayer.txt");
-            pw = new PrintWriter(fichero);
+     FileWriter fichero = null;
+     PrintWriter pw = null;
+     try {
+     fichero = new FileWriter("loggedPlayer.txt");
+     pw = new PrintWriter(fichero);
 
-            pw.println(j.getNick());
-            pw.println(j.getPassword());
-            pw.println(j.getNombre());
+     pw.println(j.getNick());
+     pw.println(j.getPassword());
+     pw.println(j.getNombre());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                // Nuevamente aprovechamos el finally para 
-                // asegurarnos que se cierra el fichero.
-                if (null != fichero) {
-                    fichero.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
-    */
-    
-
+     } catch (Exception e) {
+     e.printStackTrace();
+     } finally {
+     try {
+     // Nuevamente aprovechamos el finally para 
+     // asegurarnos que se cierra el fichero.
+     if (null != fichero) {
+     fichero.close();
+     }
+     } catch (Exception e2) {
+     e2.printStackTrace();
+     }
+     }
+     }
+     */
 }
