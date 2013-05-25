@@ -19,6 +19,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import database.LocalStatsHandler;
 import database.Game;
+import database.OnlineStatsHandler;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -144,15 +145,18 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
                                 // add text
 
-                                text(new TextBuilder("ef") {
+                                text(new TextBuilder() {
                                     {
                                         alignCenter();
                                         valignCenter();
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        String s = LocalStatsHandler.listarTop10Static(1);
-                                        text(s);
+                                        if (game.getOnline()) {
+                                            text(LocalStatsHandler.listarTop10Static(1));
+                                        } else {
+                                            text(OnlineStatsHandler.listarTop10Static(1));
+                                        }
                                     }
                                 });
                             }
@@ -174,10 +178,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(2)) {
-                                            String s = LocalStatsHandler.listarTop10Static(2);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(2)) {
+                                                s = OnlineStatsHandler.listarTop10Static(2);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(2)) {
+                                                s = LocalStatsHandler.listarTop10Static(2);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -190,8 +201,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 height("9%");
                                 width("100%");
 
-                                // add text
-
                                 text(new TextBuilder() {
                                     {
                                         alignCenter();
@@ -199,10 +208,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(3)) {
-                                            String s = LocalStatsHandler.listarTop10Static(3);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(3)) {
+                                                s = OnlineStatsHandler.listarTop10Static(3);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(3)) {
+                                                s = LocalStatsHandler.listarTop10Static(3);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -224,10 +240,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(4)) {
-                                            String s = LocalStatsHandler.listarTop10Static(4);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(4)) {
+                                                s = OnlineStatsHandler.listarTop10Static(4);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(4)) {
+                                                s = LocalStatsHandler.listarTop10Static(4);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -249,10 +272,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(5)) {
-                                            String s = LocalStatsHandler.listarTop10Static(5);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(5)) {
+                                                s = OnlineStatsHandler.listarTop10Static(5);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(5)) {
+                                                s = LocalStatsHandler.listarTop10Static(5);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -274,10 +304,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(6)) {
-                                            String s = LocalStatsHandler.listarTop10Static(6);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(6)) {
+                                                s = OnlineStatsHandler.listarTop10Static(6);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(6)) {
+                                                s = LocalStatsHandler.listarTop10Static(6);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -299,10 +336,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(7)) {
-                                            String s = LocalStatsHandler.listarTop10Static(7);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(7)) {
+                                                s = OnlineStatsHandler.listarTop10Static(7);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(7)) {
+                                                s = LocalStatsHandler.listarTop10Static(7);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -324,10 +368,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(8)) {
-                                            String s = LocalStatsHandler.listarTop10Static(8);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(8)) {
+                                                s = OnlineStatsHandler.listarTop10Static(8);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(8)) {
+                                                s = LocalStatsHandler.listarTop10Static(8);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -349,10 +400,17 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(9)) {
-                                            String s = LocalStatsHandler.listarTop10Static(9);
-                                            text(s);
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(9)) {
+                                                s = OnlineStatsHandler.listarTop10Static(9);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(9)) {
+                                                s = LocalStatsHandler.listarTop10Static(9);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -374,10 +432,18 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         height("100%");
                                         width("100%");
                                         font("Interface/Fonts/Default.fnt");
-                                        if (noHayMasPartidas(10)) {
-                                            String s = LocalStatsHandler.listarTop10Static(10);
-                                            text(s);
+
+                                        String s = "";
+                                        if (game.getOnline()) {
+                                            if (noHayMasPartidasOnline(10)) {
+                                                s = OnlineStatsHandler.listarTop10Static(10);
+                                            }
+                                        } else {
+                                            if (noHayMasPartidas(10)) {
+                                                s = LocalStatsHandler.listarTop10Static(10);
+                                            }
                                         }
+                                        text(s);
                                     }
                                 });
                             }
@@ -457,7 +523,19 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         } else {
             return false;
         }
+    }
 
-
+    public static boolean noHayMasPartidasOnline(int i) {
+        if (i != 0) {
+            String nueva = OnlineStatsHandler.listarTop10Static(i);
+            String deAntes = OnlineStatsHandler.listarTop10Static(i - 1);
+            if (nueva.equals(deAntes)) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 }
