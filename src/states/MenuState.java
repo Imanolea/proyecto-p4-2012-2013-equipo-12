@@ -33,6 +33,7 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.Menu;
 import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
 import de.lessvoid.nifty.controls.RadioButton;
+import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -75,7 +76,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private boolean primeraVez3 = true;
     private String nameJugador;
     private Element popup;
-    public boolean online;
 
     public MenuState(MainApp game) {
         this.game = game;
@@ -126,8 +126,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nameJugador = "";
         // enable depth test and back-face culling for performance
         app.getRenderer().applyRenderState(RenderState.DEFAULT);
-
-
+        
         // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
@@ -682,6 +681,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void insertarUsuario() {
 
+        boolean enlinea = game.getOnline();
+        
         String name = nifty.getScreen("InputScreen").findNiftyControl("NameInput", TextField.class).getText();
 
         String nick = nifty.getScreen("InputScreen").findNiftyControl("NickInput", TextField.class).getText();
@@ -700,7 +701,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         Player j = new Player(nick, pass, name);
         j.printJugador(j);
 
-        if (!online) {
+        if (!enlinea) {
 
             try {
                 database.LocalStatsHandler.agregarPerfilStatic(j);
@@ -714,6 +715,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             } catch (Exception e3) {
             }
         } else {
+            
             try {
                 database.OnlineStatsHandler.agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
@@ -743,13 +745,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void cargarUsuario() {
-
-        online = nifty.getScreen("LogInScreen").findNiftyControl("OnlineR", RadioButton.class).isActivated();
-
+                                
+        boolean enlinea = game.getOnline();
+        
         String nick = nifty.getScreen("LogInScreen").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen").findNiftyControl("PassLogIn", TextField.class).getText();
-        if (!online) {
+        if (!enlinea) {
             try {
                 nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
                 Player p = new Player(nick, password, nameJugador);
@@ -796,12 +798,12 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void cargarUsuario2() {
 
-
-
+        boolean enlinea = game.getOnline();
+        
         String nick = nifty.getScreen("LogInScreen2").findNiftyControl("NickLogIn", TextField.class).getText();
 
         String password = nifty.getScreen("LogInScreen2").findNiftyControl("PassLogIn", TextField.class).getText();
-        if (!online) {
+        if (!enlinea) {
             try {
                 nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
             } catch (Exception e) {
@@ -925,4 +927,16 @@ public class MenuState extends AbstractAppState implements ScreenController {
      }
      }
      */
+    
+    public void setOnline(){
+        game.setOnline(true);
+        System.out.println("SET ONLINE DONE CORRECTLY");
+
+    }
+    
+    public void setOffline(){
+        game.getOnline();
+        System.out.println("SET LOCAL DONE CORRECTLY");
+
+    }
 }
