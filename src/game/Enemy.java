@@ -4,6 +4,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.collision.CollisionResults;
 import com.jme3.material.Material;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
 public class Enemy {
@@ -16,15 +17,8 @@ public class Enemy {
     private boolean active;
     private boolean aspired;
     private boolean hasBeenAspired;
-    
-    public Enemy() {
-        spatial = null;
-        health = originalHealth;
-        death = false;
-        fDeathEnemy = new RigidBodyControl(1f);
-        hasBeenAspired = false;
-        active = true;
-    }
+    private Vector3f direction;
+    private float speed;
     
     public Enemy(Spatial s) {
         spatial = s;
@@ -33,6 +27,8 @@ public class Enemy {
         fDeathEnemy = new RigidBodyControl(1f);
         hasBeenAspired = false;
         active = true;
+        direction = new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1);
+        speed = (float)Math.random()*5+15;
     }
 
     public void setSpatial(Spatial spatial) {
@@ -132,6 +128,34 @@ public class Enemy {
      */
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * @return the direction
+     */
+    public Vector3f getDirection() {
+        return direction;
+    }
+
+    /**
+     * @param direction the direction to set
+     */
+    public void setDirection(Vector3f direction) {
+        this.direction = direction;
+    }
+
+    /**
+     * @return the speed
+     */
+    public float getSpeed() {
+        return speed;
+    }
+
+    /**
+     * @param speed the speed to set
+     */
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
 }
