@@ -32,6 +32,7 @@ public class MainApp extends Application {
     private GameOverState gos=null;
     private Player player;
     private boolean online;
+    private String namePlayer;
 
     public MainApp() {
     }
@@ -210,6 +211,14 @@ public class MainApp extends Application {
 
     public boolean getOnline() {
         return online;
+    }
+    
+    public void setNombre(String n) {
+        this.namePlayer = n;
+    }
+
+    public String getNombre() {
+        return namePlayer;
     }
     
 }
