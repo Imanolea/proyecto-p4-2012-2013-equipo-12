@@ -102,8 +102,6 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             String userid = "powders";
             String password = "p0wd3rs";
 
-
-
             connection = DriverManager.getConnection(url, userid, password);
         } catch (Exception e1) {
             System.out.print("EXCEPTION");
@@ -179,9 +177,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String password = "mX5%gY7!";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
 
             connection = DriverManager.getConnection(url, userid, password);
             String query = "SELECT * FROM JUGADOR;";
@@ -566,20 +564,46 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         return r;
 
     }
+    
+    public static String searchPosition(String nickname) {
+        Connection connection = null;
+        Statement statement;
+        ResultSet rs;
+        String string = "";
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
+
+            connection = DriverManager.getConnection(url, userid, password);
+            String query = "SELECT * FROM PARTIDA;";
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            
+            // y recorremos lo obtenido
+             while (rs.next()) {
+                if ((rs.getString("NICK")).equals(nickname)){
+                    if (string == "" || Integer.parseInt(string) < Integer.parseInt(rs.getString("PUNTUACION"))) {
+                        string = rs.getString("PUNTUACION");
+                    }
+                }
+            }
+
+            rs.close();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.print(string);
+        desconectar(connection);
+        return string;
+    }
 
     public static void main(String[] args) throws Exception {
-
-        getInstance().listarJugadores();
-        System.out.println(listarTop10Static(1));
-        System.out.println(listarTop10Static(2));
-        System.out.println(listarTop10Static(3));
-        System.out.println(listarTop10Static(4));
-        System.out.println(listarTop10Static(5));
-        System.out.println(listarTop10Static(6));
-        System.out.println(listarTop10Static(7));
-        System.out.println(listarTop10Static(8));
-        System.out.println(listarTop10Static(9));
-        listarEstadisticasPartidas();
+        OnlineStatsHandler o = new OnlineStatsHandler(); o.listarJugadores();
     }
     
 }
