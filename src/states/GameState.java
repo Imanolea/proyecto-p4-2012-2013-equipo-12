@@ -126,7 +126,11 @@ public class GameState extends AbstractAppState implements ActionListener {
     public GameState(MainApp game) {
         this.game = game;
     }
-
+    
+    /**
+     * Establece configuración para entrada en pause y slaida
+     * @param enabled Estado de la partida en relación al pause
+     */
     public void setEnabled(boolean enabled) {
         
         if (enabled) {
@@ -145,7 +149,12 @@ public class GameState extends AbstractAppState implements ActionListener {
             pause = true;
         }
     }
-
+    
+    /**
+     * Método que inicializa las variables de la aplicación
+     * @param stateManager Gestiona los estados del juego
+     * @param app Aplicación del juego
+     */
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         
@@ -281,6 +290,10 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     }
 
+    /**
+     * Bucle del juego
+     * @param tpf tiempo por frame
+     */
     public void update(float tpf) {
         if (!pause) {
             
@@ -289,8 +302,6 @@ public class GameState extends AbstractAppState implements ActionListener {
             initCrossHairs();
             guiNode.setQueueBucket(Bucket.Gui);
             guiNode.setCullHint(CullHint.Never);
-
-            // guiNode.center();
 
             gameTimer -= tpf;
             timeGame += tpf;
@@ -476,29 +487,35 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         rootNode.updateGeometricState();
     }
-
+    
+    /**
+     * Método mediante el cual el estado de juego es añadido
+     * @param stateManager gestor de estados
+     */
     public void stateAttached(AppStateManager stateManager) {
 
         if (flyCam != null) {
             flyCam.setEnabled(true);
         }
-
         game.getViewPort().attachScene(rootNode);
-
         game.getGUIViewPort().attachScene(guiNode);
     }
 
+    /**
+     * Método mediante el cual el estado de juego es suprimido
+     * @param stateManager gestor de estados
+     */
     public void stateDetached(AppStateManager stateManager) {
         if (flyCam != null) {
             flyCam.setEnabled(false);
         }
-        // game.getViewPort().detachScene(shootables);
-        // game.getViewPort().detachScene(inhalables);
         game.getViewPort().detachScene(rootNode);
-
         game.getGUIViewPort().detachScene(guiNode);
     }
-
+    
+    /**
+     * Inicializa los controles del teclado
+     */
     private void setUpKeys() {
 
         inputManager.addMapping("Left", new KeyTrigger(KeyInput.KEY_A));
@@ -520,6 +537,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     }
 
+    /**
+     * Método que proyecta a los enemigos en el espacio
+     */
     private void throwEnemies() {
         for (int i = 0; i < pow.length; i++) {
             if (pow[i].getSpatial().getParent() == aspiredEnemies) {
@@ -538,6 +558,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
     }
 
+    /**
+     * Genera una axplosión
+     * @param s Modelo del enemigo que explota
+     */
     private void explosion(Spatial s) {
         int i = 0;
 
@@ -568,6 +592,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         exTimer[i]++;
     }
 
+    /**
+     * Crea un proyectil
+     * @return el proyectil
+     */
     private Bullet createFire() {
 
         Bullet f =
@@ -590,7 +618,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         f.getParticleInfluencer().setVelocityVariation(0.3f);
         return f;
     }
-
+    
+    /**
+     * Sitúa las luces del juego
+     */
     private void setUpLight() {
 
         DirectionalLight l1 = new DirectionalLight();
@@ -625,6 +656,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     }
 
+    /**
+     * Dibuja los elementos de la GUI
+     */
     protected void initCrossHairs() {
 
         guiNode.detachAllChildren();
@@ -659,47 +693,47 @@ public class GameState extends AbstractAppState implements ActionListener {
                 settings.getWidth() - settings.getWidth() / 2,
                 settings.getHeight() / 10, 0);
         guiNode.attachChild(ch3);
-
-        // rootNode.attachChild(guiNode);
     }
 
+    /**
+     * Inicializa los audios
+     */
     public void initAudio() {
-        // the second parameter lets you choose the song you want to play
-        backgroundAudio = new AudioNode(assetManager, "/Audio/loop.ogg", false); // true means stream audio 
-        backgroundAudio.setLooping(true); // continuous playing == true
-        /* this methods are used to make the sound come froma  certain place (3d audio)
-         backgroundAudio.setPositional(true);
-         backgroundAudio.setLocalTranslation(Vector3f.ZERO.clone());*/
+        backgroundAudio = new AudioNode(assetManager, "/Audio/loop.ogg", false);
+        backgroundAudio.setLooping(true);
         backgroundAudio.setVolume(2);
         rootNode.attachChild(backgroundAudio);
         backgroundAudio.play();
 
-        gunAudio = new AudioNode(assetManager, "/Audio/fire1.wav", false); // false means buffered audio
+        gunAudio = new AudioNode(assetManager, "/Audio/fire1.wav", false);
         gunAudio.setLooping(false);
         gunAudio.setVolume(2);
         rootNode.attachChild(gunAudio);
 
-        aspireAudio = new AudioNode(assetManager, "/Audio/aspire.wav", false); // false means buffered audio
+        aspireAudio = new AudioNode(assetManager, "/Audio/aspire.wav", false);
         aspireAudio.setLooping(true);
         aspireAudio.setVolume(2);
         rootNode.attachChild(aspireAudio);
 
-        aspireAudioEnd = new AudioNode(assetManager, "/Audio/aspireEnd.wav", false); // false means buffered audio
+        aspireAudioEnd = new AudioNode(assetManager, "/Audio/aspireEnd.wav", false);
         aspireAudioEnd.setLooping(true);
         aspireAudioEnd.setVolume(2);
         rootNode.attachChild(aspireAudioEnd);
 
-        throwAudio = new AudioNode(assetManager, "/Audio/lanzar.wav", false); // false means buffered audio
+        throwAudio = new AudioNode(assetManager, "/Audio/lanzar.wav", false);
         throwAudio.setLooping(true);
         throwAudio.setVolume(2);
         rootNode.attachChild(throwAudio);
 
-        chargeAudio = new AudioNode(assetManager, "/Audio/cargar.wav", false); // false means buffered audio
+        chargeAudio = new AudioNode(assetManager, "/Audio/cargar.wav", false);
         chargeAudio.setLooping(true);
         chargeAudio.setVolume(2);
         rootNode.attachChild(chargeAudio);
     }
-
+    
+    /**
+     * Dispara un proyectil
+     */
     public void shootFire() {
 
         for (int i = 0; i < fire.length; i++) {
@@ -715,6 +749,11 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
     }
 
+    /**
+     * Obtiene el spatial a partir de una geometría enemiga
+     * @param geometry geometría del enemigo
+     * @return el spatial del enemigo
+     */
     public Spatial getGeometrySpatial(Geometry geometry) {
 
         Spatial s = geometry.getParent();
@@ -726,7 +765,12 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         return null;
     }
-
+    
+    /**
+     * Muerte de un enemigo
+     * @param s Modelo del enemigo que muere
+     * @param index Posición del enemigo en el array de enemigos
+     */
     private void death(Spatial s, int index) {
         s.setMaterial(enemyMaterial[4]);
         s.addControl(pow[index].getfDeathEnemy());
@@ -734,7 +778,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         bulletAppState.getPhysicsSpace().add(pow[index].getfDeathEnemy());
         deaths++;
     }
-
+    
+    /**
+     * Método que se ejecuta mientras aspiramos
+     */
     private void aspire() {
         CollisionResults rCleanerEnemy = new CollisionResults();
         inhalables.collideWith(cleanerRay, rCleanerEnemy);
@@ -750,13 +797,19 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
         }
     }
-
+    
+    /**
+     * Método que se ejecuta mientras no aspiramos
+     */
     public void notAspire() {
         for (int i = 0; i < pow.length; i++) {
             pow[i].setAspired(false);
         }
     }
-
+    
+    /**
+     * Método que hace aparecer aleatoriamente enemigos en pantalla
+     */
     public void spawn() {
         boolean found = false;
         int c = -1;
@@ -786,7 +839,14 @@ public class GameState extends AbstractAppState implements ActionListener {
             } while (!found);
         }
     }
-
+    
+    /**
+     * Métoto de gestiona los controles en función del evento activado
+     * @param name nombre asignado al evento activado
+     * @param isPressed controla si se activa al presionar la tecla, true, 
+     * o al presionar y soltar la tecla, false
+     * @param tpf tiempo por frame
+     */
     public void onAction(String name, boolean isPressed, float tpf) {
 
         if (!pause) {
@@ -850,10 +910,9 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     }
 
-    public void render(RenderManager rm) {
-    }
-
-    // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
+    /**
+     *  Método que es invocado cuando la la informacion relativa a la partida se quiera guardar en la bd
+     */
     public void recordStatistics() {
         Player player = game.getPlayer(); // lee el player actual 
         Game juego = new Game(player.getNick(), "" + (int)(PUNTUACION*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
@@ -866,7 +925,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         
     }
-
+    
+    /**
+     * Método que gestiona el game over
+     */
     public void gameOverFunction() {
         game.loadGameOverFromGame();
         backgroundAudio.stop();
