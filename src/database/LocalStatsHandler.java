@@ -297,6 +297,37 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         return string;
     }
 
+    public static String searchPosition(String nickname) {
+        Connection connection = null;
+        Statement statement;
+        ResultSet rs;
+        String string = "";
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
+            String query = "SELECT * FROM PARTIDA;";
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            // y recorremos lo obtenido
+            while (rs.next()) {
+                if ((rs.getString("NICK")).equals(nickname)){
+                    if (string == "" || Integer.parseInt(string) < Integer.parseInt(rs.getString("PUNTUACION"))) {
+                        string = rs.getString("PUNTUACION");
+                    }
+                }
+            }
+
+            rs.close();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        desconectar(connection);
+        return string;
+    }
+
     public void mostrarDisparosTopPorciento() throws Exception {
         conectar();
         try {
@@ -516,11 +547,10 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
         //getInstance().agregarPartida(partidita);
-        //getInstance().listarEstadisticasPartidas();
+        getInstance().listarEstadisticasPartidas();
         //getInstance().mostrarDisparosTopporciento();
-        //getInstance().listarEstadisticasJugares();*/
-        String s = LocalStatsHandler.listarTop10Static(1);
-        System.out.println(s);
+        //getInstance().listarEstadisticasJugares();
+
 
     }
 }
