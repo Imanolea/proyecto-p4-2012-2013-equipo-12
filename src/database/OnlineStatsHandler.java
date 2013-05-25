@@ -31,38 +31,40 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     private JPanel topPanel;
     private JTable table;
     private JScrollPane scrollPane;
-    
 
-   
     public void conectar() {
 
         try {
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String password = "mX5%gY7!";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
 
+            /*
+             * String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+                        String userid = "powders";
+                        String password = "p0wd3rs";
+             */
             conn = DriverManager.getConnection(url, userid, password);
             System.out.println(userid);
-          } catch (ClassNotFoundException e1) {
+        } catch (ClassNotFoundException e1) {
             JOptionPane.showMessageDialog(this, "Clase no encontrada", "Error de conexion", 0);
-          e1.printStackTrace();
+            e1.printStackTrace();
         } catch (SQLException e2) {
             JOptionPane.showMessageDialog(this, "Error de SQL", "Error de SQL", 0);
-           e2.printStackTrace();
+            e2.printStackTrace();
         }
     }
 
-    
     public void desconectar() {
         try {
             // cerramos todo
             conn.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error de comunicacion con el servidor", "Error de conexion", 2);
-            
+
         }
     }
 
@@ -73,18 +75,15 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         return instance;
     }
 
-    
-
-
     public static Connection conectar(Connection con) {
         Connection connection = null;
         try {
-           // Cargar por refletividad el driver de JDBC MySQL
+            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-             String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String password = "mX5%gY7!";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
 
             connection = DriverManager.getConnection(url, userid, password);
         } catch (Exception e1) {
@@ -96,14 +95,14 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     public static Connection conectarStatic() {
         Connection connection = null;
         try {
-           // Cargar por refletividad el driver de JDBC MySQL
+            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-             String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String password = "mX5%gY7!";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
 
-            
+
 
             connection = DriverManager.getConnection(url, userid, password);
         } catch (Exception e1) {
@@ -111,9 +110,6 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         }
         return connection;
     }
-
- 
-   
 
     public static void desconectar(Connection connection) {
         try {
@@ -124,8 +120,6 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         }
     }
 
-    
-
     public void listarJugadores() throws Exception {
         conectar();
         try {
@@ -135,10 +129,10 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next()) {
-                String name = "" + rs.getString("PASSWORD");
-                System.out.println("PE: " + name);
                 String nick = "" + rs.getString("NICK");
                 System.out.println("NICK: " + nick);
+                String name = "" + rs.getString("PASSWORD");
+                System.out.println("PASSWORD: " + name);
                 String pass = "" + rs.getString("NOMBRE");
                 System.out.println("PASS: " + pass);
                 System.out.println("--");
@@ -185,7 +179,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-             String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
             String userid = "sql25266";
             String password = "mX5%gY7!";
 
@@ -239,7 +233,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         }
         return string;
     }
-    
+
     public static String[] listarTop10Static() {
         Connection conn = null;
         Statement statement = null;
@@ -261,6 +255,8 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
                 String s = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
                 string[i] = s;
                 i++;
+                System.out.println(string);
+
             }
             rs.close();
             statement.close();
@@ -311,38 +307,33 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         String string = "";
 
         try {
-          // Cargar por refletividad el driver de JDBC MySQL
+            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-               String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String password = "mX5%gY7!";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
 
             connection = DriverManager.getConnection(url, userid, password);
-            String query = "SELECT * FROM TOP;";
+
+            String query = "SELECT * FROM PARTIDA ORDER BY TIEMPO DESC;";
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
-            // y recorremos lo obtenido
+            // y recorremos lo obtenido  nomre nick puntuacion nivel disparos_Ac disparos_tot tiempo
             while (rs.next() && i < 10) {
-                if (pos == i) {
+                String nick = "" + rs.getString("NICK");
+                String punt = "" + rs.getString("PUNTUACION");
+                String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                String tiempo = "" + rs.getString("TIEMPO");
+                int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
+                int prec2 = (prec * 100) / 50;
+                string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
+                i++;
+                if (pos == i){
+                    System.out.println(string);
                     return string;
-                } else {
-                    String nick = "" + rs.getString("NICK");
-                    //System.out.println("NICK: " + nick);
-                    String punt = "" + rs.getString("PUNTUACION");
-                    //System.out.println("PUNTUACION: " + name);
-                    String disparos_ac = "" + rs.getString("DISPAROS_AC");
-                    //System.out.println("DISPAROS_AC: " + disparos_ac);
-                    String disparos_tot = "" + rs.getString("DISPAROS_TOT");
-                    //System.out.println("DISPAROS_TOT: " + disparos_tot);
-                    String tiempo = "" + rs.getString("TIEMPO");
-                    //System.out.println("TIEMPO: " + tiempo);
-                    //System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
-                    //System.out.println("--");
-                    int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
-                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
-                    i++;
                 }
             }
             rs.close();
@@ -402,13 +393,13 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         String nick = jugador.getNick();
         String name = jugador.getNombre();
         // Cargar por refletividad el driver de JDBC MySQL
-            Class.forName("com.mysql.jdbc.Driver");
-            // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-               String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String passwordd = "mX5%gY7!";
+        Class.forName("com.mysql.jdbc.Driver");
+        // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
+        String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+        String userid = "powders";
+        String password2 = "p0wd3rs";
 
-            connection = DriverManager.getConnection(url, userid, passwordd);
+        connection = DriverManager.getConnection(url, userid, password2);
         ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
         ps.setString(1, nick);
         ps.setString(2, password);
@@ -460,15 +451,15 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         String disparos_tot = partida.getDisparos_tot();
         String muertes = partida.getMuertes();
         double tiempo = partida.getTiempo();
-        Connection connection =null;
+        Connection connection = null;
 
         try {
-           // Cargar por refletividad el driver de JDBC MySQL
+            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-              String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
-            String userid = "sql25266";
-            String password = "mX5%gY7!";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
+            String userid = "powders";
+            String password = "p0wd3rs";
 
             connection = DriverManager.getConnection(url, userid, password);
             ps = connection.prepareStatement("INSERT INTO PARTIDA VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -576,9 +567,19 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
 
     }
 
-    public static void main(String[] args) throws Exception  {
-       
-       OnlineStatsHandler o = new OnlineStatsHandler();
-       o.listarJugadores();
+    public static void main(String[] args) throws Exception {
+
+        getInstance().listarJugadores();
+        System.out.println(listarTop10Static(1));
+        System.out.println(listarTop10Static(2));
+        System.out.println(listarTop10Static(3));
+        System.out.println(listarTop10Static(4));
+        System.out.println(listarTop10Static(5));
+        System.out.println(listarTop10Static(6));
+        System.out.println(listarTop10Static(7));
+        System.out.println(listarTop10Static(8));
+        System.out.println(listarTop10Static(9));
+        listarEstadisticasPartidas();
     }
+    
 }
