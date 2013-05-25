@@ -157,7 +157,6 @@ public class GameState extends AbstractAppState implements ActionListener {
      */
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        
 
         this.game = (MainApp) game;
         this.assetManager = this.game.getAssetManager();
@@ -201,7 +200,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables);
-
+        
         aspiredEnemies = new Node("Aspired enemies");
         rootNode.attachChild(aspiredEnemies);
 
@@ -239,8 +238,9 @@ public class GameState extends AbstractAppState implements ActionListener {
                 rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
-            } while (rEnemigoEscenario.size() > 0);
-            shootables.attachChild(pow[i].getSpatial());
+            } while (rEnemigoEscenario.size() > 0); 
+            //enemies.attachChild(pow[i].getSpatial());
+            shootables.attachChild(pow[i].getSpatial());          
         }
 
         boundEnemy = pow[0].getSpatial().getWorldBound();
@@ -275,7 +275,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 20;
+        gameTimer = 200;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -295,6 +295,7 @@ public class GameState extends AbstractAppState implements ActionListener {
      * @param tpf tiempo por frame
      */
     public void update(float tpf) {
+        
         if (!pause) {
             
             super.update(tpf);
@@ -373,8 +374,11 @@ public class GameState extends AbstractAppState implements ActionListener {
 
             for (int i = 0; i < pow.length; i++) {
                 if (!pow[i].isActive()) {
-                    pow[i].getSpatial().scale(1 + tpf * 3);
+                    if (tpf<0.5){
+                        pow[i].getSpatial().scale(1 + tpf * 3);
+                    }
                     if (pow[i].getSpatial().getWorldBound().getVolume() >= boundEnemy.getVolume()) {
+                        rootNode.detachChild(pow[i].getSpatial());
                         pow[i].setActive(true);
                         shootables.attachChild(pow[i].getSpatial());
                     }
@@ -382,10 +386,21 @@ public class GameState extends AbstractAppState implements ActionListener {
                 Vector3f dir = pow[i].getSpatial().getLocalTranslation().subtract(player.getPhysicsLocation()).normalize();
                 if (!pow[i].isDeath()) {
                     pow[i].getSpatial().lookAt(player.getPhysicsLocation().clone(), Vector3f.UNIT_Y);
-
                     if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
+                        if (tpf<0.5){
+                            pow[i].getSpatial().move(pow[i].getDirection().x*pow[i].getSpeed()*tpf, 0,pow[i].getDirection().z*pow[i].getSpeed()*tpf);
+                        }                   
+                        CollisionResults rEnemy = new CollisionResults();
+                        shootables.detachChild(pow[i].getSpatial());
+                        rootNode.collideWith(pow[i].getSpatial().getWorldBound(), rEnemy);
+                        shootables.attachChild(pow[i].getSpatial());
+                        rEnemy.toString();
+                        if (rEnemy.size() > 0) {
+                            pow[i].getSpatial().move(-pow[i].getDirection().x*pow[i].getSpeed()*tpf, 0,-pow[i].getDirection().z*pow[i].getSpeed()*tpf);
+                            pow[i].setDirection(new Vector3f(-pow[i].getDirection().x, 0, -pow[i].getDirection().z));
+                        }
                         pow[i].setTimer(pow[i].getTimer() + tpf);
                         if (pow[i].getTimer() > 7) {
                             pow[i].getSpatial().setMaterial(enemyMaterial[2]);
@@ -424,6 +439,10 @@ public class GameState extends AbstractAppState implements ActionListener {
                         String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
                         explosion(pow[Integer.parseInt(words[0])].getSpatial());
                         gameTimer += 5;
+                        pow[Integer.parseInt(words[0])].getfDeathEnemy().setLinearVelocity(Vector3f.ZERO);
+                        pow[Integer.parseInt(words[0])].getfDeathEnemy().setAngularVelocity(Vector3f.ZERO);
+                        pow[Integer.parseInt(words[0])].getSpatial().removeControl(pow[Integer.parseInt(words[0])].getfDeathEnemy());
+                        bulletAppState.getPhysicsSpace().remove(pow[Integer.parseInt(words[0])].getfDeathEnemy());
                         pow[Integer.parseInt(words[0])].getSpatial().removeFromParent();
                     }
                     if (pow[i].isAspired()) {
@@ -448,7 +467,13 @@ public class GameState extends AbstractAppState implements ActionListener {
                 }
                 if (fire[i].isShooted()) {
                     fire[i].move(tpf);
-                    Box ball = new Box(1f, 1f, 1f);
+                    fire[i].setTimer(fire[i].getTimer()+tpf);
+                    if (fire[i].getTimer()>5){
+                        fire[i].setTimer(0);
+                        fire[i].setParticlesPerSec(0);
+                        fire[i].setShooted(false);
+                    }    
+                    Box ball = new Box(1, 1, 1);
                     Geometry theBall = new Geometry("Ball", ball);
                     theBall.move(fire[i].getWorldTranslation().x, fire[i].getWorldTranslation().y, fire[i].getWorldTranslation().z);
                     CollisionResults rScene = new CollisionResults();
@@ -820,7 +845,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         if (c != -1) {
             do {
-                pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                //pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                pow[c].getSpatial().setLocalTranslation(portal.getLocalTranslation().x,portal.getLocalTranslation().y+10,portal.getLocalTranslation().z-5);
                 CollisionResults rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
@@ -828,14 +854,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                     found = true;
                 }
                 pow[c].getSpatial().setMaterial(enemyMaterial[1]);
-                pow[c].getSpatial().removeControl(pow[c].getfDeathEnemy());
-                pow[c].setHealth(2);
+                pow[c].setHealth(pow[c].getOriginalHealth());
                 pow[c].setDeath(false);
                 pow[c].setHasBeenAspired(false);
                 pow[c].setActive(false);
                 pow[c].getSpatial().scale(0.1f);
                 rootNode.attachChild(pow[c].getSpatial());
-                //}
             } while (!found);
         }
     }
@@ -939,7 +963,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         gunAudio.stop();
         recordStatistics();
         cam.lookAtDirection(new Vector3f(0,0,-1), new Vector3f(0,1,0));
-        rootNode.detachAllChildren();
-       
+        rootNode.detachAllChildren();      
     }
 }
