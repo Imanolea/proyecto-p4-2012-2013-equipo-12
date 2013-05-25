@@ -390,7 +390,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         width("30%");
                                     }
                                 });
-
+                                control(new RadioGroupBuilder("RadioGroup"));
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
                                         childLayoutHorizontal(); // panel properties, add more...               
@@ -399,13 +399,21 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         height("18%");
                                         width("18%");
 
-                                        control(new RadioGroupBuilder("RadioGroup"));
+
                                         control(new LabelBuilder("LocalL", "Local"));
                                         control(new RadioButtonBuilder("LocalR") {
                                             {
 
                                                 group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
-                                                interactOnClick("setOffline()");
+                                                interactOnRelease("setOffline()");
+                                            }
+                                        });
+                                        control(new LabelBuilder("OnlineL", "Online"));
+                                        control(new RadioButtonBuilder("OnlineR") {
+                                            {
+
+                                                group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
+                                                interactOnRelease("setOnline()");
                                             }
                                         });
 
@@ -420,14 +428,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                             }
                                         });
-                                        control(new LabelBuilder("OnlineL", "Online"));
-                                        control(new RadioButtonBuilder("OnlineR") {
-                                            {
 
-                                                group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
-                                                interactOnClick("setOnline()");
-                                            }
-                                        });
 
                                     }
                                 });
