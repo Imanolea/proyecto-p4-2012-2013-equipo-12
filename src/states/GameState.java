@@ -43,6 +43,7 @@ import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
+import com.jme3.ui.Picture;
 import database.Game;
 import database.Player;
 import game.Bullet;
@@ -114,6 +115,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Vector3f playerLocation; // Localización relativa del jugador
     private Vector3f playerDirection; // Dirección en la que apunta el jugador
     private Vector3f playerUp; // Vector vertical del jugador
+    Picture pic0;
     
     /**
      * Método constructor de la clase
@@ -205,6 +207,12 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         setUpKeys();
         setUpLight();
+        
+        pic0 = new Picture("pic0");
+        pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
+        pic0.setWidth(settings.getWidth() / 7);
+        pic0.setHeight(settings.getHeight() / 2);
+        pic0.setPosition(settings.getWidth() / 6 - settings.getWidth() / 8, settings.getHeight() / 4);
 
         for (int i = 0; i < fire.length; i++) {
             explosion[i] = null;
@@ -683,6 +691,28 @@ public class GameState extends AbstractAppState implements ActionListener {
     protected void initCrossHairs() {
 
         guiNode.detachAllChildren();
+        
+        if (enemiesCleaned == 0) {
+            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
+          }
+        else if (enemiesCleaned == 1) {
+            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar2.png", true);
+
+        } else if (enemiesCleaned == 2) {
+            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar3.png", true);
+
+        } else if (enemiesCleaned == 3) {
+            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar4.png", true);
+
+        } else if (enemiesCleaned == 4) {
+
+            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar5.png", true);
+        } else if (enemiesCleaned == 5) {
+
+            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar6.png", true);
+        }
+
+        guiNode.attachChild(pic0);
 
         guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
@@ -841,8 +871,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         if (c != -1) {
             do {
-                //pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
-                pow[c].getSpatial().setLocalTranslation(portal.getLocalTranslation().x,portal.getLocalTranslation().y+10,portal.getLocalTranslation().z-5);
+                pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
                 CollisionResults rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
