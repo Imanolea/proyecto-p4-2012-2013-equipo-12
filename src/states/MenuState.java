@@ -32,25 +32,16 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.controls.Menu;
-import de.lessvoid.nifty.controls.MenuItemActivatedEvent;
-import de.lessvoid.nifty.controls.RadioButton;
-import de.lessvoid.nifty.controls.RadioButtonGroup;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
-import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.tools.SizeValue;
 import game.MainApp;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import org.bushe.swing.event.EventTopicSubscriber;
 
 public class MenuState extends AbstractAppState implements ScreenController {
 
@@ -709,6 +700,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
     public void loadLogInFromMenu() {
         nifty.removeScreen("MenuScreen");
         game.loadLogInFromMenu();
+    }
+    
+     public void loadLogInFromInput() {
+        nifty.removeScreen("InputScreen");
+        game.loadLogInFromInput();
     }
 
     public void loadMenuFromLogIn2() {
