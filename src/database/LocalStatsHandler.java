@@ -168,7 +168,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         String string = "";
         try {
             conectar();
-            String query = "SELECT * FROM TOP ORDER BY PUNTUACION DESC;";
+            String query = "SELECT * FROM TOP ORDER BY TIEMPO DESC;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
@@ -191,14 +191,14 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         }
         return string;
     }
-    
+
     public static String[] listarTop10Static() {
         Connection conn = null;
         Statement statement = null;
         ResultSet rs = null;
         String string[] = new String[10];
         try {
-            String query = "SELECT * FROM TOP;";
+            String query = "SELECT * FROM TOP ORDER BY TIEMPO DESC;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
@@ -227,13 +227,15 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         String string = "";
         try {
             conectar();
-            String query = "SELECT * FROM TOP;";
+            String query = "SELECT * FROM TOP ORDER BY PUNTUACION;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
             // y recorremos lo obtenido
             while (rs.next() && i < 10) {
                 if (pos == i) {
+
+                    System.out.println(string);
                     return string;
                 } else {
                     String nick = "" + rs.getString("NICK");
@@ -243,7 +245,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                     String tiempo = "" + rs.getString("TIEMPO");
                     int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
                     int prec2 = (prec * 100) / 50;
-                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
+                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
                     i++;
                 }
             }
@@ -265,32 +267,28 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-            String query = "SELECT * FROM TOP;";
+            String query = "SELECT * FROM TOP ORDER BY TIEMPO DESC;";
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
             // y recorremos lo obtenido
             while (rs.next() && i < 10) {
+
+                String nick = "" + rs.getString("NICK");
+                String punt = "" + rs.getString("PUNTUACION");
+                String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                String tiempo = "" + rs.getString("TIEMPO");
+                int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
+                int prec2 = (prec * 100) / 50;
+                string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
+                i++;
                 if (pos == i) {
+                    System.out.println(string);
                     return string;
-                } else {
-                    String nick = "" + rs.getString("NICK");
-                    //System.out.println("NICK: " + nick);
-                    String punt = "" + rs.getString("PUNTUACION");
-                    //System.out.println("PUNTUACION: " + name);
-                    String disparos_ac = "" + rs.getString("DISPAROS_AC");
-                    //System.out.println("DISPAROS_AC: " + disparos_ac);
-                    String disparos_tot = "" + rs.getString("DISPAROS_TOT");
-                    //System.out.println("DISPAROS_TOT: " + disparos_tot);
-                    String tiempo = "" + rs.getString("TIEMPO");
-                    //System.out.println("TIEMPO: " + tiempo);
-                    //System.out.println("TIEMPO: " + (int) Float.parseFloat(tiempo) / 3600 + "horas, " + (int) (Float.parseFloat(tiempo) % 3600) / 1 + "minutos, " + (int) (Float.parseFloat(tiempo) % 360) % 1 + "segundos.");
-                    //System.out.println("--");
-                    int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
-                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
-                    i++;
                 }
             }
+
             rs.close();
             statement.close();
         } catch (Exception e) {
@@ -521,7 +519,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
         //getInstance().agregarPartida(partidita);
         //getInstance().listarEstadisticasPartidas();
-        getInstance().listarTop10();        
+        getInstance().listarTop10();
         //getInstance().mostrarDisparosTopporciento();
         //getInstance().listarEstadisticasJugares();*/
     }
