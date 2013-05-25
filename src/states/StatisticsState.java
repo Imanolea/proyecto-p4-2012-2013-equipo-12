@@ -151,7 +151,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         if (game.getOnline()) {
                                             text(LocalStatsHandler.listarTop10Static(1));
                                         } else {
@@ -177,7 +177,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(2)) {
@@ -207,7 +207,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(3)) {
@@ -239,7 +239,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(4)) {
@@ -271,7 +271,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(5)) {
@@ -303,7 +303,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(6)) {
@@ -335,7 +335,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(7)) {
@@ -367,7 +367,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(8)) {
@@ -399,7 +399,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(9)) {
@@ -431,7 +431,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman15.fnt");
 
                                         String s = "";
                                         if (game.getOnline()) {
