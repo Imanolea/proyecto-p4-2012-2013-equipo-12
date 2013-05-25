@@ -11,17 +11,13 @@ public class Bullet extends ParticleEmitter{
     private boolean shooted;
     private Vector3f direction;
     private float vel = 40f;
-    
-    public Bullet(){
-        super();
-        shooted = false;
-        direction = null;
-    }
+    private float timer;
 
     public Bullet(String emitter, Type type, int i) {
         super(emitter, type, i);
         shooted = false;
         direction = null;
+        timer = 0;
     }
 
     public boolean isShooted() {
@@ -50,6 +46,20 @@ public class Bullet extends ParticleEmitter{
 
     public void move(float tpf) {
         move(direction.x*tpf*getVel(), direction.y*tpf*getVel(), direction.z*tpf*getVel());
+    }
+
+    /**
+     * @return the timer
+     */
+    public float getTimer() {
+        return timer;
+    }
+
+    /**
+     * @param timer the timer to set
+     */
+    public void setTimer(float timer) {
+        this.timer = timer;
     }
 
 }
