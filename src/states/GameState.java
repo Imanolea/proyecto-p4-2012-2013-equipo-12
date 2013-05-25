@@ -62,68 +62,62 @@ import java.util.logging.Logger;
 
 public class GameState extends AbstractAppState implements ActionListener {
 
-    // protected Node guiNode = new Node("Gui Node");
-    protected BitmapText fpsText;
-    protected BitmapText menuText;
-    protected BitmapFont guiFont;
-    protected FlyByCamera flyCam;
-    private MainApp game = null;
-    private AppActionListener actionListener = new AppActionListener();
-    // private SimpleApplication app;
-    private Node rootNode = new Node();
-    private AssetManager assetManager;
-    private AppStateManager stateManager;
-    private AppSettings settings;
-    private InputManager inputManager;
-    private Camera cam;
-    private ViewPort viewPort;
-    private BulletAppState physics;
-    private final int NUMBER_ENEMIES = 18;
-    private final int NUMBER_CHARGES = 5;
-    private final int CLEANER_CAPACITY = 5;
-    private Spatial sceneModel;
-    private Spatial portalStructure;
-    private Spatial portal;
-    private Geometry cleanerShape;
-    private Enemy[] pow = new Enemy[NUMBER_ENEMIES];
-    private ParticleEmitter[] explosion = new ParticleEmitter[NUMBER_CHARGES];
-    private double[] exTimer = new double[NUMBER_CHARGES];
-    private Bullet[] fire = new Bullet[NUMBER_CHARGES];
-    private Material[] enemyMaterial = new Material[5];
-    private BulletAppState bulletAppState;
-    private RigidBodyControl landscape;
-    private RigidBodyControl portalscape;
-    private CharacterControl player;
-    private Ray cleanerRay;
-    private BoundingVolume boundEnemy;
-    private Node shootables;
-    private Node inhalables;
-    private Node aspiredEnemies;
-    private Node guiNode = new Node();
-    private Vector3f walkDirection = new Vector3f();
-    private int enemiesCleaned;
-    private float spawnTimer;
-    private float gameTimer;
-    private boolean left, right , up , down , aspire;
-    public boolean pause;
-    private boolean gameOver;
-    public boolean gameOverFirstTime;
-    // atributos para la gestión del audio
-    private AudioNode gunAudio;
-    private AudioNode backgroundAudio;
-    private AudioNode throwAudio;
-    private AudioNode aspireAudio;
-    private AudioNode aspireAudioEnd;
-    private AudioNode chargeAudio;
-    private boolean aspireFirstTime;
-    private float timeGame = 0;
-    private float puntuacion = 100;
-    private float successfulShot;
-    private float totalShots;
-    private float deaths;
-    private Vector3f playerLocation;
-    private Vector3f playerDirection;
-    private Vector3f playerUp;
+    protected BitmapFont guiFont; // Fuente del texto en pantalla
+    protected FlyByCamera flyCam; // Conecta la cámara con el cursor
+    private MainApp game; // La aplicación
+    private Node rootNode = new Node(); // Nodo cuyos elementos se visualizan en la aplicación
+    private AssetManager assetManager; // Asistente para acceder a los recursos
+    private AppStateManager stateManager; // Asistente que gestiona los cambios de estado
+    private AppSettings settings; // Configuración de la ventana
+    private InputManager inputManager; // Gestiona los eventos de teclas y ratón
+    private Camera cam; // Gestiona la perspectiva de visión del entorno
+    private ViewPort viewPort; // Visión del jugador
+    private BulletAppState physics; // Física del juego
+    private final int NUMBER_ENEMIES = 20; // Número máximo de enemigos en pantalla
+    private final int NUMBER_CHARGES = 5; // Número máximo de proyectiles en pantalla
+    private final int CLEANER_CAPACITY = 5; // Número máximo de enemigos aspirados
+    private Spatial sceneModel; // Modelo del entorno en el que jugamos
+    private Spatial portalStructure; // Modelo de la estructura del portal
+    private Spatial portal; // Modelo del portal en sí
+    private Geometry cleanerShape; // Geometría que define el área en la que los enemigos son aspirados
+    private Enemy[] pow = new Enemy[NUMBER_ENEMIES]; // Enemigos
+    private ParticleEmitter[] explosion = new ParticleEmitter[NUMBER_CHARGES]; // Explosión
+    private double[] exTimer = new double[NUMBER_CHARGES]; // Temporizador para el fin de la explosión
+    private Bullet[] fire = new Bullet[NUMBER_CHARGES]; // Disparos
+    private Material[] enemyMaterial = new Material[5]; // Material de los enemigos
+    private BulletAppState bulletAppState; // Estado de las físicas
+    private RigidBodyControl landscape; // Cuerpo físico del entorno
+    private RigidBodyControl portalscape; // Cuerpo de la estructura del portal
+    private CharacterControl player; // Gestiona el control del jugador 
+    private Ray cleanerRay; // Rayo que se proyecta al aspirar
+    private BoundingVolume boundEnemy; // Volumen del enemigo
+    private Node shootables; // Nodo de los enemigos a los que podemos disparar
+    private Node inhalables; // Nodo de los enemigos a los que podemos aspirar
+    private Node aspiredEnemies; // Nodo de los enemigos que están aspirados
+    private Node guiNode = new Node(); // Nodo de los elemntos de la interfaz 
+    private Vector3f walkDirection = new Vector3f(); // Vector de desplazamiento del jugador
+    private int enemiesCleaned; // Número de enemigos tirados al portal
+    private float spawnTimer; // Tiempo que determina la aparición de nuevos enemigos
+    private float gameTimer; // Tiempo que queda para el game over
+    private boolean left, right , up , down , aspire; // Booleanas de los controles
+    public boolean pause; // Booleana de pause
+    private boolean gameOver; // Booleana de estado de game over
+    public boolean gameOverFirstTime; // Booleana de game over
+    private AudioNode gunAudio; // Nodo del sonido de disparo
+    private AudioNode backgroundAudio; // Nodo del sonido de la música
+    private AudioNode throwAudio; // Nodo del sonido de disparar enemigos
+    private AudioNode aspireAudio; // Nodo del sonido de aspirar
+    private AudioNode aspireAudioEnd; // Nodo del sonido de terminar de aspirar
+    private AudioNode chargeAudio; // Nodo del sonido de meter enemigos en la bolsa de la aspiradora
+    private boolean aspireFirstTime; // Booleana que controla el principio de la aspiración
+    private float timeGame; // Tiempo de juego
+    private float successfulShot; // Número de tiros acertados
+    private final int PUNTUACION = 100;
+    private float totalShots; // Número total de disparos
+    private float deaths; // Número de enemigos abatidos
+    private Vector3f playerLocation; // Localización relativa del jugador
+    private Vector3f playerDirection; // Dirección en la que apunta el jugador
+    private Vector3f playerUp; // Vector vertical del jugador
 
     public GameState(MainApp game) {
         this.game = game;
@@ -136,20 +130,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                 return;
             }
         }
-    }
-
-    public void loadText() {
-        guiFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
-        fpsText = new BitmapText(guiFont, false);
-        fpsText.setSize(guiFont.getCharSet().getRenderedSize());
-        fpsText.setLocalTranslation(0, fpsText.getLineHeight(), 0);
-        fpsText.setText("Frames per second");
-        // guiNode.attachChild(fpsText);
-        menuText = new BitmapText(guiFont, false);
-        menuText.setSize(guiFont.getCharSet().getRenderedSize());
-        menuText.setLocalTranslation(0, (game.getContext().getSettings().getHeight() / 2f) - (menuText.getLineHeight() / 2f), 0);
-        menuText.setText("Press [M] to go back to the Menu");
-        // guiNode.attachChild(menuText);
     }
 
     public void cleanup() {
@@ -189,18 +169,12 @@ public class GameState extends AbstractAppState implements ActionListener {
         this.settings = this.game.getSettings();
         this.physics = this.stateManager.getState(BulletAppState.class);
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
-        //guiNode = ((SimpleApplication) app).getGuiNode();
-
-        loadText();
-
+        
         if (game.getInputManager() != null) {
             flyCam = new FlyByCamera(game.getCamera());
             flyCam.setMoveSpeed(1f);
             flyCam.registerWithInput(game.getInputManager());
         }
-
-        // app.setDisplayFps(false);
-        //setDisplayStatView(false);
 
         pause = false;
         gameOver = false;
@@ -321,9 +295,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         if (!pause) {
             
             super.update(tpf);
-
-            int fps = (int) game.getTimer().getFrameRate();
-            fpsText.setText("Frames per second: " + fps);
 
             initCrossHairs();
             guiNode.setQueueBucket(Bucket.Gui);
@@ -517,7 +488,6 @@ public class GameState extends AbstractAppState implements ActionListener {
     }
 
     public void stateAttached(AppStateManager stateManager) {
-        game.getInputManager().addListener(actionListener, "SIMPLEAPP_Exit");
 
         if (flyCam != null) {
             flyCam.setEnabled(true);
@@ -529,7 +499,6 @@ public class GameState extends AbstractAppState implements ActionListener {
     }
 
     public void stateDetached(AppStateManager stateManager) {
-        game.getInputManager().removeListener(actionListener);
         if (flyCam != null) {
             flyCam.setEnabled(false);
         }
@@ -891,16 +860,15 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     }
 
-    @Override
     public void render(RenderManager rm) {
     }
 
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
     public void recordStatistics() {
         Player player = game.getPlayer(); // lee el player actual 
-        Game juego = new Game(player.getNick(), "" + (int)(puntuacion*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
+        Game juego = new Game(player.getNick(), "" + (int)(PUNTUACION*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
         System.out.println(timeGame);
-        System.out.println((int)(puntuacion*timeGame));
+        System.out.println((int)(PUNTUACION*timeGame));
         if( game.getOnline() == true ){
             database.OnlineStatsHandler.agregarPartidaStatic(juego);
         }else{
