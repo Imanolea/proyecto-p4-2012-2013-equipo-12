@@ -284,7 +284,6 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
                 i++;
                 if (pos == i) {
-                    System.out.println(string);
                     return string;
                 }
             }
@@ -305,7 +304,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             String query = "SELECT NICK, DISPAROS_AC, DISPAROS_TOT FROM TOP;";
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
-            // y recorremos lo obtenido
+            // y recorremos lo obtenido.
             while (rs.next()) {
                 String nick = "" + rs.getString("NICK");
                 String disparos_ac = "" + rs.getString("DISPAROS_AC");
@@ -510,7 +509,6 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     public static void main(String[] args) throws Exception {
 
-        getInstance().listarEstadisticasJugares();
         //getInstance().comprobarJugador("e", "Jesus");
 
         // Player Imanol = new Player("ima", "Ima", "ima");
@@ -519,8 +517,10 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
         //getInstance().agregarPartida(partidita);
         //getInstance().listarEstadisticasPartidas();
-        getInstance().listarTop10();
         //getInstance().mostrarDisparosTopporciento();
         //getInstance().listarEstadisticasJugares();*/
+        String s = LocalStatsHandler.listarTop10Static(1);
+        System.out.println(s);
+
     }
 }
