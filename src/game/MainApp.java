@@ -121,6 +121,14 @@ public class MainApp extends Application {
         getStateManager().attach(ls);
     }
     
+     public void loadLogInFromInput(){
+        getStateManager().detach(is);
+         
+         ls = new LogInState(this);
+        getStateManager().attach(ls);
+    }
+    
+    
     public void loadMenuFromLogIn2(){
         getStateManager().detach(ls2);
         getStateManager().attach(ms);
