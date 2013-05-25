@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,17 +40,18 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+            String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String password = "mX5%gY7!";
 
             conn = DriverManager.getConnection(url, userid, password);
+            System.out.println(userid);
           } catch (ClassNotFoundException e1) {
             JOptionPane.showMessageDialog(this, "Clase no encontrada", "Error de conexion", 0);
-          //  e1.printStackTrace();
+          e1.printStackTrace();
         } catch (SQLException e2) {
             JOptionPane.showMessageDialog(this, "Error de SQL", "Error de SQL", 0);
-           // e2.printStackTrace();
+           e2.printStackTrace();
         }
     }
 
@@ -63,6 +62,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             conn.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error de comunicacion con el servidor", "Error de conexion", 2);
+            
         }
     }
 
@@ -82,11 +82,11 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+             String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String password = "mX5%gY7!";
 
-            con = DriverManager.getConnection(url, userid, password);
+            connection = DriverManager.getConnection(url, userid, password);
         } catch (Exception e1) {
             System.out.print("EXCEPTION");
         }
@@ -99,9 +99,11 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+             String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String password = "mX5%gY7!";
+
+            
 
             connection = DriverManager.getConnection(url, userid, password);
         } catch (Exception e1) {
@@ -183,9 +185,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+             String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String password = "mX5%gY7!";
 
             connection = DriverManager.getConnection(url, userid, password);
             String query = "SELECT * FROM JUGADOR;";
@@ -195,7 +197,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             while (rs.next() && !encontrado) {
                 String nick = "" + rs.getString("NICK");
                 String pass = "" + rs.getString("PASSWORD");
-                name = "" + rs.getString("NAME");
+                name = "" + rs.getString("NOMBRE");
                 if (insertedNick.equals(nick) && insertedPassword.equals(pass)) {
                     encontrado = true;
                     return name;
@@ -312,9 +314,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
           // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+               String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String password = "mX5%gY7!";
 
             connection = DriverManager.getConnection(url, userid, password);
             String query = "SELECT * FROM TOP;";
@@ -402,9 +404,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String passwordd = "p0wd3rs";
+               String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String passwordd = "mX5%gY7!";
 
             connection = DriverManager.getConnection(url, userid, passwordd);
         ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
@@ -464,9 +466,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
            // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+              String url = "jdbc:mysql://sql2.freesqldatabase.com/sql25266";
+            String userid = "sql25266";
+            String password = "mX5%gY7!";
 
             connection = DriverManager.getConnection(url, userid, password);
             ps = connection.prepareStatement("INSERT INTO PARTIDA VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
@@ -572,14 +574,11 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
 
         return r;
 
-
     }
 
-    public static void main(String[] args)  {
-        try {
-            getInstance().listarJugadores();
-        } catch (Exception ex) {
-            Logger.getLogger(OnlineStatsHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public static void main(String[] args) throws Exception  {
+       
+       OnlineStatsHandler o = new OnlineStatsHandler();
+       o.listarJugadores();
     }
 }
