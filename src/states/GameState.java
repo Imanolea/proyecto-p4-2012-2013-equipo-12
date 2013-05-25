@@ -78,7 +78,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Camera cam;
     private ViewPort viewPort;
     private BulletAppState physics;
-    private final int NUMBER_ENEMIES = 20;
+    private final int NUMBER_ENEMIES = 18;
     private final int NUMBER_CHARGES = 5;
     private final int CLEANER_CAPACITY = 5;
     private Spatial sceneModel;
@@ -898,10 +898,15 @@ public class GameState extends AbstractAppState implements ActionListener {
     // clase que es invocada cuando la la informacion relativa a la partida se quiera guardar en la bd
     public void recordStatistics() {
         Player player = game.getPlayer(); // lee el player actual 
-        Game game = new Game(player.getNick(), "" + (int)(puntuacion*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
+        Game juego = new Game(player.getNick(), "" + (int)(puntuacion*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
         System.out.println(timeGame);
         System.out.println((int)(puntuacion*timeGame));
-        database.LocalStatsHandler.agregarPartidaStatic(game); // guarda la informacion de la partida en la base de datos
+        if( game.getOnline() == true ){
+            database.OnlineStatsHandler.agregarPartidaStatic(juego);
+        }else{
+            database.LocalStatsHandler.agregarPartidaStatic(juego); // guarda la informacion de la partida en la base de datos
+        }
+        
     }
 
     public void gameOverFunction() {
