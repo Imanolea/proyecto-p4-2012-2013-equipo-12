@@ -31,6 +31,7 @@ public class MainApp extends Application {
     private LogInState2 ls2 = null;
     private GameOverState gos=null;
     private Player player;
+    private boolean online;
 
     public MainApp() {
     }
@@ -202,5 +203,13 @@ public class MainApp extends Application {
         return player;
     }
     
+    
+    public void setOnline(boolean b) {
+        this.online = b;
+    }
+
+    public boolean getOnline() {
+        return online;
+    }
     
 }
