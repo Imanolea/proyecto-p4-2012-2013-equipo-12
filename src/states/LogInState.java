@@ -37,6 +37,7 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import game.MainApp;
+import java.awt.Color;
 
 public class LogInState extends AbstractAppState implements ScreenController {
 
@@ -131,8 +132,26 @@ public class LogInState extends AbstractAppState implements ScreenController {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
 
+                /*layer(new LayerBuilder("Layer1LogInBackground") {
+                    {
+                        childLayoutCenter();
+                        alignCenter();
+                        valignCenter();
 
-                layer(new LayerBuilder("LayerLogIn") {
+                        image(new ImageBuilder() {
+                            {
+                                this.filename("Pictures/Menu2.jpg"); // imagen de fondo definida en otro layer
+                                valignCenter();
+                                alignCenter();
+                                height("100%");
+                                width("100%");
+                            }
+                        });
+
+                    }
+                });*/
+
+                layer(new LayerBuilder("Layer2LogIn") {
                     {
                         childLayoutVertical(); // layer properties, add more...
 
@@ -143,6 +162,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                 alignCenter();
                                 height("35%");
                                 width("100%");
+
                                 image(new ImageBuilder() {
                                     {
                                         this.filename("/Pictures/Titulo.png");
@@ -198,7 +218,8 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 alignCenter();
                                                 valignCenter();
                                                 font("Interface/Fonts/Default.fnt");
-                                                text("Insert your nick and password if you are alredy registered.");
+                                                color("#FFE4E1");
+                                                text("Insert nick and password if you are alredy registered.");
                                                 height("20%");
                                                 width("80%");
                                             }
@@ -208,6 +229,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignCenter();
+                                                color("#FFE4E1");
                                                 text("If not, press the \"REGISTER\" button to start the registration process.");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("20%");
@@ -322,11 +344,11 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignBottom();
-                                                backgroundColor("#f108");
+                                                backgroundColor("#191970");
                                                 height("75%");
                                                 width("30%");
                                                 visibleToMouse(true);
-                                                interactOnClick("loadInputFromLogIn()");
+                                                interactOnClick("loadInputFromLogIn2()");
                                                 interactOnRelease("initializaOnlineBoolean()");
                                             }
                                         });
@@ -346,7 +368,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignBottom();
-                                                backgroundColor("#f108");
+                                                backgroundColor("#191970");
                                                 height("75%");
                                                 width("30%");
                                                 visibleToMouse(true);
@@ -370,7 +392,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignBottom();
-                                                backgroundColor("#f108");
+                                                backgroundColor("#191970");
                                                 height("75%");
                                                 width("30%");
                                                 visibleToMouse(true);
@@ -383,11 +405,33 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
-                                        childLayoutCenter(); // panel properties, add more...               
+                                        childLayoutVertical(); // panel properties, add more...               
                                         alignCenter();
-                                        valignCenter();
-                                        height("7%");
+                                        valignBottom();
+                                        height("11%");
                                         width("30%");
+
+                                        panel(new PanelBuilder("Panel_Space") {
+                                            {
+                                                childLayoutCenter(); // panel properties, add more...               
+                                                alignCenter();
+                                                valignCenter();
+                                                height("30%");
+                                                width("30%");
+                                            }
+                                        });
+
+                                        text(new TextBuilder() {
+                                            {
+                                                alignCenter();
+                                                valignCenter();
+                                                color("#FFE4E1");
+                                                text("Access mode:");
+                                                font("Interface/Fonts/Default.fnt");
+                                                height("70%");
+                                                width("30%");
+                                            }
+                                        });
                                     }
                                 });
                                 control(new RadioGroupBuilder("RadioGroup"));
@@ -401,22 +445,22 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
 
                                         control(new LabelBuilder("LocalL", "Local"));
+
                                         control(new RadioButtonBuilder("LocalR") {
                                             {
-
                                                 group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
                                                 interactOnRelease("setOffline()");
                                             }
                                         });
-                                           panel(new PanelBuilder("Panel_Space") {
-                                    {
-                                        childLayoutCenter(); // panel properties, add more...               
-                                        alignCenter();
-                                        valignCenter();
-                                        height("7%");
-                                        width("30%");
-                                    }
-                                });
+                                        panel(new PanelBuilder("Panel_Space") {
+                                            {
+                                                childLayoutCenter(); // panel properties, add more...               
+                                                alignCenter();
+                                                valignCenter();
+                                                height("7%");
+                                                width("30%");
+                                            }
+                                        });
                                         control(new LabelBuilder("OnlineL", "Online"));
                                         control(new RadioButtonBuilder("OnlineR") {
                                             {
@@ -451,43 +495,26 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                 childLayoutVertical();
                                 alignCenter();
                                 valignBottom();
-                                height("5%");
+                                height("10%");
                                 width("100%");
                                 // GUI element
+
+                                panel(new PanelBuilder("Panel_Botones") {
+                                    {
+                                        childLayoutHorizontal();
+                                        alignCenter();
+                                        valignBottom();
+                                        height("60%");
+                                        width("16%");
+                                    }
+                                });
 
                                 text(new TextBuilder() {
                                     {
                                         this.style("icon-system");
                                         text("Developers: Imanol Barriuso, Jon Ander Novella, Jesus Pereira and Jokin Sainz.");
                                         font("Interface/Fonts/Default.fnt");
-                                        height("47%");
-                                        width("100%");
-                                    }
-                                });
-                                panel(new PanelBuilder("Panel_Botones") {
-                                    {
-                                        childLayoutHorizontal();
-                                        alignCenter();
-                                        valignBottom();
-                                        height("47%");
-                                        width("16%");
-
-                                        /*text(new TextBuilder() {
-                                         {
-                                         text("© Copyright. All rights reserved");
-                                         font("Interface/Fonts/Default.fnt");
-                                         height("100%");
-                                         width("100%");
-                                         }
-                                         });*/
-                                    }
-                                });
-                                panel(new PanelBuilder("Panel_Botones") {
-                                    {
-                                        childLayoutVertical();
-                                        alignCenter();
-                                        valignBottom();
-                                        height("6%");
+                                        height("20%");
                                         width("100%");
                                     }
                                 });
@@ -499,34 +526,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                 });
                 // </layer>
 
-                layer(new LayerBuilder("Layer2LogIn") {
-                    {
-                        childLayoutCenter();
-                        alignCenter();
-                        valignCenter();
 
-                        /*control(new WindowBuilder("NoticeWindow", "WELCOME TO POWDERS.") {
-                         {
-                         width("320px"); // windows will need a size
-                         height("18px");
-                         alignCenter();
-                         valignBottom();
-                         closeable(false);
-                         backgroundColor("#000088ff");
-
-                         /*text(new TextBuilder() {
-                         {
-                         text("The nick you entered is already in use by another user.");
-                         style("base-font");
-                         color("#fffa");
-                         valignCenter();
-                         width("100%");
-                         }
-                         });
-                         }
-                         });*/
-                    }
-                });
             }
         }.build(nifty));
         // </screen>
