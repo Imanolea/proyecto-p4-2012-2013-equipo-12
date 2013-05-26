@@ -116,6 +116,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Vector3f playerDirection; // Dirección en la que apunta el jugador
     private Vector3f playerUp; // Vector vertical del jugador
     Picture cleanerBar;
+    Picture scope;
     
     /**
      * Método constructor de la clase
@@ -208,6 +209,13 @@ public class GameState extends AbstractAppState implements ActionListener {
         setUpKeys();
         setUpLight();
         
+        scope = new Picture("Scope");
+        scope.setImage(assetManager, "Pictures/Mira.png", true);
+        scope.setWidth(209*(settings.getWidth()/settings.getHeight()*0.1f));
+        scope.setHeight(209*(settings.getWidth()/settings.getHeight()*0.1f));
+        scope.setPosition(settings.getWidth() / 2 - (209*(settings.getWidth()/settings.getHeight()*0.1f))/2,
+                settings.getHeight() / 2 - (209*(settings.getWidth()/settings.getHeight()*0.1f))/2);
+        
         cleanerBar = new Picture("Cleaner bar");
         cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
         cleanerBar.setWidth(641*(settings.getWidth()/settings.getHeight()*0.1f));
@@ -224,7 +232,8 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         sceneModel = assetManager.loadModel("Scenes/Escenario/Nivel_1.j3o");
         sceneModel.setName("Scene-entity");
-        sceneModel.setLocalScale(6f);
+        sceneModel.setLocalScale(12f);
+        sceneModel.setLocalTranslation(0, -20, 0);
 
         CollisionShape sceneShape =
                 CollisionShapeFactory.createMeshShape((Node) sceneModel);
@@ -718,9 +727,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
 
         guiNode.attachChild(cleanerBar);
+        guiNode.attachChild(scope);
 
         guiFont = assetManager.loadFont("Interface/Fonts/Jokerman.fnt");
-        BitmapText ch = new BitmapText(guiFont, false);
+        /*BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");
 
@@ -728,8 +738,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         ch.setLocalTranslation(
                 settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
                 settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-        guiNode.attachChild(ch);
-        
+        guiNode.attachChild(ch);*/
 
         BitmapText ch3 = new BitmapText(guiFont, false);
 
