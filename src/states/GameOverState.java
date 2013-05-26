@@ -148,24 +148,51 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 text(new TextBuilder() {
                                     {
                                         text("GAME OVER");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman.fnt");
                                         height("100%");
                                         width("100%");
                                     }
                                 });
+                                
                             }
                         }); // </panel_1>
 
-                        panel(new PanelBuilder("Panel_Buttons") {
+                   
+
+                        
+                        panel(new PanelBuilder("Panel_TITLE") {
                             {
-                                childLayoutVertical(); // panel properties, add more...               
+                                childLayoutCenter();
                                 alignCenter();
-                                valignCenter();
-                                height("20%");
-                                width("100%");
-                            }
-                        }); // </panel_1>
+                                valignBottom();
+                                height("10%");
+                                width("90%");
 
+                                // add text
+
+                                text(new TextBuilder() {
+                                    {
+                                        text("SCORE: ");
+                                        font("Interface/Fonts/Jokerman.fnt");
+                                        height("100%");
+                                        width("100%");
+                                    }
+                                });
+                                
+                            }
+                        }); // </pane
+                        
+                        
+                        panel(new PanelBuilder("Panel_Buttons") {
+                                    {
+                                        childLayoutVertical(); // panel properties, add more...               
+                                        alignCenter();
+                                        valignCenter();
+                                        height("10%");
+                                        width("100%");
+                                    }
+                                }); // </panel_1>
+                        
                         panel(new PanelBuilder("Panel_Buttons") {
                             {
                                 childLayoutVertical(); // panel properties, add more...               
