@@ -259,7 +259,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         boundEnemy = pow[0].getSpatial().getWorldBound();
 
         portalStructure = assetManager.loadModel("Models/Portal/PortalStructure.j3o");
-        portalStructure.setLocalTranslation(17.8f, -3, 31f);
+        portalStructure.setLocalTranslation(17.8f, -1f, 31f);
         portalStructure.rotate(0, 110, 0);
         portalStructure.scale(4f);
 
@@ -269,7 +269,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         portalStructure.addControl(portalscape);
 
         portal = assetManager.loadModel("Models/Portal/Portal.j3o");
-        portal.setLocalTranslation(17.8f, -3, 31.2f);
+        portal.setLocalTranslation(17.8f, -1f, 31.2f);
         portal.rotate(0, 110, 0);
         portal.scale(4f);
 
@@ -293,7 +293,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
         player.setGravity(30);
-        player.setPhysicsLocation(new Vector3f(0, 10, 0));
+        player.setPhysicsLocation(new Vector3f(17.8f, 3.5f, 30));
 
         rootNode.attachChild(sceneModel);
 
