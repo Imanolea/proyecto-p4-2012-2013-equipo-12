@@ -29,10 +29,11 @@ public class MainApp extends Application {
     private StatisticsState ss = null;
     private LogInState ls = null;
     private LogInState2 ls2 = null;
-    private GameOverState gos=null;
+    private GameOverState gos = null;
     private Player player;
     private boolean online;
     private String namePlayer;
+    private String score;
 
     public MainApp() {
     }
@@ -68,7 +69,7 @@ public class MainApp extends Application {
         ls = new LogInState(this);
         ls2 = new LogInState2(this);
         ms2 = new MenuStateGame(this);
-        gos= new GameOverState(this);
+        gos = new GameOverState(this);
 
         // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
@@ -86,7 +87,7 @@ public class MainApp extends Application {
 
         renderManager.render(tpf, true);
     }
-    
+
     public void reLoadMenu() {
         getStateManager().detach(ms);
         getStateManager().attach(ms);
@@ -107,33 +108,34 @@ public class MainApp extends Application {
         getStateManager().attach(ms);
     }
 
-    public void loadMenuFromStatistics(){
+    public void loadMenuFromStatistics() {
         getStateManager().detach(ss);
         getStateManager().attach(ms);
     }
-    
-    public void loadMenuFromLogIn(){
+
+    public void loadMenuFromLogIn() {
         getStateManager().detach(ls);
         getStateManager().attach(ms);
     }
-    public void loadLogInFromMenu(){
+
+    public void loadLogInFromMenu() {
         getStateManager().detach(ms);
         getStateManager().attach(ls);
     }
-    
-     public void loadLogInFromInput(){
+
+    public void loadLogInFromInput() {
         getStateManager().detach(is);
-         
-         ls = new LogInState(this);
+
+        ls = new LogInState(this);
         getStateManager().attach(ls);
     }
-    
-    
-    public void loadMenuFromLogIn2(){
+
+    public void loadMenuFromLogIn2() {
         getStateManager().detach(ls2);
         getStateManager().attach(ms);
     }
-    public void loadLogIn2FromMenu(){
+
+    public void loadLogIn2FromMenu() {
         getStateManager().detach(ms);
         getStateManager().attach(ls2);
     }
@@ -144,18 +146,18 @@ public class MainApp extends Application {
 
     public void loadGame() {
         getStateManager().detach(ms);
-         te = new GameState(this);
+        te = new GameState(this);
         getStateManager().attach(te);
     }
-    
+
     public void loadGameFromMenuGame() {
-         getStateManager().detach(ms2);
+        getStateManager().detach(ms2);
         //getStateManager().attach(te);
         te.setEnabled(true);
         inputManager.setCursorVisible(false);
-        
+
     }
-    
+
     public void loadMenuGameFromGame() {
         //getStateManager().detach(te);
         getStateManager().attach(ms2);
@@ -182,28 +184,27 @@ public class MainApp extends Application {
         getStateManager().detach(ms);
         getStateManager().attach(ss);
     }
-    
 
     public void loadMenuFromGaveOver() {
 
         getStateManager().detach(gos);
         getStateManager().attach(ms);
     }
-    
-    public void  loadGameFromGameOver() {
+
+    public void loadGameFromGameOver() {
 
         getStateManager().detach(gos);
-         te = new GameState(this);
+        te = new GameState(this);
         getStateManager().attach(te);
     }
-     
-    public void  loadGameOverFromGame() {
-    inputEnabled=false;
+
+    public void loadGameOverFromGame() {
+        inputEnabled = false;
         getStateManager().detach(te);
         getStateManager().attach(gos);
-       
+
     }
-    
+
     public void setPlayer(Player p) {
         this.player = p;
     }
@@ -211,8 +212,7 @@ public class MainApp extends Application {
     public Player getPlayer() {
         return player;
     }
-    
-    
+
     public void setOnline(boolean b) {
         this.online = b;
     }
@@ -220,7 +220,7 @@ public class MainApp extends Application {
     public boolean getOnline() {
         return online;
     }
-    
+
     public void setNombre(String n) {
         this.namePlayer = n;
     }
@@ -228,17 +228,24 @@ public class MainApp extends Application {
     public String getNombre() {
         return namePlayer;
     }
-    public void setInput(boolean input)
-    {
-        
-        this.inputEnabled=input;
+
+    public void setInput(boolean input) {
+
+        this.inputEnabled = input;
     }
-    
-     public boolean getInput()
-    {
-        
+
+    public boolean getInput() {
+
         return inputEnabled;
     }
     
-    
+    public void setScore(String s) {
+
+        this.score = s;
+    }
+
+    public String getScore() {
+
+        return score;
+    }
 }
