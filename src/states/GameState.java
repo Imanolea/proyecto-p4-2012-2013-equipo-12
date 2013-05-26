@@ -232,8 +232,8 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         sceneModel = assetManager.loadModel("Scenes/Escenario/Nivel_1.j3o");
         sceneModel.setName("Scene-entity");
-        sceneModel.setLocalScale(12f);
-        sceneModel.setLocalTranslation(0, -20, 0);
+        sceneModel.setLocalScale(6f);
+        sceneModel.setLocalTranslation(0, -5, 0);
 
         CollisionShape sceneShape =
                 CollisionShapeFactory.createMeshShape((Node) sceneModel);
@@ -248,7 +248,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
             pow[i].getSpatial().setName(i + "-entity");
             do {
-                pow[i].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                pow[i].getSpatial().setLocalTranslation((float) Math.random() * 52 - 29, (float) Math.random() * 13 + 7, (float) Math.random() * 60 - 22);
                 rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
@@ -259,7 +259,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         boundEnemy = pow[0].getSpatial().getWorldBound();
 
         portalStructure = assetManager.loadModel("Models/Portal/PortalStructure.j3o");
-        portalStructure.setLocalTranslation(-22.46f, 0, 14.3f);
+        portalStructure.setLocalTranslation(17.8f, -3, 31f);
         portalStructure.rotate(0, 110, 0);
         portalStructure.scale(4f);
 
@@ -269,7 +269,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         portalStructure.addControl(portalscape);
 
         portal = assetManager.loadModel("Models/Portal/Portal.j3o");
-        portal.setLocalTranslation(-22.46f, 0, 14.617f);
+        portal.setLocalTranslation(17.8f, -3, 31.2f);
         portal.rotate(0, 110, 0);
         portal.scale(4f);
 
