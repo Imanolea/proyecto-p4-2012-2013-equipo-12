@@ -5,7 +5,10 @@
 package game;
 
 import com.jme3.app.Application;
+import com.jme3.audio.AudioNode;
+import com.jme3.audio.AudioNode.Status;
 import com.jme3.renderer.ViewPort;
+import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
@@ -14,6 +17,7 @@ import states.*;
 
 public class MainApp extends Application {
 
+    protected Node rootNode = new Node("Root Node");
     private GameState te = null;
     private MenuState ms = null;
     private MenuStateGame ms2 = null;
@@ -28,6 +32,8 @@ public class MainApp extends Application {
     private boolean online;
     private String namePlayer;
     private String score;
+    private AudioNode backgroundAudio; // Nodo del sonido de la música
+
 
     public MainApp() {
     }
@@ -65,6 +71,10 @@ public class MainApp extends Application {
         ms2 = new MenuStateGame(this);
         gos = new GameOverState(this);
         is2 = new InputState2(this);
+        
+        backgroundAudio = new AudioNode(assetManager, "/Audio/Cavern of Mystery long version.wav", false);
+        backgroundAudio.setLooping(true);
+        backgroundAudio.setVolume(2);
 
         // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
@@ -252,5 +262,17 @@ public class MainApp extends Application {
     public String getScore() {
 
         return score;
+    }
+    
+    public void playAudio() {
+
+        if(backgroundAudio.getStatus() ==  Status.Stopped)
+            this.backgroundAudio.play();
+    }
+
+    public void stopAudio() {
+        
+        if(backgroundAudio.getStatus() ==  Status.Playing)
+        this.backgroundAudio.stop();
     }
 }
