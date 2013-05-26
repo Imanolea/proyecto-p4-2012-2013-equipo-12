@@ -143,7 +143,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 height("10%");
                                 width("90%");
 
-                                // add text
+                                // add text//
 
                                 text(new TextBuilder() {
                                     {
