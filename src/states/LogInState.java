@@ -408,6 +408,15 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                                 interactOnRelease("setOffline()");
                                             }
                                         });
+                                           panel(new PanelBuilder("Panel_Space") {
+                                    {
+                                        childLayoutCenter(); // panel properties, add more...               
+                                        alignCenter();
+                                        valignCenter();
+                                        height("7%");
+                                        width("30%");
+                                    }
+                                });
                                         control(new LabelBuilder("OnlineL", "Online"));
                                         control(new RadioButtonBuilder("OnlineR") {
                                             {

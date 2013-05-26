@@ -223,7 +223,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignCenter();
-                                                text("NICK: ");
+                                                text("Nick: ");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("70%");
                                                 width("30%");
@@ -263,7 +263,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignCenter();
-                                                text("PASS: ");
+                                                text("Password: ");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("70%");
                                                 width("30%");

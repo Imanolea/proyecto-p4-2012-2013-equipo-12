@@ -23,7 +23,6 @@ import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.PopupBuilder;
@@ -184,7 +183,7 @@ public class InputState extends AbstractAppState implements ScreenController {
 
                                         text(new TextBuilder() {
                                             {
-                                                text("Insert name:");
+                                                text("Name: ");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("50%");
                                                 width("50%");
@@ -222,7 +221,7 @@ public class InputState extends AbstractAppState implements ScreenController {
 
                                         text(new TextBuilder() {
                                             {
-                                                text("Insert nickname:");
+                                                text("Nick: ");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("50%");
                                                 width("50%");
@@ -259,7 +258,7 @@ public class InputState extends AbstractAppState implements ScreenController {
 
                                         text(new TextBuilder() {
                                             {
-                                                text("Insert pass:");
+                                                text("Password:");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("50%");
                                                 width("50%");
@@ -326,7 +325,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("50%");
                                                 width("40%");
                                                 visibleToMouse(true);
-                                                interactOnClick("loadMenuFromInput()");
+                                                interactOnClick("loadLogInFromInput()");
 
                                             }
                                         });
