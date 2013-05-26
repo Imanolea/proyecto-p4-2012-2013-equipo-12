@@ -400,7 +400,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         style("base-font");
                                         color("#fffa");
                                         valignCenter();
-                                        width("100%");
+                                        width("80%");
                                     }
                                 });
 
