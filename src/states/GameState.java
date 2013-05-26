@@ -70,7 +70,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Camera cam; // Gestiona la perspectiva de visión del entorno
     private ViewPort viewPort; // Visión del jugador
     private BulletAppState physics; // Física del juego
-    private final int NUMBER_ENEMIES = 20; // Número máximo de enemigos en pantalla
+    private final int NUMBER_ENEMIES = 15; // Número máximo de enemigos en pantalla
     private final int NUMBER_CHARGES = 5; // Número máximo de proyectiles en pantalla
     private final int CLEANER_CAPACITY = 5; // Número máximo de enemigos aspirados
     private Spatial sceneModel; // Modelo del entorno en el que jugamos
@@ -279,7 +279,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 200;
+        gameTimer = 8;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -540,6 +540,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
+        inputManager.clearRawInputListeners();
+        inputManager.clearMappings();
     }
     
     /**
