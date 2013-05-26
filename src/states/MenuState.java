@@ -117,6 +117,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
         nameJugador = "";
+        
+        // play Music if it is not being played
+        game.playAudio();
+        
         // enable depth test and back-face culling for performance
         app.getRenderer().applyRenderState(RenderState.DEFAULT);
 
@@ -185,7 +189,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 childLayoutCenter();
                                 alignCenter();
                                 height("16%");
-                                width("70%");
+                                width("36%");
 
                                 // add text
 
@@ -195,7 +199,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         valignCenter();
                                         alignCenter();
                                         height("100%");
-                                        width("40%");
+                                        width("100%");
 
                                     }
                                 });
@@ -395,11 +399,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         String score = "";
                                         if(game.getOnline()){
                                            String string = OnlineStatsHandler.searchPosition(game.getPlayer().getNick());
-                                           if(string.equals("")) score = "Best score: " + 0 + ".";
+                                           if(string.equals("")) score = "Best score: " + 0 + "";
                                            else score = "Best score: " + string + ".";
                                         }else{
                                            String string = LocalStatsHandler.searchPosition(game.getPlayer().getNick());
-                                           if(string.equals("")) score = "Best score: " + 0 + ".";
+                                           if(string.equals("")) score = "Best score: " + 0 + "";
                                            else score = "Best score: " + string + ".";
                                         }
                                         text(score);
@@ -583,7 +587,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void startGame() {
 
-        //nifty.exit();
+        game.stopAudio();
         game.loadGame();
         nifty.removeScreen("MenuScreen");
 
