@@ -34,7 +34,7 @@ import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
 
 public class GameOverState extends AbstractAppState implements ScreenController {
-    
+
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
     protected BitmapText menuText;
@@ -50,32 +50,33 @@ public class GameOverState extends AbstractAppState implements ScreenController 
     private FlyByCamera flyCam;
     private Nifty nifty;
     public static boolean b = false;
-    
+
     public GameOverState(MainApp game) {
         this.game = game;
     }
-    
+
     public void bind(Nifty nifty, Screen screen) {
         this.nifty = nifty;
     }
-    
+
     public void onStartScreen() {
     }
-    
+
     public void onEndScreen() {
     }
-    
+
     private class AppActionListener implements ActionListener {
-        
+
         public void onAction(String name, boolean value, float tpf) {
             if (!value) {
                 return;
             }
-            if(name.equals("Exit"))
-            System.exit(0);
+            if (name.equals("Exit")) {
+                System.exit(0);
+            }
         }
     }
-    
+
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         menuText = new BitmapText(menuFont, false);
@@ -84,12 +85,12 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-    
+
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.game = (MainApp) game;
-        
+
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
         this.inputManager = this.game.getInputManager();
@@ -107,22 +108,22 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("Exit", new KeyTrigger(KeyInput.KEY_ESCAPE));
         }
-        
-        
+
+
         niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
-        
-        
+
+
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
         flyCam.setDragToRotate(true);
         nifty.loadStyleFile("nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");
-        
+
         inputManager.setCursorVisible(true);
-        
-        
-        
+
+
+
         nifty.addScreen("GameOverScreen", new ScreenBuilder("GameOverScreen") {
             {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
@@ -138,6 +139,39 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
                         panel(new PanelBuilder("Panel_TITLE") {
                             {
+                                childLayoutVertical();
+                                alignCenter();
+                                valignBottom();
+                                height("15%");
+                                width("90%");
+
+                                // add text
+
+                                panel(new PanelBuilder("Panel_TITLE") {
+                                    {
+                                        childLayoutCenter();
+                                        alignCenter();
+                                        valignBottom();
+                                        height("50%");
+                                        width("90%");
+
+                                    }
+                                });
+
+                                text(new TextBuilder() {
+                                    {
+                                        text("GAME OVER");
+                                        font("Interface/Fonts/Jokerman.fnt");
+                                        height("50%");
+                                        width("100%");
+                                    }
+                                });
+
+                            }
+                        });
+
+                        panel(new PanelBuilder("Panel_TITLE") {
+                            {
                                 childLayoutCenter();
                                 alignCenter();
                                 valignBottom();
@@ -148,52 +182,27 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
                                 text(new TextBuilder() {
                                     {
-                                        text("GAME OVER");
+                                        text("SCORE: " + game.getScore());
                                         font("Interface/Fonts/Jokerman.fnt");
                                         height("100%");
-                                        width("100%");
+                                        width("10%");
                                     }
                                 });
-                                
+
                             }
                         }); // </panel_1>
 
-                   
 
-                        
-                        panel(new PanelBuilder("Panel_TITLE") {
-                            {
-                                childLayoutCenter();
-                                alignCenter();
-                                valignBottom();
-                                height("10%");
-                                width("90%");
-
-                                // add text
-
-                                text(new TextBuilder() {
-                                    {
-                                        text("SCORE: ");
-                                        font("Interface/Fonts/Jokerman.fnt");
-                                        height("100%");
-                                        width("100%");
-                                    }
-                                });
-                                
-                            }
-                        }); // </pane
-                        
-                        
                         panel(new PanelBuilder("Panel_Buttons") {
-                                    {
-                                        childLayoutVertical(); // panel properties, add more...               
-                                        alignCenter();
-                                        valignCenter();
-                                        height("10%");
-                                        width("100%");
-                                    }
-                                }); // </panel_1>
-                        
+                            {
+                                childLayoutVertical(); // panel properties, add more...               
+                                alignCenter();
+                                valignCenter();
+                                height("10%");
+                                width("100%");
+                            }
+                        }); // </panel_1>
+
                         panel(new PanelBuilder("Panel_Buttons") {
                             {
                                 childLayoutVertical(); // panel properties, add more...               
@@ -201,7 +210,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 valignCenter();
                                 height("60%");
                                 width("100%");
-                                
+
                                 control(new ButtonBuilder("PLAY AGAIN", "PLAY AGAIN") {
                                     {
                                         alignCenter();
@@ -211,7 +220,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         width("30%");
                                         visibleToMouse(true);
                                         interactOnRelease("loadGameFromGameOver()");
-                                        
+
                                     }
                                 });
                                 panel(new PanelBuilder("Panel_Buttons") {
@@ -224,7 +233,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                     }
                                 }); // </panel_1>
 
-                                
+
                                 control(new ButtonBuilder("BACK TO MENU", "BACK TO MENU") {
                                     {
                                         alignCenter();
@@ -234,10 +243,10 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         width("30%");
                                         visibleToMouse(true);
                                         interactOnRelease("loadMenuFromGaveOver()");
-                                        
+
                                     }
                                 });
-                                
+
                                 panel(new PanelBuilder("Panel_Buttons") {
                                     {
                                         childLayoutVertical(); // panel properties, add more...               
@@ -257,26 +266,26 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         width("30%");
                                         visibleToMouse(true);
                                         interactOnRelease("exit()");
-                                        
+
                                     }
                                 });
-                                
-                                
-                                
+
+
+
                             }
                         }); // </panel_2>
 
-                        
+
                     }
                 });
             }
         }.build(nifty));
-        
-        
+
+
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("GameOverScreen"); // it is used to start the screen
     }
-    
+
     public void update(float tpf) {
         super.update(tpf);
 
@@ -286,13 +295,13 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
         guiNode.updateGeometricState();
-        
+
     }
-    
+
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-         game.getInputManager().addListener(new AppActionListener(), "Exit");
+        game.getInputManager().addListener(new AppActionListener(), "Exit");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
@@ -300,7 +309,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         }
 //      
     }
-    
+
     @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
@@ -308,7 +317,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         game.getGUIViewPort().detachScene(guiNode);
         game.getGUIViewPort().removeProcessor(niftyDisplay);
     }
-    
+
     public void render(RenderManager rm) {
     }
 }
