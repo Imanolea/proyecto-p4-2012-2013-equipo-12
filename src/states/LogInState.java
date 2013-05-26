@@ -90,6 +90,11 @@ public class LogInState extends AbstractAppState implements ScreenController {
         guiNode.attachChild(menuText);
     }
 
+    /**
+     * Método que inicializa las variables de la aplicación
+     * @param stateManager Gestiona los estados del juego
+     * @param app Aplicación del juego
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -131,7 +136,8 @@ public class LogInState extends AbstractAppState implements ScreenController {
             {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
-
+                
+                // esto añade la imagen de fondo menu2.jpg en un nuevo layer que se posicionaría por debajo de los elementos de la ventana
                 /*layer(new LayerBuilder("Layer1LogInBackground") {
                     {
                         childLayoutCenter();
@@ -597,8 +603,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        }
-//      
+        } 
     }
 
     @Override
