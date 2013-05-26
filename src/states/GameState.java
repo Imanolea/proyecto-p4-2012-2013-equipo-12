@@ -288,7 +288,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 200;
+        gameTimer = 20;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -756,7 +756,7 @@ public class GameState extends AbstractAppState implements ActionListener {
      * Inicializa los audios
      */
     public void initAudio() {
-        backgroundAudio = new AudioNode(assetManager, "/Audio/loop.ogg", false);
+        backgroundAudio = new AudioNode(assetManager, "/Audio/Running Stringsfull.wav", false);
         backgroundAudio.setLooping(true);
         backgroundAudio.setVolume(2);
         rootNode.attachChild(backgroundAudio);
