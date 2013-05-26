@@ -131,7 +131,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
 
-
+                
                 layer(new LayerBuilder("Layer_ID2") {
                     {
                         childLayoutVertical(); // layer properties, add more...
@@ -195,7 +195,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 childLayoutCenter();
                                                 alignCenter();
                                                 height("1%");
-                                                width("28%");
+                                                width("10%");
                                             }
                                         }); // </panel_1>
 
@@ -233,7 +233,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 childLayoutCenter();
                                                 alignCenter();
                                                 height("1%");
-                                                width("28%");
+                                                width("10%");
                                             }
                                         }); // </panel_1>
 
@@ -270,7 +270,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 childLayoutCenter();
                                                 alignCenter();
                                                 height("1%");
-                                                width("28%");
+                                                width("10%");
                                             }
                                         }); // </panel_1>
 
@@ -298,7 +298,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignCenter();
-                                                backgroundColor("#f108");
+                                                backgroundColor("#191970");
                                                 height("50%");
                                                 width("40%");
                                                 visibleToMouse(true);
@@ -321,11 +321,11 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignCenter();
-                                                backgroundColor("#f108");
+                                                backgroundColor("#191970");
                                                 height("50%");
                                                 width("40%");
                                                 visibleToMouse(true);
-                                                interactOnClick("loadLogInFromInput()");
+                                                interactOnClick("loadMenuFromInput()");
 
                                             }
                                         });
