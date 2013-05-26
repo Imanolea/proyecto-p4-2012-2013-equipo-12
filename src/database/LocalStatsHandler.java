@@ -229,7 +229,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 String tiempo = "" + rs.getString("TIEMPO");
                 int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
                 int prec2 = (prec * 100) / 50;
-                string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
+                string =  string =  nick + "   " + "SCORE: "+ punt +" "+ "   ACCURACY: " + prec2 + "%   TIME: " + tiempo + "sec.";
                 i++;
                 if (pos == i) {
                     return string;
