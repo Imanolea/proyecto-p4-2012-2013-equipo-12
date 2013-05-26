@@ -10,14 +10,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
 import database.Player;
-import states.GameOverState;
-import states.GameState;
-import states.InputState;
-import states.LogInState;
-import states.LogInState2;
-import states.MenuState;
-import states.MenuStateGame;
-import states.StatisticsState;
+import states.*;
 
 public class MainApp extends Application {
 
@@ -26,6 +19,7 @@ public class MainApp extends Application {
     private MenuStateGame ms2 = null;
     private AppSettings s;
     private InputState is = null;
+    private InputState2 is2 = null;
     private StatisticsState ss = null;
     private LogInState ls = null;
     private LogInState2 ls2 = null;
@@ -70,6 +64,7 @@ public class MainApp extends Application {
         ls2 = new LogInState2(this);
         ms2 = new MenuStateGame(this);
         gos = new GameOverState(this);
+        is2 = new InputState2(this);
 
         // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
@@ -101,6 +96,11 @@ public class MainApp extends Application {
     public void loadInput() {
         getStateManager().detach(ms);
         getStateManager().attach(is);
+    }
+    
+    public void loadInput2() {
+        getStateManager().detach(ls);
+        getStateManager().attach(is2);
     }
 
     public void loadMenuFromInput() {
@@ -138,6 +138,11 @@ public class MainApp extends Application {
     public void loadLogIn2FromMenu() {
         getStateManager().detach(ms);
         getStateManager().attach(ls2);
+    }
+    
+    public void loadLogInFromInput2() {
+        getStateManager().detach(is2);
+        getStateManager().attach(ls);
     }
 
     public AppSettings getSettings() {
