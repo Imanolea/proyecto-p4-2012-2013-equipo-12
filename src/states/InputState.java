@@ -335,26 +335,6 @@ public class InputState extends AbstractAppState implements ScreenController {
                             }
                         }); // </panel_3>
 
-                        // <panel_4>
-                        panel(new PanelBuilder("Panel_LANGUAGES2") {
-                            {
-                                childLayoutHorizontal();
-                                alignCenter();
-                                height("15%");
-                                width("100%");
-
-                                // <panel_4.1>
-                                panel(new PanelBuilder("Panel_EMPTY3.12") {
-                                    {
-                                        childLayoutCenter();
-                                        valignCenter();
-                                        height("50%");
-                                        width("50%");
-                                    }
-                                }); // </panel_4.1>
-
-                            }
-                        });// </panel_4>
                     }
                 });
                 // </layer>
