@@ -72,7 +72,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                 return;
             }
             if(name.equals("Exit"))
-         
+            System.exit(0);
         }
     }
     
