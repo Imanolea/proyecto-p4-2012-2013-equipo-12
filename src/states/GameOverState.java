@@ -43,7 +43,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
     private AppStateManager stateManager;
     private InputManager inputManager;
     private ViewPort viewPort;
-    private MainApp game = null;
+    private MainApp game = null; // variable del tipo MainApp, que gestiona el manejo de los estados
     private AudioRenderer audioRenderer;
     private ViewPort guiViewPort;
     private NiftyJmeDisplay niftyDisplay;
@@ -76,6 +76,9 @@ public class GameOverState extends AbstractAppState implements ScreenController 
             }
         }
     }
+    /*
+     * 
+     */
 
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
@@ -85,7 +88,12 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-
+    
+    /**
+     * Método inicial que se le llama inicialmente, y en el que se cargan el estado y sus elementos
+     * @param stateManager variable AppStateManager
+     * @param app variable de tipo Applicacion
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -123,46 +131,26 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         inputManager.setCursorVisible(true);
 
 
-
-        nifty.addScreen("GameOverScreen", new ScreenBuilder("GameOverScreen") {
+        // a partir de aqui se crean todos los elementos que contendrá este estado
+        nifty.addScreen("GameOverScreen", new ScreenBuilder("GameOverScreen") { // comenzamos la creacion de la pantalla y le damos un nombre: GameOverScreen
             {
-                //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
-                controller(new MenuState(game));
-                
-                layer(new LayerBuilder("Layer1GameOverBackground") {
+                controller(new MenuState(game)); // Esto conecta este estado con el ScreenController correcpondiente, que es donde se encntraran los metodos a los que los botones de esta clase llama
+
+                layer(new LayerBuilder("LayerGameOver") { // layer donde se cargarán los elementos
                     {
-                        childLayoutCenter();
-                        alignCenter();
-                        valignCenter();
+                        childLayoutVertical(); // organizacion vertical de los elementos
 
-                        image(new ImageBuilder() {
+                        panel(new PanelBuilder() { // panel
                             {
-                                this.filename("Pictures/Menu.jpg"); // imagen de fondo definida en otro layer
-                                valignCenter();
-                                alignCenter();
-                                height("100%");
-                                width("100%");
-                            }
-                        });
-
-                    }
-                });
-                
-                layer(new LayerBuilder("Layer2GameOver") {
-                    {
-                        childLayoutVertical(); // layer properties, add more...
-
-                        panel(new PanelBuilder("Panel_TITLE") {
-                            {
-                                childLayoutVertical();
-                                alignCenter();
-                                valignBottom();
-                                height("15%");
-                                width("90%");
+                                childLayoutVertical(); // Organización de los submétodos en forma vertical
+                                alignCenter(); // alineacion central
+                                valignBottom(); // preferencia por colocar los elementos al fondo
+                                height("15%"); // porcentaje de altura del panel
+                                width("90%"); // porcentaje de anchura del panel
 
                                 // add text
 
-                                panel(new PanelBuilder("Panel_TITLE") {
+                                panel(new PanelBuilder() { // subpanel
                                     {
                                         childLayoutCenter();
                                         alignCenter();
@@ -173,7 +161,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                     }
                                 });
 
-                                text(new TextBuilder() {
+                                text(new TextBuilder() { // texto inicial
                                     {
                                         text("GAME OVER");
                                         font("Interface/Fonts/Jokerman31.fnt");
@@ -183,50 +171,48 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 });
 
                             }
-                        });
+                        }); // </panel_1>
 
-                        panel(new PanelBuilder("Panel_TITLE") {
+                        panel(new PanelBuilder() {
                             {
-                                childLayoutCenter();
+                                childLayoutCenter(); // Organización de los submétodos en forma central
                                 alignCenter();
                                 valignBottom();
-                                height("10%");
-                                width("90%");
-
-                                // add text//
+                                height("10%");// porcentaje de altura del panel
+                                width("90%"); // porcentaje de anchura del panel
 
                                 text(new TextBuilder() {
                                     {
-                                        text("SCORE: " + game.getScore());
-                                        font("Interface/Fonts/Jokerman.fnt");
+                                        text("SCORE: " + game.getScore()); // añade el texto
+                                        font("Interface/Fonts/Jokerman.fnt"); // define la fuente a usar
                                         height("100%");
                                         width("10%");
                                     }
                                 });
 
                             }
-                        }); // </panel_1>
+                        }); // </panel_2>
 
 
-                        panel(new PanelBuilder("Panel_Buttons") {
+                        panel(new PanelBuilder() { // panel_3
                             {
-                                childLayoutVertical(); // panel properties, add more...               
+                                childLayoutVertical(); // Organización de los submétodos en forma central
                                 alignCenter();
                                 valignCenter();
                                 height("10%");
                                 width("100%");
                             }
-                        }); // </panel_1>
+                        }); // </panel_3>
 
-                        panel(new PanelBuilder("Panel_Buttons") {
+                        panel(new PanelBuilder("Panel_Buttons") { // panel donde se insertarán los botones
                             {
-                                childLayoutVertical(); // panel properties, add more...               
+                                childLayoutVertical(); // Organización de los submétodos en forma central       
                                 alignCenter();
                                 valignCenter();
                                 height("60%");
                                 width("100%");
 
-                                control(new ButtonBuilder("PLAY AGAIN", "PLAY AGAIN") {
+                                control(new ButtonBuilder("PLAY AGAIN", "PLAY AGAIN") { // boton PLAY
                                     {
                                         alignCenter();
                                         valignTop();
@@ -238,18 +224,18 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
                                     }
                                 });
-                                panel(new PanelBuilder("Panel_Buttons") {
+                                panel(new PanelBuilder("Panel_Buttons") { // panel vacio a modo de separacion
                                     {
-                                        childLayoutVertical(); // panel properties, add more...               
+                                        childLayoutVertical();             
                                         alignCenter();
                                         valignCenter();
                                         height("20%");
                                         width("100%");
                                     }
-                                }); // </panel_1>
+                                }); // </panel_4.1>
 
 
-                                control(new ButtonBuilder("BACK TO MENU", "BACK TO MENU") {
+                                control(new ButtonBuilder("BACK TO MENU", "BACK TO MENU") { // boton BACK TO MENU
                                     {
                                         alignCenter();
                                         valignCenter();
@@ -262,7 +248,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                     }
                                 });
 
-                                panel(new PanelBuilder("Panel_Buttons") {
+                                panel(new PanelBuilder("Panel_Buttons") { // panel vacio a modo de separacion
                                     {
                                         childLayoutVertical(); // panel properties, add more...               
                                         alignCenter();
@@ -270,9 +256,9 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         height("20%");
                                         width("100%");
                                     }
-                                }); // </panel_1>
+                                }); // </panel_4.2>
 
-                                control(new ButtonBuilder("EXIT", "EXIT") {
+                                control(new ButtonBuilder("EXIT", "EXIT") { //botón EXIT
                                     {
                                         alignCenter();
                                         valignBottom();
@@ -281,24 +267,19 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         width("30%");
                                         visibleToMouse(true);
                                         interactOnRelease("exit()");
-
                                     }
                                 });
 
-
-
                             }
-                        }); // </panel_2>
-
+                        }); // </panel_4>
 
                     }
-                });
+                }); // </layer>
             }
-        }.build(nifty));
-
+        }.build(nifty)); //construye todo lo que se encuentra dentro de estos corcheter
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("GameOverScreen"); // it is used to start the screen
+        nifty.gotoScreen("GameOverScreen"); // se usa para ir a la pantalla correspondiente que ponemos como parametro
     }
 
     public void update(float tpf) {
