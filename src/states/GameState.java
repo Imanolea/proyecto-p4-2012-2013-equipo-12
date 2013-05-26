@@ -222,7 +222,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             rootNode.attachChild(fire[i]);
         }
 
-        sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario.j3o");
+        sceneModel = assetManager.loadModel("Scenes/Escenario/Nivel_1.j3o");
         sceneModel.setName("Scene-entity");
         sceneModel.setLocalScale(6f);
 
@@ -719,7 +719,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         guiNode.attachChild(cleanerBar);
 
-        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        guiFont = assetManager.loadFont("Interface/Fonts/Jokerman.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");
@@ -729,24 +729,16 @@ public class GameState extends AbstractAppState implements ActionListener {
                 settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
                 settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
-        BitmapText ch2 = new BitmapText(guiFont, false);
-
-        ch2.setColor(ColorRGBA.White);
-        ch2.setSize(settings.getWidth() / 25);
-        ch2.setText("Enemigos aspirados: " + enemiesCleaned + "/" + CLEANER_CAPACITY);
-        ch2.setLocalTranslation(
-                settings.getWidth() / 25,
-                settings.getHeight() / 10, 0);
-        guiNode.attachChild(ch2);
+        
 
         BitmapText ch3 = new BitmapText(guiFont, false);
 
         ch3.setColor(ColorRGBA.White);
         ch3.setSize(settings.getWidth() / 25);
         DecimalFormat df = new DecimalFormat("0.00");
-        ch3.setText("Tiempo restante: " + df.format(gameTimer));
+        ch3.setText("" + df.format(gameTimer));
         ch3.setLocalTranslation(
-                settings.getWidth() - settings.getWidth() / 2,
+                settings.getWidth() / 25,
                 settings.getHeight() / 10, 0);
         guiNode.attachChild(ch3);
     }
