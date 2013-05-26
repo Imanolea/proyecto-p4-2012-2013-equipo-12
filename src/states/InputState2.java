@@ -88,7 +88,12 @@ public class InputState2 extends AbstractAppState implements ScreenController {
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-
+    
+    /**
+     * Método que inicializa las variables de la aplicación
+     * @param stateManager Gestiona los estados del juego
+     * @param app Aplicación del juego
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
@@ -336,96 +341,6 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                             }
                         }); // </panel_2>
 
-                        // <panel_3>
-                        panel(new PanelBuilder("Panel_LANGUAGES2") {
-                            {
-                                childLayoutHorizontal();
-                                alignCenter();
-                                height("15%");
-                                width("100%");
-
-                                // <panel_3.1>
-                                panel(new PanelBuilder("Panel_EMPTY3.12") {
-                                    {
-                                        childLayoutCenter();
-                                        valignCenter();
-                                        height("50%");
-                                        width("50%");
-                                    }
-                                }); // </panel_3.1>
-
-                                // <panel_3.2>
-                                panel(new PanelBuilder("Panel_IN_LANGUAGES2") {
-                                    {
-                                        childLayoutHorizontal();
-                                        valignCenter();
-                                        height("50%");
-                                        width("50%"); ////////////////// NESPÂÑOL ENGLIH
-
-                                        // <panel_3.2.1>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.12") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("70%");
-
-
-                                            }
-                                        }); // </panel_3.2.1>
-
-                                        // <panel_3.2.2>
-                                        panel(new PanelBuilder("Panel_UK2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image uk
-                                            }
-                                        }); // </panel_3.2.2>
-
-                                        // <panel_3.2.3>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.32") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.3>
-
-                                        // <panel_3.2.4>
-                                        panel(new PanelBuilder("Panel_ESP2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image esp
-                                            }
-                                        }); // </panel_3.2.4>
-
-                                        // <panel_3.2.5>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.52") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.6>
-
-                                    }
-                                }); // </panel_3.2>
-                            }
-                        });// </panel_3>
                     }
                 });
                 // </layer>

@@ -14,6 +14,10 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+/**
+ * @author Team 12
+ * @Description Esta clase permite realizar la conexion a una base de datos local
+ */
 public class LocalStatsHandler extends JPanel implements Connectible {
 
     private static final long serialVersionUID = -6855550844603162276L;
@@ -23,14 +27,17 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     private PreparedStatement ps;
     private static LocalStatsHandler instance = null;
 
+    /**
+     * Método dinámico empleado para hacer la conexión con la base de datos EstadisticasLocal.sqlite
+     */
     public void conectar() {
 
-try{
-        // Cargar por refletividad el driver de JDBC SQLite
-        Class.forName("org.sqlite.JDBC");
-        // Ahora indicamos la URL para conectarse a la BD de SQLite
-        conn = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-       } catch (ClassNotFoundException e1) {
+        try {
+            // Cargar por refletividad el driver de JDBC SQLite
+            Class.forName("org.sqlite.JDBC");
+            // Ahora indicamos la URL para conectarse a la BD de SQLite
+            conn = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
+        } catch (ClassNotFoundException e1) {
             JOptionPane.showMessageDialog(this, "Clase no encontrada", "Error de conexion", 0);
             e1.printStackTrace();
         } catch (SQLException e2) {
@@ -39,6 +46,9 @@ try{
         }
     }
 
+    /**
+     * Método estático empleado para hacer la conexión con la base de datos EstadisticasLocal.sqlite mediante el paso por parametro de la variable Connection
+     */
     public static Connection conectar(Connection con) {
         Connection connection = null;
         try {
@@ -52,6 +62,9 @@ try{
         return connection;
     }
 
+    /**
+     * Método estático empleado para hacer la conexión con la base de datos EstadisticasLocal.sqlite
+     */
     public static Connection conectarStatic() {
         Connection connection = null;
         try {
@@ -65,6 +78,9 @@ try{
         return connection;
     }
 
+    /**
+     * Método dinámico empleado para hacer la desconexión con la base de datos EstadisticasLocal.sqlite
+     */
     @Override
     public void desconectar() {
         try {
@@ -75,6 +91,9 @@ try{
         }
     }
 
+    /**
+     * Método estático empleado para hacer la desconexión con la base de datos EstadisticasLocal.sqlite, mediante el paso por parametro de la variable Connection
+     */
     public static void desconectar(Connection connection) {
         try {
             // cerramos todo
@@ -91,6 +110,10 @@ try{
         return instance;
     }
 
+    /**
+     * Método empleado para listar los jugadores registrados en la base de datos local, en EstadisticasLocal.sqlite
+     * @throws Exception Esta excepción se tratará en otra clase mediante la visualización del pop up correspodiente.
+     */
     public void listarEstadisticasJugares() throws Exception {
         conectar();
         try {
@@ -101,7 +124,7 @@ try{
             // y recorremos lo obtenido
             while (rs.next()) {
                 String name = "" + rs.getString("NAME");
-                System.out.println("PE: " + name);
+                System.out.println("NAME: " + name);
                 String nick = "" + rs.getString("NICK");
                 System.out.println("NICK: " + nick);
                 String pass = "" + rs.getString("PASSWORD");
@@ -117,6 +140,13 @@ try{
         desconectar();
     }
 
+    /**
+     * Método dinámico empleado para comprobar que el nick y password insertados como paramétros son los datos de un usuario que ya se encuentra registrados en la base de datos local, en EstadisticasLocal.sqlite
+     * @param insertedNick Variable String que corresponde al nickname del usuario
+     * @param insertedPassword Variable String que corresponde al password del usuario
+     * @return Retorna un String: el nickname del usuario en caso de que los parametros concuerden con los datos de un usuario ya registrado y devuelve un string vacio en caso contrario
+     * @throws Exception Esta excepción se tratará en otra clase mediante la visualización del pop up correspodiente
+     */
     public String comprobarJugador(String insertedNick, String insertedPassword) throws Exception {
         String name = "";
         conectar();
@@ -140,6 +170,12 @@ try{
         return "";
     }
 
+    /**
+     * Método estático empleado para comprobar que el nick y password insertados como paramétros son los datos de un usuario que ya se encuentra registrados en la base de datos local, en EstadisticasLocal.sqlite
+     * @param insertedNick Variable String que corresponde al nickname del usuario
+     * @param insertedPassword Variable String que corresponde al password del usuario
+     * @return Retorna un String: el nickname del usuario en caso de que los parametros concuerden con los datos de un usuario ya registrado y devuelve un string vacio en caso contrario
+     */
     public static String comprobarJugadorStatic(String insertedNick, String insertedPassword) {
         Connection connection = null;
         Statement statement;
@@ -171,13 +207,16 @@ try{
         return "";
     }
 
-
-
-       public String listarTop10(int pos) {
-       String query = "SELECT * FROM PARTIDA ORDER BY TIEMPO DESC;";
-       String string = "";
+    /**
+     * Método dinámico empleado para listar el top 10 de jugadores con mejor puntuación, indicando que posicion de los 10 tops mostrar por parametro
+     * @param pos Variable de tipo integer usado para indicar que partida de las 10 se quiere visualizar
+     * @return Retorna una variable string con el string preparado para mostrar por pantalla
+     */
+    public String listarTop10(int pos) {
+        String query = "SELECT * FROM PARTIDA ORDER BY TIEMPO DESC;";
+        String string = "";
         conectar();
-       try{
+        try {
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
@@ -192,8 +231,7 @@ try{
                 int prec2 = (prec * 100) / 50;
                 string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
                 i++;
-                if (pos == i){
-                   
+                if (pos == i) {
                     return string;
                 }
             }
@@ -205,6 +243,12 @@ try{
         desconectar(conn);
         return string;
     }
+
+    /**
+     * Método estático empleado para listar el top 10 de jugadores con mejor puntuación, indicando que posicion de los 10 tops mostrar por parametro
+     * @param pos Variable de tipo integer usado para indicar que partida de las 10 se quiere visualizar
+     * @return Retorna una variable string con el string preparado para mostrar por pantalla
+     */
     public static String listarTop10Static(int pos) {
         Connection connection = null;
         Statement statement;
@@ -244,6 +288,11 @@ try{
         return string;
     }
 
+    /**
+     * Método estatico que busca la mejor puntuación de un usuario teniendo en cuenta todas las partidas realizadas por dicho usuario
+     * @param nickname Párametro String que indica el nickname del jugador del que se quiere buscar su mejor puntuación
+     * @return Retorna un string con la mejor puntuación obtenida por el usuario verificable por su nick
+     */
     public static String searchPosition(String nickname) {
         Connection connection = null;
         Statement statement;
@@ -259,7 +308,7 @@ try{
 
             // y recorremos lo obtenido
             while (rs.next()) {
-                if ((rs.getString("NICK")).equals(nickname)){
+                if ((rs.getString("NICK")).equals(nickname)) {
                     if (string == "" || Integer.parseInt(string) < Integer.parseInt(rs.getString("PUNTUACION"))) {
                         string = rs.getString("PUNTUACION");
                     }
@@ -275,6 +324,10 @@ try{
         return string;
     }
 
+    /**
+     * Método empleado para mostrar el tanto porciento de aciertos de un usuario teniendo en cuenta el numero de disparos totales y el de aciertos
+     * @throws Exception 
+     */
     public void mostrarDisparosTopPorciento() throws Exception {
         conectar();
         try {
@@ -300,6 +353,11 @@ try{
         desconectar();
     }
 
+    /**
+     * Método dinámico empleado para agregar el usuario p player introducido como parámetro en la base de datos
+     * @param jugador Variable Player correspondiente al usuario a introducir en la base de datos
+     * @throws Exception Devuelve una excepción en caso de SQLException, ClasNotFoundException o usuario ya existente en la bd
+     */
     public void agregarPerfil(Player jugador) throws Exception {
         conectar();
         String password = jugador.getPassword();
@@ -316,6 +374,11 @@ try{
 
     }
 
+    /**
+     * Método estático empleado para agregar el usuario p player introducido como parámetro en la base de datos
+     * @param jugador Variable Player correspondiente al usuario a introducir en la base de datos
+     * @throws Exception Devuelve una excepción en caso de SQLException, ClasNotFoundException o usuario ya existente en la bd
+     */
     public static void agregarPerfilStatic(Player jugador) throws Exception {
         Connection connection;
         PreparedStatement ps;
@@ -334,6 +397,11 @@ try{
 
     }
 
+    /**
+     * Método dinamico empleado para agregar una partida en la base de datos introduciéndola como parámetro y asociandola con un nick
+     * @param partida Variable de tipo Game correspondiente a la partida a introducir en la base de datos
+     * @throws Exception Exception Devuelve una excepción en caso de SQLException, ClasNotFoundException o partida ya existente en la bd
+     */
     public void agregarPartida(Game partida) throws Exception {
         conectar();
         String nick = partida.getNick();
@@ -364,6 +432,10 @@ try{
         }
     }
 
+    /**
+     * Método estático empleado para agregar una partida en la base de datos introduciéndola como parámetro y asociandola con un nick
+     * @param partida Variable de tipo Game correspondiente a la partida a introducir en la base de datos
+     */
     public static void agregarPartidaStatic(Game partida) {
         PreparedStatement ps;
         String nick = partida.getNick();
@@ -392,12 +464,15 @@ try{
             ps.close();
             desconectar(connection);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static ArrayList listarEstadisticasPartidas() {
+    /**
+     * Método que escribe en concola todas las partidas realizadas por todos los usuario registrados en la bd local
+     */
+    public static void listarEstadisticasPartidas() {
 
-        ArrayList<Game> aP = new ArrayList<Game>();
         Connection connection = conectarStatic();
         conectar(connection);
         try {
@@ -423,20 +498,15 @@ try{
                 System.out.println("MUERTOS: " + muertos);
                 String tiempo = "" + rs.getString("TIEMPO");
                 System.out.println("TIEMPO: " + tiempo);
-
-                Game p = new Game(nick, punt, nivel, disparos_ac, disparos_tot, muertos, Double.parseDouble(tiempo));
-                aP.add(p);
             }
             statement.close();
             desconectar(connection);
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
-
-        return aP;
     }
 
+    // Metodo candidato a ser eliminado
     public static String listarEstadisticasPartidas(int i) {
 
         Connection connection = conectarStatic();
@@ -477,27 +547,20 @@ try{
             desconectar(connection);
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
-
         return r;
-
-
     }
 
     public static void main(String[] args) throws Exception {
 
         //getInstance().comprobarJugador("e", "Jesus");
-
         // Player Imanol = new Player("ima", "Ima", "ima");
         //getInstance().agregarPerfil(Imanol);
-
         //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
         //getInstance().agregarPartida(partidita);
         getInstance().listarEstadisticasPartidas();
         //getInstance().mostrarDisparosTopporciento();
         //getInstance().listarEstadisticasJugares();
-
 
     }
 }
