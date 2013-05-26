@@ -276,7 +276,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                     }
                 }); // </layer>
             }
-        }.build(nifty)); //construye todo lo que se encuentra dentro de estos corcheter
+        }.build(nifty)); //construye todo lo que se encuentra dentro de estos corchetes
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("GameOverScreen"); // se usa para ir a la pantalla correspondiente que ponemos como parametro
