@@ -128,12 +128,27 @@ public class GameOverState extends AbstractAppState implements ScreenController 
             {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
-                layer(new LayerBuilder("LayerGameOver") {
+                
+                layer(new LayerBuilder("Layer1GameOverBackground") {
                     {
-                        backgroundColor(Color.BLACK);
+                        childLayoutCenter();
+                        alignCenter();
+                        valignCenter();
+
+                        image(new ImageBuilder() {
+                            {
+                                this.filename("Pictures/Menu.jpg"); // imagen de fondo definida en otro layer
+                                valignCenter();
+                                alignCenter();
+                                height("100%");
+                                width("100%");
+                            }
+                        });
+
                     }
                 });
-                layer(new LayerBuilder("LayerGameOver") {
+                
+                layer(new LayerBuilder("Layer2GameOver") {
                     {
                         childLayoutVertical(); // layer properties, add more...
 
@@ -161,7 +176,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 text(new TextBuilder() {
                                     {
                                         text("GAME OVER");
-                                        font("Interface/Fonts/Jokerman.fnt");
+                                        font("Interface/Fonts/Jokerman31.fnt");
                                         height("50%");
                                         width("100%");
                                     }
