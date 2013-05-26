@@ -390,11 +390,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         if(game.getOnline()){
                                            String string = OnlineStatsHandler.searchPosition(game.getPlayer().getNick());
                                            if(string.equals("")) score = "Best score: " + 0 + "";
-                                           else score = "Best score: " + string + ".";
+                                           else score = "Best score: " + string;
                                         }else{
                                            String string = LocalStatsHandler.searchPosition(game.getPlayer().getNick());
                                            if(string.equals("")) score = "Best score: " + 0 + "";
-                                           else score = "Best score: " + string + ".";
+                                           else score = "Best score: " + string;
                                         }
                                         text(score);
                                         style("base-font");
