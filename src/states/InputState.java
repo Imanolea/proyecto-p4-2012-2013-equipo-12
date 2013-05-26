@@ -50,8 +50,6 @@ public class InputState extends AbstractAppState implements ScreenController {
     private NiftyJmeDisplay niftyDisplay;
     private FlyByCamera flyCam;
     private Nifty nifty;
-    private String titulos[][] = {{"Comienzo", "Start"},
-        {"Estadísticas", "Statistics"}, {"¿?", "?¿"}, {"Salir", "Quit"}};
     private int i = 0;
     public static boolean b = false;
 
@@ -87,12 +85,16 @@ public class InputState extends AbstractAppState implements ScreenController {
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-
+    
+    /**
+     * Método que inicializa las variables de la aplicación
+     * @param stateManager Gestiona los estados del juego
+     * @param app Aplicación del juego
+     */
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.game = (MainApp) game; // can cast Application to something more specific
-
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
         this.inputManager = this.game.getInputManager();
@@ -124,17 +126,14 @@ public class InputState extends AbstractAppState implements ScreenController {
 
         inputManager.setCursorVisible(true);
 
-
-
-        nifty.addScreen("InputScreen", new ScreenBuilder("IScreen") {
+        // a partir de aqui se añaden los elementos que aparecerán en la ventana
+        nifty.addScreen("InputScreen", new ScreenBuilder("IScreen") { // comenzamos la creacion de la pantalla y le damos un nombre: InputScreen
             {
-                //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
-                controller(new MenuState(game));
-
+                controller(new MenuState(game));  // Esto conecta este estado con el ScreenController correcpondiente, que es donde se encntraran los metodos a los que los botones de esta clase llama
                 
                 layer(new LayerBuilder("Layer_ID2") {
                     {
-                        childLayoutVertical(); // layer properties, add more...
+                        childLayoutVertical(); // organizacion vertical de los elementos
 
                         // <panel_1>
                         panel(new PanelBuilder("Panel_TITLE2") {
@@ -145,7 +144,8 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 width("50%");
                             }
                         }); // </panel_1>
-
+                        
+                        // <panel_2>
                         panel(new PanelBuilder("Panel_TITLE2") {
                             {
                                 childLayoutCenter();
@@ -163,9 +163,9 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 });
 
                             }
-                        }); // </panel_1>
+                        }); // </panel_2>
 
-                        // <panel_2>
+                        // <panel_3>
                         panel(new PanelBuilder("Panel_BUTTONS2") {
                             {
                                 childLayoutVertical(); // panel properties, add more...               
@@ -173,7 +173,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 height("60%");
                                 width("50%");
 
-                                panel(new PanelBuilder("Panel_EMPTY2") {
+                                panel(new PanelBuilder("Panel_EMPTY2") { // <panel_3.1>
                                     {
                                         childLayoutHorizontal();
                                         height("10%");
@@ -197,7 +197,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("1%");
                                                 width("10%");
                                             }
-                                        }); // </panel_1>
+                                        }); 
 
                                         control(new TextFieldBuilder("NameInput", "") {
                                             {
@@ -208,9 +208,9 @@ public class InputState extends AbstractAppState implements ScreenController {
                                         });
 
                                     }
-                                });// </panel_2.1>
+                                }); // </panel_3.1>
 
-                                // <panel_2.2>
+                                // <panel_3.2>
                                 panel(new PanelBuilder("Panel_STATISTICS2") {
                                     {
                                         childLayoutHorizontal();
@@ -245,9 +245,9 @@ public class InputState extends AbstractAppState implements ScreenController {
                                         });
 
                                     }
-                                });// </panel_2.2>
+                                });// </panel_3.2>
 
-                                // <panel_2.3>
+                                // <panel_3.3>
                                 panel(new PanelBuilder("Panel_STATISTICS3") {
                                     {
                                         childLayoutHorizontal();
@@ -282,9 +282,9 @@ public class InputState extends AbstractAppState implements ScreenController {
                                         });
 
                                     }
-                                });// </panel_2.3>
+                                });// </panel_3.3>
 
-                                // <panel_2.4>
+                                // <panel_3.4>
                                 panel(new PanelBuilder("Panel_Buttons") {
                                     {
                                         childLayoutHorizontal();
@@ -330,12 +330,12 @@ public class InputState extends AbstractAppState implements ScreenController {
                                             }
                                         });
                                     }
-                                });// </panel_2.4>
+                                });// </panel_3.4>
 
                             }
-                        }); // </panel_2>
+                        }); // </panel_3>
 
-                        // <panel_3>
+                        // <panel_4>
                         panel(new PanelBuilder("Panel_LANGUAGES2") {
                             {
                                 childLayoutHorizontal();
@@ -343,7 +343,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 height("15%");
                                 width("100%");
 
-                                // <panel_3.1>
+                                // <panel_4.1>
                                 panel(new PanelBuilder("Panel_EMPTY3.12") {
                                     {
                                         childLayoutCenter();
@@ -351,92 +351,22 @@ public class InputState extends AbstractAppState implements ScreenController {
                                         height("50%");
                                         width("50%");
                                     }
-                                }); // </panel_3.1>
+                                }); // </panel_4.1>
 
-                                // <panel_3.2>
-                                panel(new PanelBuilder("Panel_IN_LANGUAGES2") {
-                                    {
-                                        childLayoutHorizontal();
-                                        valignCenter();
-                                        height("50%");
-                                        width("50%"); ////////////////// NESPÂÑOL ENGLIH
-
-                                        // <panel_3.2.1>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.12") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("70%");
-
-
-                                            }
-                                        }); // </panel_3.2.1>
-
-                                        // <panel_3.2.2>
-                                        panel(new PanelBuilder("Panel_UK2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image uk
-                                            }
-                                        }); // </panel_3.2.2>
-
-                                        // <panel_3.2.3>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.32") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.3>
-
-                                        // <panel_3.2.4>
-                                        panel(new PanelBuilder("Panel_ESP2") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("75%");
-                                                width("10%");
-
-                                                // add image esp
-                                            }
-                                        }); // </panel_3.2.4>
-
-                                        // <panel_3.2.5>
-                                        panel(new PanelBuilder("Panel_EMPTY3.2.52") {
-                                            {
-                                                childLayoutHorizontal();
-                                                valignCenter();
-                                                height("100%");
-                                                width("5%");
-
-
-                                            }
-                                        }); // </panel_3.2.6>
-
-                                    }
-                                }); // </panel_3.2>
                             }
-                        });// </panel_3>
+                        });// </panel_4>
                     }
                 });
                 // </layer>
             }
-        }.build(nifty));
+        }.build(nifty)); //construye todo lo que se encuentra dentro de estos corchetes
         // </screen>
 
+        // creación del pop up que mostrará el error de no conexión a la base de datos
         new PopupBuilder("popupConnectionError") {
             {
                 childLayoutCenter();
                 backgroundColor("#000a");
-
 
                 panel(new PanelBuilder("PanelPopup") {
                     {
@@ -474,11 +404,11 @@ public class InputState extends AbstractAppState implements ScreenController {
             }
         }.registerPopup(nifty);
 
+        // creación del pop up que mostrará el error de nick ya existente en la base de datos
         new PopupBuilder("popupUserError") {
             {
                 childLayoutCenter();
                 backgroundColor("#000a");
-
 
                 panel(new PanelBuilder("PanelPopup") {
                     {
@@ -516,15 +446,12 @@ public class InputState extends AbstractAppState implements ScreenController {
             }
         }.registerPopup(nifty);
 
-
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("InputScreen"); // it is used to start the screen
+        nifty.gotoScreen("InputScreen"); // se usa para ir a la pantalla correspondiente que ponemos como parametro
     }
 
     public void update(float tpf) {
         super.update(tpf);
-
-
 
         // simple update and root node
 
