@@ -71,7 +71,8 @@ public class GameOverState extends AbstractAppState implements ScreenController 
             if (!value) {
                 return;
             }
-            
+            if(name.equals("Exit"))
+         
         }
     }
     
@@ -103,7 +104,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
         // Init input
         if (game.getInputManager() != null) {
-            game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
+            game.getInputManager().addMapping("Exit", new KeyTrigger(KeyInput.KEY_ESCAPE));
         }
         
         
@@ -263,7 +264,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
+         game.getInputManager().addListener(new AppActionListener(), "Exit");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
