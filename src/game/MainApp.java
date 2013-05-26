@@ -198,10 +198,10 @@ public class MainApp extends Application {
     }
      
     public void  loadGameOverFromGame() {
-
+    inputEnabled=false;
         getStateManager().detach(te);
-        te.cleanup();
         getStateManager().attach(gos);
+       
     }
     
     public void setPlayer(Player p) {
@@ -228,5 +228,17 @@ public class MainApp extends Application {
     public String getNombre() {
         return namePlayer;
     }
+    public void setInput(boolean input)
+    {
+        
+        this.inputEnabled=input;
+    }
+    
+     public boolean getInput()
+    {
+        
+        return inputEnabled;
+    }
+    
     
 }

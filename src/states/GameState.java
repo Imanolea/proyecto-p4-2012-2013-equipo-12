@@ -540,8 +540,8 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
-        inputManager.clearRawInputListeners();
-        inputManager.clearMappings();
+        
+        
     }
     
     /**

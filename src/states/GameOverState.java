@@ -97,6 +97,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
+        game.setInput(true);
 
         // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
@@ -209,7 +210,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         height("15%");
                                         width("30%");
                                         visibleToMouse(true);
-                                        interactOnClick("loadGameFromGameOver()");
+                                        interactOnRelease("loadGameFromGameOver()");
                                         
                                     }
                                 });
@@ -232,7 +233,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         height("15%");
                                         width("30%");
                                         visibleToMouse(true);
-                                        interactOnClick("loadMenuFromGaveOver()");
+                                        interactOnRelease("loadMenuFromGaveOver()");
                                         
                                     }
                                 });
@@ -255,7 +256,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                         height("15%");
                                         width("30%");
                                         visibleToMouse(true);
-                                        interactOnClick("exit()");
+                                        interactOnRelease("exit()");
                                         
                                     }
                                 });
