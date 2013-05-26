@@ -967,8 +967,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     public void recordStatistics() {
         Player player = game.getPlayer(); // lee el player actual 
         Game juego = new Game(player.getNick(), "" + (int)(PUNTUACION*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
-        System.out.println(timeGame);
-        System.out.println((int)(PUNTUACION*timeGame));
+        game.setScore(""+(int)(PUNTUACION*timeGame));
         if( game.getOnline() == true ){
             database.OnlineStatsHandler.agregarPartidaStatic(juego);
         }else{
