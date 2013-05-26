@@ -115,7 +115,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Vector3f playerLocation; // Localización relativa del jugador
     private Vector3f playerDirection; // Dirección en la que apunta el jugador
     private Vector3f playerUp; // Vector vertical del jugador
-    Picture pic0;
+    Picture cleanerBar;
     
     /**
      * Método constructor de la clase
@@ -208,11 +208,12 @@ public class GameState extends AbstractAppState implements ActionListener {
         setUpKeys();
         setUpLight();
         
-        pic0 = new Picture("pic0");
-        pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
-        pic0.setWidth(settings.getWidth() / 7);
-        pic0.setHeight(settings.getHeight() / 2);
-        pic0.setPosition(settings.getWidth() / 6 - settings.getWidth() / 8, settings.getHeight() / 4);
+        cleanerBar = new Picture("Cleaner bar");
+        cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
+        cleanerBar.setWidth(641*(settings.getWidth()/settings.getHeight()*0.1f));
+        cleanerBar.setHeight(2603*(settings.getWidth()/settings.getHeight()*0.1f));
+        cleanerBar.setPosition(settings.getWidth() / 25,
+                settings.getHeight() / 10);
 
         for (int i = 0; i < fire.length; i++) {
             explosion[i] = null;
@@ -221,7 +222,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             rootNode.attachChild(fire[i]);
         }
 
-        sceneModel = assetManager.loadModel("Scenes/Escenario/Escenario.j3o");
+        sceneModel = assetManager.loadModel("Scenes/Escenario/Nivel_1.j3o");
         sceneModel.setName("Scene-entity");
         sceneModel.setLocalScale(6f);
 
@@ -243,7 +244,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                 sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
             } while (rEnemigoEscenario.size() > 0); 
-            //enemies.attachChild(pow[i].getSpatial());
             shootables.attachChild(pow[i].getSpatial());          
         }
 
@@ -279,7 +279,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 8;
+        gameTimer = 200;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -304,7 +304,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             
             super.update(tpf);
 
-            initCrossHairs();
+            drawGUI();
             guiNode.setQueueBucket(Bucket.Gui);
             guiNode.setCullHint(CullHint.Never);
 
@@ -394,16 +394,19 @@ public class GameState extends AbstractAppState implements ActionListener {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
                         if (tpf<0.5){
-                            pow[i].getSpatial().move(pow[i].getDirection().x*pow[i].getSpeed()*tpf, 0,pow[i].getDirection().z*pow[i].getSpeed()*tpf);
-                        }                   
+                            pow[i].getSpatial().move((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf, 0,(pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf);
+                            pow[i].setVariant(pow[i].getVariant()*(1+tpf*1.5f));                  
+                        }  
+                        
                         CollisionResults rEnemy = new CollisionResults();
                         shootables.detachChild(pow[i].getSpatial());
                         rootNode.collideWith(pow[i].getSpatial().getWorldBound(), rEnemy);
                         shootables.attachChild(pow[i].getSpatial());
                         rEnemy.toString();
                         if (rEnemy.size() > 0) {
-                            pow[i].getSpatial().move(-pow[i].getDirection().x*pow[i].getSpeed()*tpf, 0,-pow[i].getDirection().z*pow[i].getSpeed()*tpf);
-                            pow[i].setDirection(new Vector3f(-pow[i].getDirection().x, 0, -pow[i].getDirection().z));
+                            pow[i].getSpatial().move(-((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf), 0,-((pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf));
+                            pow[i].setVariant((float)Math.random()*0.02f-0.01f);
+                            pow[i].setDirection(new Vector3f(-pow[i].getDirection().x,0,-pow[i].getDirection().z));
                         }
                         pow[i].setTimer(pow[i].getTimer() + tpf);
                         if (pow[i].getTimer() > 7) {
@@ -436,7 +439,6 @@ public class GameState extends AbstractAppState implements ActionListener {
                             aspiredEnemies.attachChild(pow[Integer.parseInt(words[0])].getSpatial());
                             enemiesCleaned++;
                             chargeAudio.playInstance();
-
                         }
                     }
                     if (rEnemyPortal.size() > 0) {
@@ -583,7 +585,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                 pow[i].getfDeathEnemy().setLinearVelocity(cam.getDirection().mult(30));
                 enemiesCleaned -= 1;
                 i = pow.length;
-                throwAudio.playInstance();
+                chargeAudio.playInstance();
                 successfulShot++;
             }
         }
@@ -690,33 +692,34 @@ public class GameState extends AbstractAppState implements ActionListener {
     /**
      * Dibuja los elementos de la GUI
      */
-    protected void initCrossHairs() {
+    protected void drawGUI() {
 
         guiNode.detachAllChildren();
         
-        if (enemiesCleaned == 0) {
-            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
-          }
-        else if (enemiesCleaned == 1) {
-            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar2.png", true);
-
-        } else if (enemiesCleaned == 2) {
-            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar3.png", true);
-
-        } else if (enemiesCleaned == 3) {
-            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar4.png", true);
-
-        } else if (enemiesCleaned == 4) {
-
-            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar5.png", true);
-        } else if (enemiesCleaned == 5) {
-
-            pic0.setImage(assetManager, "Pictures/Bar/Progress_Bar6.png", true);
+        switch(enemiesCleaned){
+            case 0:
+                cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
+                break;
+            case 1:
+                cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar1.png", true);
+                break;
+            case 2:
+                cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar2.png", true);
+                break;
+            case 3:
+                cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar3.png", true);
+                break;
+            case 4:
+                cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar4.png", true);
+                break;
+            case 5:
+                cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar5.png", true);
+                break;
         }
 
-        guiNode.attachChild(pic0);
+        guiNode.attachChild(cleanerBar);
 
-        guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+        guiFont = assetManager.loadFont("Interface/Fonts/Jokerman.fnt");
         BitmapText ch = new BitmapText(guiFont, false);
         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         ch.setText("+");
@@ -726,24 +729,16 @@ public class GameState extends AbstractAppState implements ActionListener {
                 settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
                 settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
         guiNode.attachChild(ch);
-        BitmapText ch2 = new BitmapText(guiFont, false);
-
-        ch2.setColor(ColorRGBA.White);
-        ch2.setSize(settings.getWidth() / 25);
-        ch2.setText("Enemigos aspirados: " + enemiesCleaned + "/" + CLEANER_CAPACITY);
-        ch2.setLocalTranslation(
-                settings.getWidth() / 25,
-                settings.getHeight() / 10, 0);
-        guiNode.attachChild(ch2);
+        
 
         BitmapText ch3 = new BitmapText(guiFont, false);
 
         ch3.setColor(ColorRGBA.White);
         ch3.setSize(settings.getWidth() / 25);
         DecimalFormat df = new DecimalFormat("0.00");
-        ch3.setText("Tiempo restante: " + df.format(gameTimer));
+        ch3.setText("" + df.format(gameTimer));
         ch3.setLocalTranslation(
-                settings.getWidth() - settings.getWidth() / 2,
+                settings.getWidth() / 25,
                 settings.getHeight() / 10, 0);
         guiNode.attachChild(ch3);
     }
@@ -881,6 +876,9 @@ public class GameState extends AbstractAppState implements ActionListener {
                     found = true;
                 }
                 pow[c].getSpatial().setMaterial(enemyMaterial[1]);
+                pow[c].setDirection(new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1));
+                pow[c].setSpeed((float)Math.random()*3+10);
+                pow[c].setVariant((float)Math.random()*0.02f-0.01f);
                 pow[c].setHealth(pow[c].getOriginalHealth());
                 pow[c].setDeath(false);
                 pow[c].setHasBeenAspired(false);

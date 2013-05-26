@@ -18,6 +18,7 @@ public class Enemy {
     private boolean aspired;
     private boolean hasBeenAspired;
     private Vector3f direction;
+    private float variant;
     private float speed;
     
     public Enemy(Spatial s) {
@@ -28,7 +29,8 @@ public class Enemy {
         hasBeenAspired = false;
         active = true;
         direction = new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1);
-        speed = (float)Math.random()*5+15;
+        speed = (float)Math.random()*3+10;
+        variant = (float)Math.random()*0.02f-0.01f;
     }
 
     public void setSpatial(Spatial spatial) {
@@ -156,6 +158,20 @@ public class Enemy {
      */
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    /**
+     * @return the variant
+     */
+    public float getVariant() {
+        return variant;
+    }
+
+    /**
+     * @param variant the variant to set
+     */
+    public void setVariant(float variant) {
+        this.variant = variant;
     }
 
 }
