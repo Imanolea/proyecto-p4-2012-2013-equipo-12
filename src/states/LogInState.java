@@ -107,6 +107,9 @@ public class LogInState extends AbstractAppState implements ScreenController {
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
+        
+        // play music
+        game.playAudio();
 
         // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
