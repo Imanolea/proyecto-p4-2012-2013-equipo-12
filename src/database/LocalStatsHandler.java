@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 
 /**
  * @author Team 12
- * @Description Esta clase permite realizar la conexion a una base de datos local
+ * Esta clase permite realizar la conexion a una base de datos local
  */
 public class LocalStatsHandler extends JPanel implements Connectible {
 
@@ -506,7 +506,11 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         }
     }
 
-    // Metodo candidato a ser eliminado
+    /**
+     * Lista las estadísitcas de las partidas por consola
+     * @param i Posición de la partida
+     * @return Cadena de texto con los datos de la partida
+     */
     public static String listarEstadisticasPartidas(int i) {
 
         Connection connection = conectarStatic();
@@ -553,14 +557,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     public static void main(String[] args) throws Exception {
 
-        //getInstance().comprobarJugador("e", "Jesus");
-        // Player Imanol = new Player("ima", "Ima", "ima");
-        //getInstance().agregarPerfil(Imanol);
-        //Game partidita = new Game("jonander", "1230", "3", "900", "50", "9", "12800");
-        //getInstance().agregarPartida(partidita);
         getInstance().listarEstadisticasPartidas();
-        //getInstance().mostrarDisparosTopporciento();
-        //getInstance().listarEstadisticasJugares();
 
     }
 }

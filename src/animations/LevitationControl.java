@@ -7,13 +7,23 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 
+/**
+ * Clase que gestiona el movimiento de levitación enemigo
+ * @author Team 12
+ */
+
 public class LevitationControl extends AbstractControl{
 
-    private float speed = 2f;
-    private float topUp = 2f;
-    private boolean up = true;
-    private float displacement = (float) Math.random()*topUp*2-topUp;
+    private float speed = 2f; // Velocidad a la que levita
+    private float topUp = 2f; // Rango de movimiento de la levitación
+    private boolean up = true; // Dirección en la que levita
+    private float displacement = (float) Math.random()*topUp*2-topUp; // Desplazamiento inicial en la levitación
     
+    
+    /**
+     * Realiza el movimiento del modelo
+     * @param tpf tiempo por frame
+     */
     protected void controlUpdate(float tpf) {
         
         if (getSpeed()>2){
@@ -43,6 +53,12 @@ public class LevitationControl extends AbstractControl{
 
     protected void controlRender(RenderManager rm, ViewPort vp) {        
     }
+    
+    /**
+     * Crea una instancia del control
+     * @param spatial al que se aplica el control
+     * @return el control
+     */
 
     public Control cloneForSpatial(Spatial spatial) {
         Control control = new LevitationControl();

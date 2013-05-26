@@ -1,8 +1,3 @@
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package states;
 
 import com.jme3.app.Application;
@@ -38,6 +33,10 @@ import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
 import game.MainApp;
 
+/**
+ * Estado del menú relativo a la pantalla de "log in" desde el menú del juego
+ * @author Team 12
+ */
 public class LogInState2 extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
@@ -93,7 +92,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.game = (MainApp) game; // can cast Application to something more specific
+        this.game = (MainApp) game;
 
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
@@ -104,20 +103,14 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
         this.flyCam = new FlyByCamera(game.getCamera());
         this.player=this.game.getPlayer();
 
-        // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-
-        // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
 
-
-
         niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
-
 
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
@@ -127,18 +120,15 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
         inputManager.setCursorVisible(true);
 
-
-
         nifty.addScreen("LogInScreen2", new ScreenBuilder("LogInScreen2") {
             {
-                //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
 
 
                 layer(new LayerBuilder("LayerLogIn") {
                     {
-                        childLayoutVertical(); // layer properties, add more...
-
+                        childLayoutVertical();
+                        
                         // <panel_1>
                         panel(new PanelBuilder("Panel_Title_Powders") {
                             {
@@ -157,7 +147,6 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                                 height("10%");
                                 width("50%");
 
-                                // add text
                                 text(new TextBuilder() {
                                     {
                                         text("LOG IN");
@@ -172,7 +161,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                         // <panel_2>
                         panel(new PanelBuilder("Panel_RegisterProcess") {
                             {
-                                childLayoutVertical(); // panel properties, add more...               
+                                childLayoutVertical();       
                                 alignCenter();
                                 valignCenter();
                                 height("50%");
@@ -213,7 +202,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_InsertData1") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();              
                                         height("7%");
                                         width("50%");
                                         alignCenter();
@@ -241,7 +230,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_Empty") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();            
                                         alignCenter();
                                         valignCenter();
                                         height("3%");
@@ -253,7 +242,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_InsertData12") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();       
                                         alignCenter();
                                         valignCenter();
                                         height("7%");
@@ -281,7 +270,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_Buttons") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();       
                                         alignCenter();
                                         valignCenter();
                                         height("30%");
@@ -301,7 +290,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutHorizontal(); // panel properties, add more...               
+                                                childLayoutHorizontal();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("4%");
@@ -377,15 +366,11 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
         }.registerPopup(nifty);
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("LogInScreen2"); // it is used to start the screen
+        nifty.gotoScreen("LogInScreen2");
     }
 
     public void update(float tpf) {
         super.update(tpf);
-
-
-
-        // simple update and root node
 
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
@@ -397,16 +382,13 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        }
-//      
+        }   
     }
 
-    @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
@@ -419,10 +401,8 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
 
     public void startInput() {
 
-        //nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
-
 
     }
 

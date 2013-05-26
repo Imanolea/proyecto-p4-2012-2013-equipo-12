@@ -1,8 +1,3 @@
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package states;
 
 import com.jme3.app.Application;
@@ -33,6 +28,11 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import game.MainApp;
+
+/**
+ * Estado del menú relativo a el registro del usuario desde el menú principal
+ * @author Team 12
+ */
 
 public class InputState extends AbstractAppState implements ScreenController {
 
@@ -94,7 +94,7 @@ public class InputState extends AbstractAppState implements ScreenController {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.game = (MainApp) game; // can cast Application to something more specific
+        this.game = (MainApp) game;
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
         this.inputManager = this.game.getInputManager();
@@ -103,16 +103,11 @@ public class InputState extends AbstractAppState implements ScreenController {
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
 
-        // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-
-        // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
-
-
 
         niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
@@ -433,8 +428,6 @@ public class InputState extends AbstractAppState implements ScreenController {
     public void update(float tpf) {
         super.update(tpf);
 
-        // simple update and root node
-
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -445,16 +438,13 @@ public class InputState extends AbstractAppState implements ScreenController {
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        }
-//      
+        }     
     }
 
-    @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
@@ -467,10 +457,8 @@ public class InputState extends AbstractAppState implements ScreenController {
 
     public void startInput() {
 
-        //nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
-
 
     }
 

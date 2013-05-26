@@ -1,8 +1,3 @@
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package states;
 
 import com.jme3.app.Application;
@@ -38,6 +33,11 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import game.MainApp;
 import java.awt.Color;
+
+/**
+ * Estado del menú relativo a la pantalla de "log in" desde el menú principal
+ * @author Team 12
+ */
 
 public class LogInState extends AbstractAppState implements ScreenController {
 
@@ -108,14 +108,10 @@ public class LogInState extends AbstractAppState implements ScreenController {
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
         
-        // play music
         game.playAudio();
 
-        // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-
-        // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
@@ -139,30 +135,10 @@ public class LogInState extends AbstractAppState implements ScreenController {
             {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
-                
-                // esto añade la imagen de fondo menu2.jpg en un nuevo layer que se posicionaría por debajo de los elementos de la ventana
-                /*layer(new LayerBuilder("Layer1LogInBackground") {
-                    {
-                        childLayoutCenter();
-                        alignCenter();
-                        valignCenter();
-
-                        image(new ImageBuilder() {
-                            {
-                                this.filename("Pictures/Menu2.jpg"); // imagen de fondo definida en otro layer
-                                valignCenter();
-                                alignCenter();
-                                height("100%");
-                                width("100%");
-                            }
-                        });
-
-                    }
-                });*/
 
                 layer(new LayerBuilder("Layer2LogIn") {
                     {
-                        childLayoutVertical(); // layer properties, add more...
+                        childLayoutVertical();
 
                         // <panel_1>
                         panel(new PanelBuilder("Panel_Title_Powders") {
@@ -193,7 +169,6 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                 height("10%");
                                 width("50%");
 
-                                // add text
                                 text(new TextBuilder() {
                                     {
                                         text("LOG IN");
@@ -208,7 +183,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                         // <panel_2>
                         panel(new PanelBuilder("Panel_RegisterProcess") {
                             {
-                                childLayoutVertical(); // panel properties, add more...               
+                                childLayoutVertical();        
                                 alignCenter();
                                 valignCenter();
                                 height("45%");
@@ -251,7 +226,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_InsertData1") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();       
                                         height("7%");
                                         width("50%");
                                         alignCenter();
@@ -279,7 +254,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_Empty") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();          
                                         alignCenter();
                                         valignCenter();
                                         height("3%");
@@ -291,7 +266,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_InsertData12") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();        
                                         alignCenter();
                                         valignCenter();
                                         height("7%");
@@ -320,30 +295,18 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_ERRORES") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();         
                                         alignCenter();
                                         valignBottom();
                                         height("16%");
                                         width("50%");
-
-                                        /*
-                                         text(new TextBuilder("labelErrores") {
-                                         {
-                                         alignCenter();
-                                         valignCenter();
-                                         text("- ");
-                                         font("Interface/Fonts/Default.fnt");
-                                         height("90%");
-                                         width("30%");
-                                         }
-                                         });*/
 
                                     }
                                 }); // </panel_2>
 
                                 panel(new PanelBuilder("Panel_Buttons") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();            
                                         alignCenter();
                                         valignCenter();
                                         height("12%");
@@ -364,7 +327,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutHorizontal(); // panel properties, add more...               
+                                                childLayoutHorizontal();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("2%");
@@ -388,7 +351,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutHorizontal(); // panel properties, add more...               
+                                                childLayoutHorizontal();          
                                                 alignCenter();
                                                 valignCenter();
                                                 height("2%");
@@ -414,7 +377,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
-                                        childLayoutVertical(); // panel properties, add more...               
+                                        childLayoutVertical();  
                                         alignCenter();
                                         valignBottom();
                                         height("11%");
@@ -422,7 +385,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutCenter(); // panel properties, add more...               
+                                                childLayoutCenter();       
                                                 alignCenter();
                                                 valignCenter();
                                                 height("30%");
@@ -446,7 +409,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                 control(new RadioGroupBuilder("RadioGroup"));
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
-                                        childLayoutHorizontal(); // panel properties, add more...               
+                                        childLayoutHorizontal();  
                                         alignCenter();
                                         valignCenter();
                                         height("18%");
@@ -457,13 +420,13 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                         control(new RadioButtonBuilder("LocalR") {
                                             {
-                                                group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
+                                                group("RadioGroup");
                                                 interactOnRelease("setOffline()");
                                             }
                                         });
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutCenter(); // panel properties, add more...               
+                                                childLayoutCenter();     
                                                 alignCenter();
                                                 valignCenter();
                                                 height("7%");
@@ -474,7 +437,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         control(new RadioButtonBuilder("OnlineR") {
                                             {
 
-                                                group("RadioGroup"); // the id of the RadioButtonGroup to link this RadioButton to
+                                                group("RadioGroup");
                                                 interactOnRelease("setOnline()");
                                             }
                                         });
@@ -482,7 +445,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
 
-                                                childLayoutHorizontal(); // panel properties, add more...               
+                                                childLayoutHorizontal();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("2%");
@@ -583,14 +546,12 @@ public class LogInState extends AbstractAppState implements ScreenController {
         }.registerPopup(nifty);
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("LogInScreen"); // it is used to start the screen
+        nifty.gotoScreen("LogInScreen");
     }
 
     public void update(float tpf) {
         super.update(tpf);
-
-        // simple update and root node
-
+        
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -601,7 +562,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
     @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
+
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
@@ -621,7 +582,7 @@ public class LogInState extends AbstractAppState implements ScreenController {
     }
 
     public void startInput() {
-        //nifty.exit();
+
         nifty.removeScreen("MenuScreen");
         game.loadInput();
 

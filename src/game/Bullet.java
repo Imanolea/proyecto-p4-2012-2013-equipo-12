@@ -6,12 +6,17 @@ import com.jme3.effect.ParticleMesh.Type;
 import com.jme3.math.Vector3f;
 
 
+/**
+ * Clase que gestiona los datos relacionados con los proyectiles en pantalla
+ * @author Team 12
+ */
+
 public class Bullet extends ParticleEmitter{
     
-    private boolean shooted;
-    private Vector3f direction;
-    private float vel = 40f;
-    private float timer;
+    private boolean shooted; // El proyectil está siendo disparado o no
+    private Vector3f direction; // Dirección del proyectil
+    private float vel = 40f; // Velocidad de desplazamiento
+    private float timer; // Timer relativo a su desaparición en pantalla en caso de salir fuera de los límites del escenario
 
     public Bullet(String emitter, Type type, int i) {
         super(emitter, type, i);

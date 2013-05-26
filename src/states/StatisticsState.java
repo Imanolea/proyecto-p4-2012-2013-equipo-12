@@ -33,6 +33,11 @@ import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
 import java.util.ArrayList;
 
+/**
+ * Estado relativo al menú que recoge las puntuaciones de los distintos jugadores, tanto online como local
+ * @author Team 12
+ */
+
 public class StatisticsState extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
@@ -90,8 +95,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.game = (MainApp) game; // can cast Application to something more specific
-
+        this.game = (MainApp) game;
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
         this.inputManager = this.game.getInputManager();
@@ -100,16 +104,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
 
-        // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-
-        // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
-
-
 
         niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
@@ -127,13 +126,12 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
         nifty.addScreen("StatisticsScreen", new ScreenBuilder("SScreen") {
             {
-                //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
 
 
                 layer(new LayerBuilder("Layer_ID2") {
                     {
-                        childLayoutVertical(); // layer properties, add more...
+                        childLayoutVertical();
 
                         // <panel_1>
                         panel(new PanelBuilder("Panel_TITLE2") {
@@ -142,8 +140,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 alignCenter();
                                 height("9%");
                                 width("100%");
-
-                                // add text
 
                                 text(new TextBuilder() {
                                     {
@@ -169,8 +165,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 alignCenter();
                                 height("9%");
                                 width("100%");
-
-                                // add text
 
                                 text(new TextBuilder() {
                                     {
@@ -232,8 +226,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 height("9%");
                                 width("100%");
 
-                                // add text
-
                                 text(new TextBuilder("ef") {
                                     {
                                         alignCenter();
@@ -263,8 +255,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 alignCenter();
                                 height("9%");
                                 width("100%");
-
-                                // add text
 
                                 text(new TextBuilder() {
                                     {
@@ -296,8 +286,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 height("9%");
                                 width("100%");
 
-                                // add text
-
                                 text(new TextBuilder() {
                                     {
                                         alignCenter();
@@ -327,8 +315,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 alignCenter();
                                 height("9%");
                                 width("100%");
-
-                                // add text
 
                                 text(new TextBuilder("ef") {
                                     {
@@ -360,8 +346,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 height("9%");
                                 width("100%");
 
-                                // add text
-
                                 text(new TextBuilder() {
                                     {
                                         alignCenter();
@@ -392,8 +376,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 height("9%");
                                 width("100%");
 
-                                // add text
-
                                 text(new TextBuilder() {
                                     {
                                         alignCenter();
@@ -423,8 +405,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                 alignCenter();
                                 height("9%");
                                 width("100%");
-
-                                // add text
 
                                 text(new TextBuilder() {
                                     {
@@ -472,15 +452,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("StatisticsScreen"); // it is used to start the screen
+        nifty.gotoScreen("StatisticsScreen");
     }
 
     public void update(float tpf) {
         super.update(tpf);
-
-
-
-        // simple update and root node
 
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
@@ -489,19 +465,15 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
     }
 
-    @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        }
-//      
+        }    
     }
 
-    @Override
     public void stateDetached(AppStateManager stateManager) {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);

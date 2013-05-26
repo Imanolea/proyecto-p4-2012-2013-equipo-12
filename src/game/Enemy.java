@@ -7,19 +7,24 @@ import com.jme3.material.Material;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
 
+/**
+ * Clase que gestiona los datos relacionados con los enemigos
+ * @author Team 12
+ */
+
 public class Enemy {
-    private Spatial spatial;
-    private float timer = (float) Math.random()*4 +1;
-    private final int originalHealth = 2;
-    private RigidBodyControl fDeathEnemy;
-    private int health;
-    private boolean death;
-    private boolean active;
-    private boolean aspired;
-    private boolean hasBeenAspired;
-    private Vector3f direction;
-    private float variant;
-    private float speed;
+    private Spatial spatial; // Modelo cargado del enemigo
+    private float timer = (float) Math.random()*4 +1; // Temporizador que controla el parpadeo
+    private final int originalHealth = 2; // Salud original del enemigo
+    private RigidBodyControl fDeathEnemy; // Cuerpo físico asignado al enemigo
+    private int health; // Salud del enemigo
+    private boolean death; // El enemigo está muerto o no
+    private boolean active; // El enemigo está desarrollado (en relación sl spawn) o no
+    private boolean aspired; // El enemigo está siendo aspirado o no
+    private boolean hasBeenAspired; // El enemigo ha sido aspirado desde que murió o no
+    private Vector3f direction; // Dirección del enemigo
+    private float variant; // Variante que provoca la desviación de movimiento del enemigo
+    private float speed; // Velocidad a la que se mueve le enemigo
     
     public Enemy(Spatial s) {
         spatial = s;

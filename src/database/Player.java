@@ -1,6 +1,9 @@
 package database;
 
-
+/**
+ * Tipo de entidad que almacena los datos relacionados con el jugador
+ * @author Team 12
+ */
 public class Player {
 	
 	private String password;

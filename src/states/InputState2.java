@@ -1,8 +1,3 @@
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package states;
 
 import com.jme3.app.Application;
@@ -34,6 +29,11 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import game.MainApp;
+
+/**
+ * Estado del menú relativo al registro del jugado desde el menú del juego
+ * @author Team 12
+ */
 
 public class InputState2 extends AbstractAppState implements ScreenController {
 

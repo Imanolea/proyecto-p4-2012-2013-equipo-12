@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import com.jme3.app.Application;
@@ -13,14 +9,20 @@ import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
 import database.Player;
+import org.lwjgl.opengl.Display;
 import states.*;
+
+/**
+ * Clase que gestiona los cambios de los estados y principal de la aplicación
+ * @author Team 12
+ */
 
 public class MainApp extends Application {
 
     protected Node rootNode = new Node("Root Node");
     private GameState te = null;
     private MenuState ms = null;
-    private MenuStateGame ms2 = null;
+    private PauseState ms2 = null;
     private AppSettings s;
     private InputState is = null;
     private InputState2 is2 = null;
@@ -32,24 +34,18 @@ public class MainApp extends Application {
     private boolean online;
     private String namePlayer;
     private String score;
-    private AudioNode backgroundAudio; // Nodo del sonido de la música
+    private AudioNode backgroundAudio;
 
 
     public MainApp() {
     }
 
     public void start() {
-        // set some default settings in-case
-        // settings dialog is not shown
-
         if (settings == null) {
             s = new AppSettings(true);
             s.setSettingsDialogImage("/Pictures/Portada.jpg");
-
             setSettings(s);
         }
-
-        // show settings dialog
         if (!JmeSystem.showSettingsDialog(settings, true)) {
             return;
         }
@@ -58,17 +54,15 @@ public class MainApp extends Application {
     }
 
     public void initialize() {
-        // initialize the standard environment first
         super.initialize();
 
-        // Create the States
         ms = new MenuState(this);
         te = new GameState(this);
         is = new InputState(this);
         ss = new StatisticsState(this);
         ls = new LogInState(this);
         ls2 = new LogInState2(this);
-        ms2 = new MenuStateGame(this);
+        ms2 = new PauseState(this);
         gos = new GameOverState(this);
         is2 = new InputState2(this);
         
@@ -76,7 +70,6 @@ public class MainApp extends Application {
         backgroundAudio.setLooping(true);
         backgroundAudio.setVolume(2);
 
-        // Attach the fisrt screen to be shown
         getStateManager().attach(ls);
     }
 
@@ -84,10 +77,8 @@ public class MainApp extends Application {
         super.update();
         float tpf = timer.getTimePerFrame() * speed;
 
-        // update states
         stateManager.update(tpf);
 
-        // render states
         stateManager.render(renderManager);
 
         renderManager.render(tpf, true);
@@ -167,14 +158,12 @@ public class MainApp extends Application {
 
     public void loadGameFromMenuGame() {
         getStateManager().detach(ms2);
-        //getStateManager().attach(te);
         te.setEnabled(true);
         inputManager.setCursorVisible(false);
 
     }
 
     public void loadMenuGameFromGame() {
-        //getStateManager().detach(te);
         getStateManager().attach(ms2);
     }
 

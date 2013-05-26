@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package states;
 
 import com.jme3.app.Application;
@@ -42,6 +38,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.SQLException;
+
+/**
+ * Estado del menú que aparece al iniciar la aplicación
+ * @author Team 12
+ */
 
 public class MenuState extends AbstractAppState implements ScreenController {
 
@@ -107,8 +108,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
-        this.game = (MainApp) game; // can cast Application to something more specific
-
+        this.game = (MainApp) game;
         this.assetManager = this.game.getAssetManager();
         this.stateManager = this.game.getStateManager();
         this.inputManager = this.game.getInputManager();
@@ -118,13 +118,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
         this.flyCam = new FlyByCamera(game.getCamera());
         nameJugador = "";
         
-        // play Music if it is not being played
-        game.playAudio();
+         game.playAudio();
         
-        // enable depth test and back-face culling for performance
-        app.getRenderer().applyRenderState(RenderState.DEFAULT);
+         app.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-        // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
         }
@@ -146,8 +143,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         // <screen>
         nifty.addScreen("MenuScreen", new ScreenBuilder("Menu") {
             {
-                controller(new MenuState(game)); // This connects the Java class StartingScreen and the GUI screen.     
-                
+                controller(new MenuState(game));
                 layer(new LayerBuilder("Layer1LogInBackground") {
                     {
                         childLayoutCenter();
@@ -156,7 +152,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
                         image(new ImageBuilder() {
                             {
-                                this.filename("Pictures/Menu2.jpg"); // imagen de fondo definida en otro layer
+                                this.filename("Pictures/Menu2.jpg");
                                 valignCenter();
                                 alignCenter();
                                 height("100%");
@@ -169,7 +165,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                 // <layer>
                 layer(new LayerBuilder("Layer_ID") {
                     {
-                        childLayoutVertical(); // layer properties, add more...
+                        childLayoutVertical();
 
                         // <panel_1>
                         panel(new PanelBuilder("Panel_TITLE") {
@@ -191,8 +187,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                 height("16%");
                                 width("36%");
 
-                                // add text
-
                                 image(new ImageBuilder() {
                                     {
                                         this.filename("/Pictures/Titulo.png");
@@ -209,7 +203,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                         // <panel_2>
                         panel(new PanelBuilder("Panel_BUTTONS") {
                             {
-                                childLayoutVertical(); // panel properties, add more...               
+                                childLayoutVertical();          
                                 alignCenter();
                                 height("70%");
                                 width("50%");
@@ -231,7 +225,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
                                         control(new ButtonBuilder("Button_START", titulos[0][i]) {
                                             {
                                                 alignCenter();
@@ -255,7 +248,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
                                         control(new ButtonBuilder("Button_STATISTICS", titulos[1][i]) {
                                             {
                                                 alignCenter();
@@ -279,7 +271,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
                                         control(new ButtonBuilder("Button_SIGN_UP", titulos[2][i]) {
                                             {
                                                 alignCenter();
@@ -303,7 +294,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         height("16%");
                                         width("55%");
 
-                                        // GUI element
+
                                         control(new ButtonBuilder("Button_CHANGEPLAYER", titulos[3][i]) {
                                             {
                                                 alignCenter();
@@ -327,7 +318,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         alignCenter();
                                         valignCenter();
 
-                                        // GUI element
+
                                         control(new ButtonBuilder("Button_QUIT", titulos[4][i]) {
                                             {
                                                 alignCenter();
@@ -352,8 +343,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                 // </layer>
                 layer(new LayerBuilder("Layer_ID") {
                     {
-                        childLayoutHorizontal(); // layer properties, add more...
-
+                        childLayoutHorizontal(); 
                         panel(new PanelBuilder("Panel_LANGUAGES") {
                             {
                                 childLayoutHorizontal();
@@ -546,17 +536,12 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
-        nifty.gotoScreen("MenuScreen"); // it is used to start the screen
-
+        nifty.gotoScreen("MenuScreen");
     }
 
     @Override
     public void update(float tpf) {
         super.update(tpf);
-
-
-
-        // simple update and root node
 
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
@@ -566,7 +551,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void stateAttached(AppStateManager stateManager) {
-        //  game.getInputManager().addListener(new AppActionListener(), "SIMPLEAPP_Exit1");
         super.stateAttached(stateManager);
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
@@ -579,7 +563,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
         super.stateDetached(stateManager);
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
-        //game.getGUIViewPort().removeProcessor(niftyDisplay);
     }
 
     public void render(RenderManager rm) {
@@ -620,21 +603,18 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void loadInputFromMenu() {
 
-        // nifty.exit();
         nifty.removeScreen("MenuScreen");
         game.loadInput();
     }
 
     public void loadInputFromLogIn() {
 
-        // nifty.exit();
         nifty.removeScreen("LogInScreen");
         game.loadInput();
     }
     
     public void loadInputFromLogIn2() {
 
-        // nifty.exit();
         nifty.removeScreen("LogInScreen");
         game.loadInput2();
     }
@@ -871,8 +851,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
                 showPopupConnectionError();
             }
 
-            //nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
-
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
                 Player player = new Player(nick, password, nameJugador);
@@ -1013,32 +991,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
         return p;
     }
 
-    /*public static void writeFile(Player j) {
-     FileWriter fichero = null;
-     PrintWriter pw = null;
-     try {
-     fichero = new FileWriter("loggedPlayer.txt");
-     pw = new PrintWriter(fichero);
-
-     pw.println(j.getNick());
-     pw.println(j.getPassword());
-     pw.println(j.getNombre());
-
-     } catch (Exception e) {
-     e.printStackTrace();
-     } finally {
-     try {
-     // Nuevamente aprovechamos el finally para 
-     // asegurarnos que se cierra el fichero.
-     if (null != fichero) {
-     fichero.close();
-     }
-     } catch (Exception e2) {
-     e2.printStackTrace();
-     }
-     }
-     }
-     */
     public void setOnline() {
         game.setOnline(true);
         System.out.println("SET ONLINE DONE CORRECTLY");

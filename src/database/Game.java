@@ -4,9 +4,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 /**
- *
+ * Tipo de entidad que almacena los datos relacionados con el juego
  * @author Team 12
- *
  */
 public class Game {
 
@@ -29,12 +28,9 @@ public class Game {
     }
 
     public Game(String nick, String puntuacion, String nivel,
-            String disparos_ac, String disparos_tot, String muertes, double tiempo) {
+        String disparos_ac, String disparos_tot, String muertes, double tiempo) {
         this.nick = nick;
-        //Timestamp ts = new Timestamp(System.currentTimeMillis());
-        //SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss:SS aaa");
-        //String fecha_hora = formatter.format(ts);
-        java.util.Date utilDate = new java.util.Date(); //fecha actual
+        java.util.Date utilDate = new java.util.Date();
         long lnMilisegundos = utilDate.getTime();
 
         java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(lnMilisegundos);
@@ -126,15 +122,6 @@ public class Game {
         this.tiempo = tiempo;
     }
     
-    /*
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String pass) {
-        this.contraseña = pass;
-    }
-     */
     public static void main(String[] args) {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");

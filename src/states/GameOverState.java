@@ -33,6 +33,10 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
 
+/**
+ * Estado que se activa cuando perdemos la partida
+ * @author Team 12
+ */
 public class GameOverState extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
@@ -76,9 +80,6 @@ public class GameOverState extends AbstractAppState implements ScreenController 
             }
         }
     }
-    /*
-     * 
-     */
 
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
@@ -108,11 +109,8 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         this.flyCam = new FlyByCamera(game.getCamera());
         game.setInput(true);
 
-        // enable depth test and back-face culling for performance
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
 
-
-        // Init input
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("Exit", new KeyTrigger(KeyInput.KEY_ESCAPE));
         }
@@ -147,8 +145,6 @@ public class GameOverState extends AbstractAppState implements ScreenController 
                                 valignBottom(); // preferencia por colocar los elementos al fondo
                                 height("15%"); // porcentaje de altura del panel
                                 width("90%"); // porcentaje de anchura del panel
-
-                                // add text
 
                                 panel(new PanelBuilder() { // subpanel
                                     {
@@ -250,7 +246,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
                                 panel(new PanelBuilder("Panel_Buttons") { // panel vacio a modo de separacion
                                     {
-                                        childLayoutVertical(); // panel properties, add more...               
+                                        childLayoutVertical();             
                                         alignCenter();
                                         valignCenter();
                                         height("20%");
@@ -285,8 +281,6 @@ public class GameOverState extends AbstractAppState implements ScreenController 
     public void update(float tpf) {
         super.update(tpf);
 
-        // simple update and root node
-
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -294,7 +288,6 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
     }
 
-    @Override
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
         game.getInputManager().addListener(new AppActionListener(), "Exit");
@@ -302,8 +295,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        }
-//      
+        }     
     }
 
     @Override
