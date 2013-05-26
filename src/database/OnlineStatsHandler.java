@@ -48,7 +48,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
                         String password = "p0wd3rs";
              */
             conn = DriverManager.getConnection(url, userid, password);
-            System.out.println(userid);
+       
         } catch (ClassNotFoundException e1) {
             JOptionPane.showMessageDialog(this, "Clase no encontrada", "Error de conexion", 0);
             e1.printStackTrace();
@@ -145,7 +145,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     }
 
     public String comprobarJugador(String insertedNick, String insertedPassword) throws Exception {
-        String name = "";
+           String name = "";
         conectar();
         boolean encontrado = false;
         String query = "SELECT * FROM JUGADOR;";
@@ -166,6 +166,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         desconectar();
         return "";
     }
+    
 
     public static String comprobarJugadorStatic(String insertedNick, String insertedPassword) {
         Connection connection = null;
@@ -204,33 +205,6 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         return "";
     }
 
-    public String listarTop10() {
-        String string = "";
-        try {
-            conectar();
-            String query = "SELECT * FROM TOP ORDER BY PUNTUACION DESC;";
-            statement = conn.createStatement();
-            rs = statement.executeQuery(query);
-            int i = 0;
-            // y recorremos lo obtenido
-            while (rs.next()) {
-                String nick = "" + rs.getString("NICK");
-                String punt = "" + rs.getString("PUNTUACION");
-                String disparos_ac = "" + rs.getString("DISPAROS_AC");
-                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
-                String tiempo = "" + rs.getString("TIEMPO");
-                int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
-                string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
-                System.out.println(string);
-            }
-            rs.close();
-            statement.close();
-            desconectar();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return string;
-    }
 
     public static String[] listarTop10Static() {
         Connection conn = null;
@@ -266,35 +240,35 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     }
 
     public String listarTop10(int pos) {
-        String string = "";
-        try {
-            conectar();
-            String query = "SELECT * FROM TOP;";
+       String query = "SELECT * FROM PARTIDA ORDER BY TIEMPO DESC;";
+       String string = "";
+       getInstance(). conectar();
+       try{
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
             int i = 0;
-            // y recorremos lo obtenido
+            // y recorremos lo obtenido  nomre nick puntuacion nivel disparos_Ac disparos_tot tiempo
             while (rs.next() && i < 10) {
-                if (pos == i) {
+                String nick = "" + rs.getString("NICK");
+                String punt = "" + rs.getString("PUNTUACION");
+                String disparos_ac = "" + rs.getString("DISPAROS_AC");
+                String disparos_tot = "" + rs.getString("DISPAROS_TOT");
+                String tiempo = "" + rs.getString("TIEMPO");
+                int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
+                int prec2 = (prec * 100) / 50;
+                string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
+                i++;
+                if (pos == i){
+                   
                     return string;
-                } else {
-                    String nick = "" + rs.getString("NICK");
-                    String punt = "" + rs.getString("PUNTUACION");
-                    String disparos_ac = "" + rs.getString("DISPAROS_AC");
-                    String disparos_tot = "" + rs.getString("DISPAROS_TOT");
-                    String tiempo = "" + rs.getString("TIEMPO");
-                    int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
-                    int prec2 = (prec * 100) / 50;
-                    string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec + "%   TIEMPO: " + tiempo + "seg.";
-                    i++;
                 }
             }
             rs.close();
             statement.close();
-            desconectar();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        desconectar(conn);
         return string;
     }
 
@@ -303,6 +277,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         Statement statement;
         ResultSet rs;
         String string = "";
+        
 
         try {
             // Cargar por refletividad el driver de JDBC MySQL
@@ -330,7 +305,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
                 string = "NICK: " + nick + "   PUNTUACION: " + punt + "   PRECISION: " + prec2 + "%   TIEMPO: " + tiempo + "seg.";
                 i++;
                 if (pos == i){
-                    System.out.println(string);
+                    
                     return string;
                 }
             }

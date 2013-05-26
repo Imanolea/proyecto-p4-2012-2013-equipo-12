@@ -153,9 +153,10 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         width("100%");
                                         font("Interface/Fonts/Jokerman15.fnt");
                                         if (game.getOnline()) {
-                                            text(LocalStatsHandler.listarTop10Static(1));
+                                             text(OnlineStatsHandler.getInstance().listarTop10(1));
+                                       
                                         } else {
-                                            text(OnlineStatsHandler.listarTop10Static(1));
+                                                text(LocalStatsHandler.getInstance().listarTop10(1));
                                         }
                                     }
                                 });
@@ -181,11 +182,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(2)) {
-                                                s = OnlineStatsHandler.listarTop10Static(2);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(2);
                                             }
                                         } else {
                                             if (noHayMasPartidas(2)) {
-                                                s = LocalStatsHandler.listarTop10Static(2);
+                                                s = LocalStatsHandler.getInstance().listarTop10(2);
                                             }
                                         }
                                         text(s);
@@ -211,11 +212,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(3)) {
-                                                s = OnlineStatsHandler.listarTop10Static(3);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(3);
                                             }
                                         } else {
                                             if (noHayMasPartidas(3)) {
-                                                s = LocalStatsHandler.listarTop10Static(3);
+                                                s = LocalStatsHandler.getInstance().listarTop10(3);
                                             }
                                         }
                                         text(s);
@@ -243,11 +244,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(4)) {
-                                                s = OnlineStatsHandler.listarTop10Static(4);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(4);
                                             }
                                         } else {
                                             if (noHayMasPartidas(4)) {
-                                                s = LocalStatsHandler.listarTop10Static(4);
+                                                s = LocalStatsHandler.getInstance().listarTop10(4);
                                             }
                                         }
                                         text(s);
@@ -275,11 +276,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(5)) {
-                                                s = OnlineStatsHandler.listarTop10Static(5);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(5);
                                             }
                                         } else {
                                             if (noHayMasPartidas(5)) {
-                                                s = LocalStatsHandler.listarTop10Static(5);
+                                                s = LocalStatsHandler.getInstance().listarTop10(5);
                                             }
                                         }
                                         text(s);
@@ -307,11 +308,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(6)) {
-                                                s = OnlineStatsHandler.listarTop10Static(6);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(6);
                                             }
                                         } else {
                                             if (noHayMasPartidas(6)) {
-                                                s = LocalStatsHandler.listarTop10Static(6);
+                                                s = LocalStatsHandler.getInstance().listarTop10(6);
                                             }
                                         }
                                         text(s);
@@ -339,11 +340,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(7)) {
-                                                s = OnlineStatsHandler.listarTop10Static(7);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(7);
                                             }
                                         } else {
                                             if (noHayMasPartidas(7)) {
-                                                s = LocalStatsHandler.listarTop10Static(7);
+                                                s = LocalStatsHandler.getInstance().listarTop10(7);
                                             }
                                         }
                                         text(s);
@@ -371,11 +372,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(8)) {
-                                                s = OnlineStatsHandler.listarTop10Static(8);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(8);
                                             }
                                         } else {
                                             if (noHayMasPartidas(8)) {
-                                                s = LocalStatsHandler.listarTop10Static(8);
+                                                s = LocalStatsHandler.getInstance().listarTop10(8);
                                             }
                                         }
                                         text(s);
@@ -403,11 +404,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(9)) {
-                                                s = OnlineStatsHandler.listarTop10Static(9);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(9);
                                             }
                                         } else {
                                             if (noHayMasPartidas(9)) {
-                                                s = LocalStatsHandler.listarTop10Static(9);
+                                                s = LocalStatsHandler.getInstance().listarTop10(9);
                                             }
                                         }
                                         text(s);
@@ -436,11 +437,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(10)) {
-                                                s = OnlineStatsHandler.listarTop10Static(10);
+                                                s = OnlineStatsHandler.getInstance().listarTop10(10);
                                             }
                                         } else {
                                             if (noHayMasPartidas(10)) {
-                                                s = LocalStatsHandler.listarTop10Static(10);
+                                                s = LocalStatsHandler.getInstance().listarTop10(10);
                                             }
                                         }
                                         text(s);
