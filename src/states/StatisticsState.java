@@ -92,7 +92,6 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         guiNode.attachChild(menuText);
     }
 
-    @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.game = (MainApp) game;
