@@ -93,7 +93,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Node aspiredEnemies; // Nodo de los enemigos que están aspirados
     private Node guiNode = new Node(); // Nodo de los elemntos de la interfaz 
     private Vector3f walkDirection = new Vector3f(); // Vector de desplazamiento del jugador
-    private int enemiesCleaned; // Número de enemigos tirados al portal
+    private int enemiesCleaned; // Número de enemigos en la aspiradora
     private float spawnTimer; // Tiempo que determina la aparición de nuevos enemigos
     private float gameTimer; // Tiempo que queda para el game over
     private boolean left, right , up , down , aspire; // Booleanas de los controles
@@ -248,7 +248,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             pow[i].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
             pow[i].getSpatial().setName(i + "-entity");
             do {
-                pow[i].getSpatial().setLocalTranslation((float) Math.random() * 52 - 29, (float) Math.random() * 13 + 7, (float) Math.random() * 60 - 22);
+                pow[i].getSpatial().setLocalTranslation((float) Math.random() * 52 - 29, (float) Math.random() * 6 + 7, (float) Math.random() * 60 - 22);
                 rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
@@ -288,7 +288,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 20;
+        gameTimer = 30;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -343,8 +343,8 @@ public class GameState extends AbstractAppState implements ActionListener {
             cleanerRay.setOrigin(cam.getLocation());
             cleanerRay.setDirection(cam.getDirection());
 
-            Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f);
-            Vector3f camForward = cam.getDirection().clone().multLocal(0.4f);
+            Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f-(0.264f*0.1f*enemiesCleaned));
+            Vector3f camForward = cam.getDirection().clone().multLocal(0.4f-(0.4f*0.1f*enemiesCleaned));
             camForward.y = 0;
             walkDirection.set(0, 0, 0);
 
