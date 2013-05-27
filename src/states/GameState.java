@@ -871,6 +871,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         if (c != -1) {
             do {
+                
                 pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
                 CollisionResults rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
