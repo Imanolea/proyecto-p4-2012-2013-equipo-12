@@ -450,7 +450,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (rEnemyPortal.size() > 0) {
                         String[] words = getGeometrySpatial(rEnemyPortal.getClosestCollision().getGeometry()).getName().split("-");
                         explosion(pow[Integer.parseInt(words[0])].getSpatial());
-                        gameTimer += 5;
+                        gameTimer += 4;
                         pow[Integer.parseInt(words[0])].getfDeathEnemy().setLinearVelocity(Vector3f.ZERO);
                         pow[Integer.parseInt(words[0])].getfDeathEnemy().setAngularVelocity(Vector3f.ZERO);
                         pow[Integer.parseInt(words[0])].getSpatial().removeControl(pow[Integer.parseInt(words[0])].getfDeathEnemy());
