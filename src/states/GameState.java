@@ -310,19 +310,17 @@ public class GameState extends AbstractAppState implements ActionListener {
      */
     public void update(float tpf) {
         
-        if (!pause) {
+        if (!pause && tpf < 0.1f) {
             
             super.update(tpf);
             drawGUI();
             guiNode.setQueueBucket(Bucket.Gui);
             guiNode.setCullHint(CullHint.Never);
-
             gameTimer -= tpf;
             timeGame += tpf;
-
             spawnTimer += tpf;
 
-            if (spawnTimer > 15) {
+            if (spawnTimer > 5) {
                 spawnTimer = 0;
                 spawn();
             }
@@ -387,9 +385,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
             for (int i = 0; i < pow.length; i++) {
                 if (!pow[i].isActive()) {
-                    if (tpf<0.5){
-                        pow[i].getSpatial().scale(1 + tpf * 3);
-                    }
+                    pow[i].getSpatial().scale(1 + tpf*2);
                     if (pow[i].getSpatial().getWorldBound().getVolume() >= boundEnemy.getVolume()) {
                         rootNode.detachChild(pow[i].getSpatial());
                         pow[i].setActive(true);
@@ -402,10 +398,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
-                        if (tpf<0.5){
                             pow[i].getSpatial().move((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf, 0,(pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf);
-                            pow[i].setVariant(pow[i].getVariant()*(1+tpf*1.5f));                  
-                        }  
+                            pow[i].setVariant(pow[i].getVariant()*(1+tpf*1.5f));
                         
                         CollisionResults rEnemy = new CollisionResults();
                         shootables.detachChild(pow[i].getSpatial());
@@ -877,24 +871,25 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         if (c != -1) {
             do {
-                pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                //pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
+                pow[c].getSpatial().setLocalTranslation(portal.getLocalTranslation().x, portal.getLocalTranslation().y+5, 29);
                 CollisionResults rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
                 if (rEnemigoEscenario.size() <= 0) {
                     found = true;
                 }
-                pow[c].getSpatial().setMaterial(enemyMaterial[1]);
-                pow[c].setDirection(new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1));
-                pow[c].setSpeed((float)Math.random()*3+10);
-                pow[c].setVariant((float)Math.random()*0.02f-0.01f);
-                pow[c].setHealth(pow[c].getOriginalHealth());
-                pow[c].setDeath(false);
-                pow[c].setHasBeenAspired(false);
-                pow[c].setActive(false);
-                pow[c].getSpatial().scale(0.1f);
-                rootNode.attachChild(pow[c].getSpatial());
             } while (!found);
+            pow[c].getSpatial().setMaterial(enemyMaterial[1]);
+            pow[c].setDirection(new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1));
+            pow[c].setSpeed((float)Math.random()*3+10);
+            pow[c].setVariant((float)Math.random()*0.02f-0.01f);
+            pow[c].setHealth(pow[c].getOriginalHealth());
+            pow[c].setDeath(false);
+            pow[c].setHasBeenAspired(false);
+            pow[c].setActive(false);
+            pow[c].getSpatial().scale(0.1f);
+            rootNode.attachChild(pow[c].getSpatial());
         }
     }
     
