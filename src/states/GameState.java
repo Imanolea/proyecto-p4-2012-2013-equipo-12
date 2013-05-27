@@ -289,7 +289,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 30;
+        gameTimer = 300;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -310,14 +310,16 @@ public class GameState extends AbstractAppState implements ActionListener {
      */
     public void update(float tpf) {
         
-        if (!pause && tpf < 0.1f) {
+        if (!pause && tpf<0.1) {
             
             super.update(tpf);
             drawGUI();
             guiNode.setQueueBucket(Bucket.Gui);
             guiNode.setCullHint(CullHint.Never);
+
             gameTimer -= tpf;
             timeGame += tpf;
+
             spawnTimer += tpf;
 
             if (spawnTimer > 5) {
@@ -385,7 +387,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
             for (int i = 0; i < pow.length; i++) {
                 if (!pow[i].isActive()) {
-                    pow[i].getSpatial().scale(1 + tpf*2);
+                    pow[i].getSpatial().scale(1 + tpf * 1.5f);
                     if (pow[i].getSpatial().getWorldBound().getVolume() >= boundEnemy.getVolume()) {
                         rootNode.detachChild(pow[i].getSpatial());
                         pow[i].setActive(true);
@@ -398,8 +400,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
-                            pow[i].getSpatial().move((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf, 0,(pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf);
-                            pow[i].setVariant(pow[i].getVariant()*(1+tpf*1.5f));
+                        pow[i].getSpatial().move((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf, 0,(pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf);
+                        pow[i].setVariant(pow[i].getVariant()*(1+tpf*1.5f));                  
                         
                         CollisionResults rEnemy = new CollisionResults();
                         shootables.detachChild(pow[i].getSpatial());
@@ -870,15 +872,18 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
         }
         if (c != -1) {
+            pow[c] = new Enemy(assetManager.loadModel("Models/Pow/Pow.j3o")) {
+            };
+            pow[c].getSpatial().setLocalScale(0.8f, 0.8f, 0.8f);
+            pow[c].getSpatial().setName(c + "-entity");
             do {
-                
                 pow[c].getSpatial().setLocalTranslation((float) Math.random() * 56 - 28, (float) Math.random() * 5 + 8, (float) Math.random() * 56 - 28);
                 CollisionResults rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[c].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
                 if (rEnemigoEscenario.size() <= 0) {
                     found = true;
-                }
+                }  
             } while (!found);
             pow[c].getSpatial().setMaterial(enemyMaterial[1]);
             pow[c].setDirection(new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1));
