@@ -31,7 +31,7 @@ public class MainApp extends Application {
     private LogInState2 ls2 = null;
     private GameOverState gos = null;
     private Player player;
-    private boolean online;
+    private boolean online = false;
     private String namePlayer;
     private String score;
     private AudioNode backgroundAudio;
