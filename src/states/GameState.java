@@ -289,7 +289,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 300;
+        gameTimer = 30;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -388,7 +388,8 @@ public class GameState extends AbstractAppState implements ActionListener {
             for (int i = 0; i < pow.length; i++) {
                 if (!pow[i].isActive()) {
                     pow[i].getSpatial().scale(1 + tpf * 1.5f);
-                    if (pow[i].getSpatial().getWorldBound().getVolume() >= boundEnemy.getVolume()) {
+                    if (pow[i].getSpatial().getWorldBound().getVolume() > boundEnemy.getVolume()) {
+                        pow[i].getSpatial().scale(1 - tpf * 1.5f);
                         rootNode.detachChild(pow[i].getSpatial());
                         pow[i].setActive(true);
                         shootables.attachChild(pow[i].getSpatial());
@@ -405,7 +406,7 @@ public class GameState extends AbstractAppState implements ActionListener {
                         
                         CollisionResults rEnemy = new CollisionResults();
                         shootables.detachChild(pow[i].getSpatial());
-                        rootNode.collideWith(pow[i].getSpatial().getWorldBound(), rEnemy);
+                        sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemy);
                         shootables.attachChild(pow[i].getSpatial());
                         rEnemy.toString();
                         if (rEnemy.size() > 0) {
