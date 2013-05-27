@@ -185,6 +185,8 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         enemiesCleaned = 0;
         spawnTimer = 0;
+        
+        game.setPauseOnLostFocus(true);
 
         inputManager.deleteMapping("FLYCAM_ZoomIn");
         inputManager.deleteMapping("FLYCAM_ZoomOut");
@@ -288,7 +290,6 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[4] = powDeath.getMaterial();
         
         initAudio();
-        gameTimer = 30;
 
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1, 6f, 1);
         player = new CharacterControl(capsuleShape, 0.05f);
@@ -299,7 +300,8 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         bulletAppState.getPhysicsSpace().add(landscape);
         bulletAppState.getPhysicsSpace().add(portalStructure);
-        bulletAppState.getPhysicsSpace().add(player);
+        
+        gameTimer = 30;
 
     }
 
@@ -319,7 +321,6 @@ public class GameState extends AbstractAppState implements ActionListener {
 
             gameTimer -= tpf;
             timeGame += tpf;
-
             spawnTimer += tpf;
 
             if (spawnTimer > 15) {
@@ -526,6 +527,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         guiNode.updateGeometricState();
 
         rootNode.updateGeometricState();
+        
     }
     
     /**
