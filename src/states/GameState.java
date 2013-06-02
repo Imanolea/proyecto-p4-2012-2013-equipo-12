@@ -46,6 +46,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import database.Game;
 import database.LocalStatsHandler;
+import database.OnlineStatsHandler;
 import database.Player;
 import game.Bullet;
 import game.Enemy;
@@ -97,7 +98,7 @@ public class GameState extends AbstractAppState implements ActionListener {
     private int enemiesCleaned; // Número de enemigos en la aspiradora
     private float spawnTimer; // Tiempo que determina la aparición de nuevos enemigos
     private float gameTimer; // Tiempo que queda para el game over
-    private boolean left, right , up , down , aspire; // Booleanas de los controles
+    private boolean left, right, up, down, aspire; // Booleanas de los controles
     public boolean pause; // Booleana de pause
     private boolean gameOver; // Booleana de estado de game over
     public boolean gameOverFirstTime; // Booleana de game over
@@ -118,26 +119,28 @@ public class GameState extends AbstractAppState implements ActionListener {
     private Vector3f playerUp; // Vector vertical del jugador
     Picture cleanerBar;
     Picture scope;
-    
+
     /**
      * Método constructor de la clase
+     *
      * @param game aplicación tomada como parámetro
      */
     public GameState(MainApp game) {
         this.game = game;
     }
-    
+
     /**
      * Establece configuración para entrada en pause y slaida
+     *
      * @param enabled Estado de la partida en relación al pause
      */
     public void setEnabled(boolean enabled) {
-        
+
         if (enabled) {
             backgroundAudio.play();
             player.setPhysicsLocation(playerLocation);
             cam.lookAtDirection(playerDirection, playerUp);
-            
+
             pause = false;
         } else {
             guiNode.detachAllChildren();
@@ -149,9 +152,10 @@ public class GameState extends AbstractAppState implements ActionListener {
             pause = true;
         }
     }
-    
+
     /**
      * Método que inicializa las variables de la aplicación
+     *
      * @param stateManager Gestiona los estados del juego
      * @param app Aplicación del juego
      */
@@ -167,7 +171,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         this.settings = this.game.getSettings();
         this.physics = this.stateManager.getState(BulletAppState.class);
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
-        
+
         if (game.getInputManager() != null) {
             flyCam = new FlyByCamera(game.getCamera());
             flyCam.setMoveSpeed(1f);
@@ -177,7 +181,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         pause = false;
         gameOver = false;
         gameOverFirstTime = false;
-        left = false; 
+        left = false;
         right = false;
         up = false;
         down = false;
@@ -200,7 +204,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables);
-        
+
         aspiredEnemies = new Node("Aspired enemies");
         rootNode.attachChild(aspiredEnemies);
 
@@ -210,18 +214,18 @@ public class GameState extends AbstractAppState implements ActionListener {
         setUpKeys();
         setUpLight();
         game.setPauseOnLostFocus(true);
-        
+
         scope = new Picture("Scope");
         scope.setImage(assetManager, "Pictures/Mira.png", true);
-        scope.setWidth(209*(settings.getWidth()/settings.getHeight()*0.1f));
-        scope.setHeight(209*(settings.getWidth()/settings.getHeight()*0.1f));
-        scope.setPosition(settings.getWidth() / 2 - (209*(settings.getWidth()/settings.getHeight()*0.1f))/2,
-                settings.getHeight() / 2 - (209*(settings.getWidth()/settings.getHeight()*0.1f))/2);
-        
+        scope.setWidth(209 * (settings.getWidth() / settings.getHeight() * 0.1f));
+        scope.setHeight(209 * (settings.getWidth() / settings.getHeight() * 0.1f));
+        scope.setPosition(settings.getWidth() / 2 - (209 * (settings.getWidth() / settings.getHeight() * 0.1f)) / 2,
+                settings.getHeight() / 2 - (209 * (settings.getWidth() / settings.getHeight() * 0.1f)) / 2);
+
         cleanerBar = new Picture("Cleaner bar");
         cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
-        cleanerBar.setWidth(641*(settings.getWidth()/settings.getHeight()*0.1f));
-        cleanerBar.setHeight(2603*(settings.getWidth()/settings.getHeight()*0.1f));
+        cleanerBar.setWidth(641 * (settings.getWidth() / settings.getHeight() * 0.1f));
+        cleanerBar.setHeight(2603 * (settings.getWidth() / settings.getHeight() * 0.1f));
         cleanerBar.setPosition(settings.getWidth() / 25,
                 settings.getHeight() / 10);
 
@@ -254,8 +258,8 @@ public class GameState extends AbstractAppState implements ActionListener {
                 rEnemigoEscenario = new CollisionResults();
                 sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemigoEscenario);
                 rEnemigoEscenario.toString();
-            } while (rEnemigoEscenario.size() > 0); 
-            shootables.attachChild(pow[i].getSpatial());          
+            } while (rEnemigoEscenario.size() > 0);
+            shootables.attachChild(pow[i].getSpatial());
         }
 
         boundEnemy = pow[0].getSpatial().getWorldBound();
@@ -288,7 +292,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         enemyMaterial[2] = powEyesClosed.getMaterial();
         enemyMaterial[3] = powWeak.getMaterial();
         enemyMaterial[4] = powDeath.getMaterial();
-        
+
         initAudio();
         gameTimer = 30;
 
@@ -307,12 +311,13 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     /**
      * Bucle del juego
+     *
      * @param tpf tiempo por frame
      */
     public void update(float tpf) {
-        
-        if (!pause && tpf<0.1) {
-            
+
+        if (!pause && tpf < 0.1) {
+
             super.update(tpf);
             drawGUI();
             guiNode.setQueueBucket(Bucket.Gui);
@@ -330,7 +335,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             if (gameTimer < 0) {
                 pause = true;
                 gameOver = true;
-                gameOverFirstTime=true;
+                gameOverFirstTime = true;
                 Robot robot;
                 try {
                     robot = new Robot();
@@ -344,8 +349,8 @@ public class GameState extends AbstractAppState implements ActionListener {
             cleanerRay.setOrigin(cam.getLocation());
             cleanerRay.setDirection(cam.getDirection());
 
-            Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f-(0.264f*0.1f*enemiesCleaned));
-            Vector3f camForward = cam.getDirection().clone().multLocal(0.4f-(0.4f*0.1f*enemiesCleaned));
+            Vector3f camLeft = cam.getLeft().clone().multLocal(0.264f - (0.264f * 0.1f * enemiesCleaned));
+            Vector3f camForward = cam.getDirection().clone().multLocal(0.4f - (0.4f * 0.1f * enemiesCleaned));
             camForward.y = 0;
             walkDirection.set(0, 0, 0);
 
@@ -402,18 +407,18 @@ public class GameState extends AbstractAppState implements ActionListener {
                     if (pow[i].getSpatial().getControl(LevitationControl.class).getSpeed() > 2) {
                         pow[i].getSpatial().setMaterial(enemyMaterial[1]);
                     } else if (pow[i].isActive()) {
-                        pow[i].getSpatial().move((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf, 0,(pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf);
-                        pow[i].setVariant(pow[i].getVariant()*(1+tpf*1.5f));                  
-                        
+                        pow[i].getSpatial().move((pow[i].getDirection().x + pow[i].getVariant()) * pow[i].getSpeed() * tpf, 0, (pow[i].getDirection().z - pow[i].getVariant()) * pow[i].getSpeed() * tpf);
+                        pow[i].setVariant(pow[i].getVariant() * (1 + tpf * 1.5f));
+
                         CollisionResults rEnemy = new CollisionResults();
                         shootables.detachChild(pow[i].getSpatial());
                         sceneModel.collideWith(pow[i].getSpatial().getWorldBound(), rEnemy);
                         shootables.attachChild(pow[i].getSpatial());
                         rEnemy.toString();
                         if (rEnemy.size() > 0) {
-                            pow[i].getSpatial().move(-((pow[i].getDirection().x+pow[i].getVariant())*pow[i].getSpeed()*tpf), 0,-((pow[i].getDirection().z-pow[i].getVariant())*pow[i].getSpeed()*tpf));
-                            pow[i].setVariant((float)Math.random()*0.02f-0.01f);
-                            pow[i].setDirection(new Vector3f(-pow[i].getDirection().x,0,-pow[i].getDirection().z));
+                            pow[i].getSpatial().move(-((pow[i].getDirection().x + pow[i].getVariant()) * pow[i].getSpeed() * tpf), 0, -((pow[i].getDirection().z - pow[i].getVariant()) * pow[i].getSpeed() * tpf));
+                            pow[i].setVariant((float) Math.random() * 0.02f - 0.01f);
+                            pow[i].setDirection(new Vector3f(-pow[i].getDirection().x, 0, -pow[i].getDirection().z));
                         }
                         pow[i].setTimer(pow[i].getTimer() + tpf);
                         if (pow[i].getTimer() > 7) {
@@ -480,12 +485,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                 }
                 if (fire[i].isShooted()) {
                     fire[i].move(tpf);
-                    fire[i].setTimer(fire[i].getTimer()+tpf);
-                    if (fire[i].getTimer()>5){
+                    fire[i].setTimer(fire[i].getTimer() + tpf);
+                    if (fire[i].getTimer() > 5) {
                         fire[i].setTimer(0);
                         fire[i].setParticlesPerSec(0);
                         fire[i].setShooted(false);
-                    }    
+                    }
                     Box ball = new Box(1, 1, 1);
                     Geometry theBall = new Geometry("Ball", ball);
                     theBall.move(fire[i].getWorldTranslation().x, fire[i].getWorldTranslation().y, fire[i].getWorldTranslation().z);
@@ -525,9 +530,10 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         rootNode.updateGeometricState();
     }
-    
+
     /**
      * Método mediante el cual el estado de juego es añadido
+     *
      * @param stateManager gestor de estados
      */
     public void stateAttached(AppStateManager stateManager) {
@@ -541,6 +547,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     /**
      * Método mediante el cual el estado de juego es suprimido
+     *
      * @param stateManager gestor de estados
      */
     public void stateDetached(AppStateManager stateManager) {
@@ -549,10 +556,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         game.getViewPort().detachScene(rootNode);
         game.getGUIViewPort().detachScene(guiNode);
-        
-        
+
+
     }
-    
+
     /**
      * Inicializa los controles del teclado
      */
@@ -600,6 +607,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     /**
      * Genera una axplosión
+     *
      * @param s Modelo del enemigo que explota
      */
     private void explosion(Spatial s) {
@@ -634,6 +642,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     /**
      * Crea un proyectil
+     *
      * @return el proyectil
      */
     private Bullet createFire() {
@@ -658,7 +667,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         f.getParticleInfluencer().setVelocityVariation(0.3f);
         return f;
     }
-    
+
     /**
      * Sitúa las luces del juego
      */
@@ -702,8 +711,8 @@ public class GameState extends AbstractAppState implements ActionListener {
     protected void drawGUI() {
 
         guiNode.detachAllChildren();
-        
-        switch(enemiesCleaned){
+
+        switch (enemiesCleaned) {
             case 0:
                 cleanerBar.setImage(assetManager, "Pictures/Bar/Progress_Bar0.png", true);
                 break;
@@ -729,14 +738,14 @@ public class GameState extends AbstractAppState implements ActionListener {
 
         guiFont = assetManager.loadFont("Interface/Fonts/Jokerman.fnt");
         /*BitmapText ch = new BitmapText(guiFont, false);
-        ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
-        ch.setText("+");
+         ch.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+         ch.setText("+");
 
 
-        ch.setLocalTranslation(
-                settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
-                settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
-        guiNode.attachChild(ch);*/
+         ch.setLocalTranslation(
+         settings.getWidth() / 2 - guiFont.getCharSet().getRenderedSize() / 3 * 2,
+         settings.getHeight() / 2 + ch.getLineHeight() / 2, 0);
+         guiNode.attachChild(ch);*/
 
         BitmapText ch3 = new BitmapText(guiFont, false);
 
@@ -785,7 +794,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         chargeAudio.setVolume(2);
         rootNode.attachChild(chargeAudio);
     }
-    
+
     /**
      * Dispara un proyectil
      */
@@ -806,6 +815,7 @@ public class GameState extends AbstractAppState implements ActionListener {
 
     /**
      * Obtiene el spatial a partir de una geometría enemiga
+     *
      * @param geometry geometría del enemigo
      * @return el spatial del enemigo
      */
@@ -820,9 +830,10 @@ public class GameState extends AbstractAppState implements ActionListener {
         }
         return null;
     }
-    
+
     /**
      * Muerte de un enemigo
+     *
      * @param s Modelo del enemigo que muere
      * @param index Posición del enemigo en el array de enemigos
      */
@@ -833,7 +844,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         bulletAppState.getPhysicsSpace().add(pow[index].getfDeathEnemy());
         deaths++;
     }
-    
+
     /**
      * Método que se ejecuta mientras aspiramos
      */
@@ -852,7 +863,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             }
         }
     }
-    
+
     /**
      * Método que se ejecuta mientras no aspiramos
      */
@@ -861,7 +872,7 @@ public class GameState extends AbstractAppState implements ActionListener {
             pow[i].setAspired(false);
         }
     }
-    
+
     /**
      * Método que hace aparecer aleatoriamente enemigos en pantalla
      */
@@ -885,12 +896,12 @@ public class GameState extends AbstractAppState implements ActionListener {
                 rEnemigoEscenario.toString();
                 if (rEnemigoEscenario.size() <= 0) {
                     found = true;
-                }  
+                }
             } while (!found);
             pow[c].getSpatial().setMaterial(enemyMaterial[1]);
-            pow[c].setDirection(new Vector3f((float)Math.random()*2-1,0,(float)Math.random()*2-1));
-            pow[c].setSpeed((float)Math.random()*3+10);
-            pow[c].setVariant((float)Math.random()*0.02f-0.01f);
+            pow[c].setDirection(new Vector3f((float) Math.random() * 2 - 1, 0, (float) Math.random() * 2 - 1));
+            pow[c].setSpeed((float) Math.random() * 3 + 10);
+            pow[c].setVariant((float) Math.random() * 0.02f - 0.01f);
             pow[c].setHealth(pow[c].getOriginalHealth());
             pow[c].setDeath(false);
             pow[c].setHasBeenAspired(false);
@@ -899,12 +910,13 @@ public class GameState extends AbstractAppState implements ActionListener {
             rootNode.attachChild(pow[c].getSpatial());
         }
     }
-    
+
     /**
      * Métoto de gestiona los controles en función del evento activado
+     *
      * @param name nombre asignado al evento activado
-     * @param isPressed controla si se activa al presionar la tecla, true, 
-     * o al presionar y soltar la tecla, false
+     * @param isPressed controla si se activa al presionar la tecla, true, o al
+     * presionar y soltar la tecla, false
      * @param tpf tiempo por frame
      */
     public void onAction(String name, boolean isPressed, float tpf) {
@@ -971,20 +983,21 @@ public class GameState extends AbstractAppState implements ActionListener {
     }
 
     /**
-     *  Método que es invocado cuando la la informacion relativa a la partida se quiera guardar en la bd
+     * Método que es invocado cuando la la informacion relativa a la partida se
+     * quiera guardar en la bd
      */
     public void recordStatistics() {
         Player player = game.getPlayer(); // lee el player actual 
-        Game juego = new Game(player.getNick(), "" + (int)(PUNTUACION*timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double)(int)timeGame);
-        game.setScore(""+(int)(PUNTUACION*timeGame));
-        if( game.getOnline() == true ){
-            database.OnlineStatsHandler.agregarPartidaStatic(juego);
-        }else{
-            LocalStatsHandler.getInstance().agregarPartidaStatic(juego); // guarda la informacion de la partida en la base de datos
+        Game juego = new Game(player.getNick(), "" + (int) (PUNTUACION * timeGame), "" + 1, "" + successfulShot, "" + totalShots, "" + deaths, (double) (int) timeGame);
+        game.setScore("" + (int) (PUNTUACION * timeGame));
+        if (game.getOnline() == true) {
+            OnlineStatsHandler.getInstance().addGame(juego);
+        } else {
+            LocalStatsHandler.getInstance().addGame(juego); // guarda la informacion de la partida en la base de datos
         }
-        
+
     }
-    
+
     /**
      * Método que gestiona el game over
      */
@@ -997,7 +1010,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         chargeAudio.stop();
         gunAudio.stop();
         recordStatistics();
-        cam.lookAtDirection(new Vector3f(0,0,-1), new Vector3f(0,1,0));
-        rootNode.detachAllChildren();      
+        cam.lookAtDirection(new Vector3f(0, 0, -1), new Vector3f(0, 1, 0));
+        rootNode.detachAllChildren();
     }
 }

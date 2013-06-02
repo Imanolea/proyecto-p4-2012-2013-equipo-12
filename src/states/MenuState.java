@@ -388,11 +388,11 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         font("Interface/Fonts/Default.fnt");
                                         String score = "";
                                         if(game.getOnline()){
-                                           String string = OnlineStatsHandler.searchPosition(game.getPlayer().getNick());
+                                           String string = OnlineStatsHandler.getInstance().searchPosition(game.getPlayer().getNick());
                                            if(string.equals("")) score = "Best score: " + 0 + "";
                                            else score = "Best score: " + string;
                                         }else{
-                                           String string = LocalStatsHandler.searchPosition(game.getPlayer().getNick());
+                                           String string = LocalStatsHandler.getInstance().searchPosition(game.getPlayer().getNick());
                                            if(string.equals("")) score = "Best score: " + 0 + "";
                                            else score = "Best score: " + string;
                                         }
@@ -753,7 +753,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         if (!enlinea) {
             try {
-               LocalStatsHandler.getInstance().agregarPerfilStatic(j);
+               LocalStatsHandler.getInstance().agregarPerfil(j);
                 cargarUsuarioFromSignUp(j);
                 loadMenuFromInput();
             } catch (ClassNotFoundException e1) {
@@ -765,7 +765,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         } else {
 
             try {
-                OnlineStatsHandler.getInstance().agregarPerfilStatic(j);
+                OnlineStatsHandler.getInstance().agregarPerfil(j);
                 cargarUsuarioFromSignUp(j);
                 loadMenuFromInput();
             } catch (ClassNotFoundException e1) {
@@ -804,7 +804,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         if (!enlinea) {
             try {
-                LocalStatsHandler.getInstance().agregarPerfilStatic(j);
+                LocalStatsHandler.getInstance().agregarPerfil(j);
                 cargarUsuarioFromSignUp(j);
                 loadLogInFromInput2();
             } catch (ClassNotFoundException e1) {
@@ -816,7 +816,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         } else {
 
             try {
-                OnlineStatsHandler.getInstance().agregarPerfilStatic(j);
+                OnlineStatsHandler.getInstance().agregarPerfil(j);
                 cargarUsuarioFromSignUp(j);
                 loadLogInFromInput2();
             } catch (ClassNotFoundException e1) {
@@ -852,7 +852,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         if (!enlinea) {
             try {
-                nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+                nameJugador = LocalStatsHandler.getInstance().comprobarJugador(nick, password);
             } catch (Exception e) {
                 showPopupConnectionError();
             }
@@ -869,7 +869,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         } else {
             try {
-                nameJugador = database.OnlineStatsHandler.comprobarJugadorStatic(nick, password);
+              nameJugador = OnlineStatsHandler.getInstance().comprobarJugador(nick, password);
             } catch (Exception e) {
                 showPopupConnectionError();
             }
@@ -899,7 +899,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         if (!enlinea) {
             try {
-                nameJugador = database.LocalStatsHandler.comprobarJugadorStatic(nick, password);
+                nameJugador = LocalStatsHandler.getInstance().comprobarJugador(nick, password);
             } catch (Exception e) {
                 showPopupConnectionError();
             }
@@ -914,7 +914,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         } else {
             try {
-                nameJugador = database.OnlineStatsHandler.comprobarJugadorStatic(nick, password);
+               nameJugador = OnlineStatsHandler.getInstance().comprobarJugador(nick, password);
             } catch (Exception e) {
                 showPopupConnectionError();
             }

@@ -121,7 +121,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
         inputManager.setCursorVisible(true);
 
-        final String s = LocalStatsHandler.listarTop10Static(0);
+        final String s = LocalStatsHandler.getInstance().listarTop10(0);
 
         nifty.addScreen("StatisticsScreen", new ScreenBuilder("SScreen") {
             {
@@ -485,8 +485,8 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
     public static boolean noHayMasPartidas(int i) {
         if (i != 0) {
-            String nueva = LocalStatsHandler.listarTop10Static(i);
-            String deAntes = LocalStatsHandler.listarTop10Static(i - 1);
+            String nueva = LocalStatsHandler.getInstance().listarTop10(i);
+            String deAntes = LocalStatsHandler.getInstance().listarTop10(i - 1);
             if (nueva.equals(deAntes)) {
                 return false;
             } else {
@@ -499,8 +499,8 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
 
     public static boolean noHayMasPartidasOnline(int i) {
         if (i != 0) {
-            String nueva = OnlineStatsHandler.listarTop10Static(i);
-            String deAntes = OnlineStatsHandler.listarTop10Static(i - 1);
+            String nueva = OnlineStatsHandler.getInstance().listarTop10(i);
+            String deAntes = OnlineStatsHandler.getInstance().listarTop10(i - 1);
             if (nueva.equals(deAntes)) {
                 return false;
             } else {
