@@ -400,8 +400,9 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     }
 
     public static void main(String[] args) throws Exception {
-
+        getInstance().conectar();
         getInstance().listarEstadisticasPartidas();
+        getInstance().desconectar();
 
     }
 }

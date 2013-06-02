@@ -430,5 +430,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     }
 
     public static void main(String[] args) throws Exception {
+        
+        getInstance().conectar();
+        getInstance().listarEstadisticasPartidas();
+        getInstance().desconectar();
     }
 }
