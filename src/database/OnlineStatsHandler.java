@@ -411,8 +411,10 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
 
     public static void main(String[] args) throws Exception {
         
+        
+        //BD CAÍDA, cuando funcione quitar los métodos necesarios que están como comentario
         getInstance().conectar();
-        getInstance().listarEstadisticasPartidas();
+        getInstance().listarEstadisticasJugadores();
         getInstance().desconectar();
     }
 }
