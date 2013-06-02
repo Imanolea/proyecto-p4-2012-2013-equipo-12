@@ -75,26 +75,6 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         return instance;
     }
 
-    /**
-     * Método estático empleado para hacer la conexión con la base de datos
-     * externa mediante el paso por parametro de la variable Connection
-     */
-    public static Connection conectar(Connection con) {
-        Connection connection = null;
-        try {
-            // Cargar por refletividad el driver de JDBC MySQL
-            Class.forName("com.mysql.jdbc.Driver");
-            // Ahora indicamos la URL,USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
-
-            connection = DriverManager.getConnection(url, userid, password);
-        } catch (Exception e1) {
-            System.out.print("EXCEPTION");
-        }
-        return connection;
-    }
 
     /**
      * Método empleado para listar los jugadores registrados en la base de datos
@@ -103,7 +83,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
      * @throws Exception Esta excepción se tratará en otra clase mediante la
      * visualización del pop up correspodiente.
      */
-    public void listarEstadisticasJugares() throws Exception {
+    public void listarEstadisticasJugadores() throws Exception {
 
         try {
             // Ahora utilizamos las sentencias de BD
