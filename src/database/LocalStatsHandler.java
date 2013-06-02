@@ -46,38 +46,9 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         }
     }
 
-    /**
-     * Método estático empleado para hacer la conexión con la base de datos EstadisticasLocal.sqlite mediante el paso por parametro de la variable Connection
-     */
-    public static Connection conectar(Connection con) {
-        Connection connection = null;
-        try {
-            // Cargar por refletividad el driver de JDBC SQLite
-            Class.forName("org.sqlite.JDBC");
-            // Ahora indicamos la URL para conectarse a la BD de SQLite
-            con = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-        } catch (Exception e1) {
-            System.out.print("EXCEPTION");
-        }
-        return connection;
-    }
+    
 
-    /**
-     * Método estático empleado para hacer la conexión con la base de datos EstadisticasLocal.sqlite
-     */
-    public static Connection conectarStatic() {
-        Connection connection = null;
-        try {
-            // Cargar por refletividad el driver de JDBC SQLite
-            Class.forName("org.sqlite.JDBC");
-            // Ahora indicamos la URL para conectarse a la BD de SQLite
-            connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-        } catch (Exception e1) {
-            System.out.print("EXCEPTION");
-        }
-        return connection;
-    }
-
+    
     /**
      * Método dinámico empleado para hacer la desconexión con la base de datos EstadisticasLocal.sqlite
      */
@@ -91,18 +62,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         }
     }
 
-    /**
-     * Método estático empleado para hacer la desconexión con la base de datos EstadisticasLocal.sqlite, mediante el paso por parametro de la variable Connection
-     */
-    public static void desconectar(Connection connection) {
-        try {
-            // cerramos todo
-            connection.close();
-        } catch (Exception e) {
-            System.out.print("EXCEPTION");
-        }
-    }
-
+    
     public static LocalStatsHandler getInstance() {
         if (instance == null) {
             instance = new LocalStatsHandler();
@@ -115,7 +75,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @throws Exception Esta excepción se tratará en otra clase mediante la visualización del pop up correspodiente.
      */
     public void listarEstadisticasJugares() throws Exception {
-        conectar();
+     
         try {
             // Ahora utilizamos las sentencias de BD
             String query = "SELECT * FROM JUGADOR;";
@@ -137,7 +97,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecuci��n de sentencias SQLite.", "La conexi��n no pudo ser establecida", 2);
         }
-        desconectar();
+     
     }
 
     /**
@@ -149,7 +109,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      */
     public String comprobarJugador(String insertedNick, String insertedPassword) throws Exception {
         String name = "";
-        conectar();
+      
         boolean encontrado = false;
         String query = "SELECT * FROM JUGADOR;";
         statement = conn.createStatement();
@@ -166,7 +126,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         }
         rs.close();
         statement.close();
-        desconectar();
+      
         return "";
     }
 
@@ -215,7 +175,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     public String listarTop10(int pos) {
         String query = "SELECT * FROM PARTIDA ORDER BY TIEMPO DESC;";
         String string = "";
-        conectar();
+       
         try {
             statement = conn.createStatement();
             rs = statement.executeQuery(query);
@@ -240,7 +200,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        desconectar(conn);
+      
         return string;
     }
 
@@ -284,7 +244,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        desconectar(connection);
+       
         return string;
     }
 
@@ -320,7 +280,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        desconectar(connection);
+   
         return string;
     }
 
@@ -329,7 +289,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @throws Exception 
      */
     public void mostrarDisparosTopPorciento() throws Exception {
-        conectar();
+       
         try {
             // Ahora utilizamos las sentencias de BD
             String query = "SELECT NICK, DISPAROS_AC, DISPAROS_TOT FROM TOP;";
@@ -350,7 +310,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecucion de sentencias SQLite.", "La conexion no pudo ser establecida", 2);
         }
-        desconectar();
+      
     }
 
     /**
@@ -359,7 +319,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @throws Exception Devuelve una excepción en caso de SQLException, ClasNotFoundException o usuario ya existente en la bd
      */
     public void agregarPerfil(Player jugador) throws Exception {
-        conectar();
+ 
         String password = jugador.getPassword();
         String nick = jugador.getNick();
         String name = jugador.getNombre();
@@ -370,7 +330,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         ps.executeUpdate();
         ps.close();
 
-        desconectar();
+    
 
     }
 
@@ -379,21 +339,20 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @param jugador Variable Player correspondiente al usuario a introducir en la base de datos
      * @throws Exception Devuelve una excepción en caso de SQLException, ClasNotFoundException o usuario ya existente en la bd
      */
-    public static void agregarPerfilStatic(Player jugador) throws Exception {
-        Connection connection;
+    public void agregarPerfilStatic(Player jugador) throws Exception {
+  
         PreparedStatement ps;
         String password = jugador.getPassword();
         String nick = jugador.getNick();
         String name = jugador.getNombre();
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:EstadisticasLocal.sqlite");
-        ps = connection.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
+      
+        ps = conn.prepareStatement("INSERT INTO JUGADOR VALUES (?, ?, ?)");
         ps.setString(1, nick);
         ps.setString(2, password);
         ps.setString(3, name);
         ps.executeUpdate();
         ps.close();
-        desconectar(connection);
+     
 
     }
 
@@ -403,7 +362,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @throws Exception Exception Devuelve una excepción en caso de SQLException, ClasNotFoundException o partida ya existente en la bd
      */
     public void agregarPartida(Game partida) throws Exception {
-        conectar();
+    
         String nick = partida.getNick();
         Timestamp fecha_hora = partida.getFecha_hora();
         String fecha_horaS = fecha_hora.toString();
@@ -426,7 +385,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             ps.setDouble(8, tiempo);
             ps.executeUpdate();
             ps.close();
-            desconectar();
+         
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error ejecutando una PARTIDAS", "La conexi��n no pudo ser establecida", 2);
         }
@@ -462,7 +421,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
             ps.setDouble(8, tiempo);
             ps.executeUpdate();
             ps.close();
-            desconectar(connection);
+           
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -471,14 +430,13 @@ public class LocalStatsHandler extends JPanel implements Connectible {
     /**
      * Método que escribe en concola todas las partidas realizadas por todos los usuario registrados en la bd local
      */
-    public static void listarEstadisticasPartidas() {
+    public void listarEstadisticasPartidas() {
 
-        Connection connection = conectarStatic();
-        conectar(connection);
+     
         try {
             // Ahora utilizamos las sentencias de BD
             String query = "SELECT * FROM PARTIDA;";
-            Statement statement = connection.createStatement();
+            Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next()) {
@@ -500,7 +458,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 System.out.println("TIEMPO: " + tiempo);
             }
             statement.close();
-            desconectar(connection);
+           
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -511,10 +469,9 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @param i Posición de la partida
      * @return Cadena de texto con los datos de la partida
      */
-    public static String listarEstadisticasPartidas(int i) {
+    public String listarEstadisticasPartidas(int i) {
 
-        Connection connection = conectarStatic();
-        conectar(connection);
+      
         i++;
         int j = 0;
         String r = "";
@@ -522,7 +479,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
         try {
             // Ahora utilizamos las sentencias de BD
             String query = "SELECT * FROM PARTIDA;";
-            Statement statement = connection.createStatement();
+            Statement statement = conn.createStatement();
             ResultSet rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next() && j != i) {
@@ -548,7 +505,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
                 j++;
             }
             statement.close();
-            desconectar(connection);
+           
         } catch (SQLException e) {
             e.printStackTrace();
         }

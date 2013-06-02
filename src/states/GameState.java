@@ -45,6 +45,7 @@ import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import database.Game;
+import database.LocalStatsHandler;
 import database.Player;
 import game.Bullet;
 import game.Enemy;
@@ -979,7 +980,7 @@ public class GameState extends AbstractAppState implements ActionListener {
         if( game.getOnline() == true ){
             database.OnlineStatsHandler.agregarPartidaStatic(juego);
         }else{
-            database.LocalStatsHandler.agregarPartidaStatic(juego); // guarda la informacion de la partida en la base de datos
+            LocalStatsHandler.getInstance().agregarPartidaStatic(juego); // guarda la informacion de la partida en la base de datos
         }
         
     }

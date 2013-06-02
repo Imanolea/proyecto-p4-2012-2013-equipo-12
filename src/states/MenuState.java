@@ -577,6 +577,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void quitGame() {
+        LocalStatsHandler.getInstance().desconectar();
+        //OnlineStatsHandler.getInstance().desconectar();
         game.stop();
     }
 
@@ -595,6 +597,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void quitStatistics() {
         game.stop();
+          LocalStatsHandler.getInstance().desconectar();
+        //OnlineStatsHandler.getInstance().desconectar();
     }
 
     public void loadStatistics() {
@@ -624,6 +628,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void exit() {
+          LocalStatsHandler.getInstance().desconectar();
+        //OnlineStatsHandler.getInstance().desconectar();
         System.exit(0);
     }
 
@@ -747,7 +753,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         if (!enlinea) {
             try {
-                database.LocalStatsHandler.agregarPerfilStatic(j);
+               LocalStatsHandler.getInstance().agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
                 loadMenuFromInput();
             } catch (ClassNotFoundException e1) {
@@ -759,7 +765,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         } else {
 
             try {
-                database.OnlineStatsHandler.agregarPerfilStatic(j);
+                OnlineStatsHandler.getInstance().agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
                 loadMenuFromInput();
             } catch (ClassNotFoundException e1) {
@@ -798,7 +804,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         if (!enlinea) {
             try {
-                database.LocalStatsHandler.agregarPerfilStatic(j);
+                LocalStatsHandler.getInstance().agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
                 loadLogInFromInput2();
             } catch (ClassNotFoundException e1) {
@@ -810,7 +816,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         } else {
 
             try {
-                database.OnlineStatsHandler.agregarPerfilStatic(j);
+                OnlineStatsHandler.getInstance().agregarPerfilStatic(j);
                 cargarUsuarioFromSignUp(j);
                 loadLogInFromInput2();
             } catch (ClassNotFoundException e1) {

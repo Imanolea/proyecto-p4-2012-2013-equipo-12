@@ -8,6 +8,8 @@ import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeSystem;
 import com.jme3.system.Timer;
+import database.LocalStatsHandler;
+import database.OnlineStatsHandler;
 import database.Player;
 import org.lwjgl.opengl.Display;
 import states.*;
@@ -51,6 +53,8 @@ public class MainApp extends Application {
         }
 
         super.start();
+       // OnlineStatsHandler.getInstance().conectar();
+        LocalStatsHandler.getInstance().conectar();
     }
 
     public void initialize() {
