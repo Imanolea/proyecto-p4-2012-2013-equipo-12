@@ -10,10 +10,11 @@ public class Player {
 	private String nick;
 	private String nombre;
 	
-	public Player(String ni, String c, String no){
-		password = c;
-		nick = ni;
-		nombre = no;
+	public Player(String password,String nick,String nombre)
+        {
+            this.password=password;
+            this.nick=nick;
+            this.nombre=nombre;
 	}
 
 	public String getPassword() {

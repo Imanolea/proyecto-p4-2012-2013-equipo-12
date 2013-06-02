@@ -741,7 +741,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nick = nick.substring(1);
         }
 
-        Player j = new Player(nick, pass, name);
+    Player j = new Player(pass,nick,name);
         j.printJugador(j);
         game.setNombre(j.getNombre());
 
@@ -792,7 +792,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nick = nick.substring(1);
         }
 
-        Player j = new Player(nick, pass, name);
+       Player j = new Player(pass,nick,name);
         j.printJugador(j);
         game.setNombre(j.getNombre());
 
@@ -830,7 +830,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         String password = p.getPassword();
 
-        nameJugador = p.getNombre();
+        String name = p.getNombre();
 
         game.setPlayer(p);
 
@@ -853,7 +853,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-                Player player = new Player(nick, password, nameJugador);
+               Player player = new Player(password,nick,nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn();
             } else {
@@ -872,7 +872,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-                Player player = new Player(nick, password, nameJugador);
+               Player player = new Player(password,nick,nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn();
             } else {
@@ -899,7 +899,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             }
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-                Player player = new Player(nick, password, nameJugador);
+                Player player = new Player(password,nick,nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn2();
             } else {
@@ -914,7 +914,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             }
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-                Player player = new Player(nick, password, nameJugador);
+                Player player = new Player(password,nick,nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn2();
             } else {
@@ -987,7 +987,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                 e2.printStackTrace();
             }
         }
-        Player p = new Player(nick, pass, name);
+        Player p = new Player(pass,nick,name);
         return p;
     }
 

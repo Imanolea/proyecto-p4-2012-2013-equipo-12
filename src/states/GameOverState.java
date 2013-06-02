@@ -9,28 +9,19 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.RenderState;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
-import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
-import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
 
 /**
@@ -69,17 +60,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
     public void onEndScreen() {
     }
 
-    private class AppActionListener implements ActionListener {
-
-        public void onAction(String name, boolean value, float tpf) {
-            if (!value) {
-                return;
-            }
-            if (name.equals("Exit")) {
-                System.exit(0);
-            }
-        }
-    }
+   
 
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
@@ -107,14 +88,12 @@ public class GameOverState extends AbstractAppState implements ScreenController 
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
-        game.setInput(true);
+      
+     game.setInput(true);
+     inputManager.deleteMapping("Menu");
+     
 
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
-
-        if (game.getInputManager() != null) {
-            game.getInputManager().addMapping("Exit", new KeyTrigger(KeyInput.KEY_ESCAPE));
-        }
-
 
         niftyDisplay = new NiftyJmeDisplay(
                 assetManager, inputManager, audioRenderer, guiViewPort);
@@ -290,7 +269,7 @@ public class GameOverState extends AbstractAppState implements ScreenController 
 
     public void stateAttached(AppStateManager stateManager) {
         super.stateAttached(stateManager);
-        game.getInputManager().addListener(new AppActionListener(), "Exit");
+       
         game.getViewPort().attachScene(rootNode);
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {

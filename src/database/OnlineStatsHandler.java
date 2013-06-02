@@ -1,5 +1,4 @@
 package database;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,12 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 /**
  * @author Team 12
@@ -644,7 +639,8 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     }
 
     public static void main(String[] args) throws Exception {
-        OnlineStatsHandler o = new OnlineStatsHandler(); o.listarJugadores();
+        OnlineStatsHandler o = new OnlineStatsHandler();
+        o.listarJugadores();
     }
     
 }
