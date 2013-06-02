@@ -748,8 +748,15 @@ public class GameState extends AbstractAppState implements ActionListener {
          guiNode.attachChild(ch);*/
 
         BitmapText ch3 = new BitmapText(guiFont, false);
+        if (gameTimer <= 10 && gameTimer > 5) {
+            ch3.setColor(ColorRGBA.Orange);
 
-        ch3.setColor(ColorRGBA.White);
+        } else if (gameTimer <= 5) {
+            ch3.setColor(ColorRGBA.Red);
+
+        } else {
+            ch3.setColor(ColorRGBA.White);
+        }
         ch3.setSize(settings.getWidth() / 25);
         DecimalFormat df = new DecimalFormat("0.00");
         ch3.setText("" + df.format(gameTimer));
