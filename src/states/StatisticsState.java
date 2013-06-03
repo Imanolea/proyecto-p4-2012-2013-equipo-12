@@ -143,8 +143,9 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         valignCenter();
                                         height("100%");
                                         width("100%");
-                                        font("Interface/Fonts/Jokerman18.fnt");
-                                        color(Color.randomColor());
+                                        font("Interface/Fonts/Jokerman23.fnt");
+                                        Color c= new Color("#37FDFC");
+                                        color(c);
                                         if (game.getOnline()) {
                                              text("1st  "+OnlineStatsHandler.getInstance().listarTop10(1));
                                        
