@@ -41,9 +41,9 @@ import java.sql.SQLException;
 
 /**
  * Estado del menú que aparece al iniciar la aplicación
+ *
  * @author Team 12
  */
-
 public class MenuState extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
@@ -117,10 +117,10 @@ public class MenuState extends AbstractAppState implements ScreenController {
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
         nameJugador = "";
-        
-         game.playAudio();
-        
-         app.getRenderer().applyRenderState(RenderState.DEFAULT);
+
+        game.playAudio();
+
+        app.getRenderer().applyRenderState(RenderState.DEFAULT);
 
         if (game.getInputManager() != null) {
             game.getInputManager().addMapping("SIMPLEAPP_Exit1", new KeyTrigger(KeyInput.KEY_0));
@@ -161,7 +161,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                         });
                     }
                 });
-                
+
                 // <layer>
                 layer(new LayerBuilder("Layer_ID") {
                     {
@@ -203,7 +203,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                         // <panel_2>
                         panel(new PanelBuilder("Panel_BUTTONS") {
                             {
-                                childLayoutVertical();          
+                                childLayoutVertical();
                                 alignCenter();
                                 height("70%");
                                 width("50%");
@@ -337,13 +337,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
                             }
                         }); // </panel_2>
 
-                        
+
                     }
                 });
                 // </layer>
                 layer(new LayerBuilder("Layer_ID") {
                     {
-                        childLayoutHorizontal(); 
+                        childLayoutHorizontal();
                         panel(new PanelBuilder("Panel_LANGUAGES") {
                             {
                                 childLayoutHorizontal();
@@ -387,14 +387,20 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                     {
                                         font("Interface/Fonts/Default.fnt");
                                         String score = "";
-                                        if(game.getOnline()){
-                                           String string = OnlineStatsHandler.getInstance().searchPosition(game.getPlayer().getNick());
-                                           if(string.equals("")) score = "Best score: " + 0 + "";
-                                           else score = "Best score: " + string;
-                                        }else{
-                                           String string = LocalStatsHandler.getInstance().searchPosition(game.getPlayer().getNick());
-                                           if(string.equals("")) score = "Best score: " + 0 + "";
-                                           else score = "Best score: " + string;
+                                        if (game.getOnline()) {
+                                            String string = OnlineStatsHandler.getInstance().searchPosition(game.getPlayer().getNick());
+                                            if (string.equals("")) {
+                                                score = "Best online score: " + 0 + "";
+                                            } else {
+                                                score = "Best online score: " + string;
+                                            }
+                                        } else {
+                                            String string = LocalStatsHandler.getInstance().searchPosition(game.getPlayer().getNick());
+                                            if (string.equals("")) {
+                                                score = "Best offline score: " + 0 + "";
+                                            } else {
+                                                score = "Best offline score: " + string;
+                                            }
                                         }
                                         text(score);
                                         style("base-font");
@@ -578,7 +584,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void quitGame() {
         LocalStatsHandler.getInstance().desconectar();
-        //OnlineStatsHandler.getInstance().desconectar();
+        OnlineStatsHandler.getInstance().desconectar();
         game.stop();
     }
 
@@ -597,8 +603,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void quitStatistics() {
         game.stop();
-          LocalStatsHandler.getInstance().desconectar();
-        //OnlineStatsHandler.getInstance().desconectar();
+        LocalStatsHandler.getInstance().desconectar();
+        OnlineStatsHandler.getInstance().desconectar();
     }
 
     public void loadStatistics() {
@@ -616,7 +622,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nifty.removeScreen("LogInScreen");
         game.loadInput();
     }
-    
+
     public void loadInputFromLogIn2() {
 
         nifty.removeScreen("LogInScreen");
@@ -628,8 +634,8 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void exit() {
-          LocalStatsHandler.getInstance().desconectar();
-        //OnlineStatsHandler.getInstance().desconectar();
+        LocalStatsHandler.getInstance().desconectar();
+        OnlineStatsHandler.getInstance().desconectar();
         System.exit(0);
     }
 
@@ -673,17 +679,17 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nifty.removeScreen("MenuScreen");
         game.loadLogInFromMenu();
     }
-    
+
     public void loadLogIn2FromMenu() {
         nifty.removeScreen("MenuScreen");
         game.loadLogIn2FromMenu();
     }
-    
+
     public void loadLogInFromInput() {
         nifty.removeScreen("InputScreen");
         game.loadLogInFromInput();
     }
-     
+
     public void loadLogInFromInput2() {
         nifty.removeScreen("InputScreen2");
         game.loadLogInFromInput2();
@@ -747,13 +753,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nick = nick.substring(1);
         }
 
-    Player j = new Player(pass,nick,name);
+        Player j = new Player(pass, nick, name);
         j.printJugador(j);
         game.setNombre(j.getNombre());
 
         if (!enlinea) {
             try {
-               LocalStatsHandler.getInstance().agregarPerfil(j);
+                LocalStatsHandler.getInstance().agregarPerfil(j);
                 cargarUsuarioFromSignUp(j);
                 loadMenuFromInput();
             } catch (ClassNotFoundException e1) {
@@ -778,7 +784,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         }
 
     }
-    
+
     public void insertarUsuario2() {
 
         boolean enlinea = game.getOnline();
@@ -798,7 +804,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             nick = nick.substring(1);
         }
 
-       Player j = new Player(pass,nick,name);
+        Player j = new Player(pass, nick, name);
         j.printJugador(j);
         game.setNombre(j.getNombre());
 
@@ -859,7 +865,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-               Player player = new Player(password,nick,nameJugador);
+                Player player = new Player(password, nick, nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn();
             } else {
@@ -869,7 +875,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         } else {
             try {
-              nameJugador = OnlineStatsHandler.getInstance().comprobarJugador(nick, password);
+                nameJugador = OnlineStatsHandler.getInstance().comprobarJugador(nick, password);
             } catch (Exception e) {
                 showPopupConnectionError();
             }
@@ -878,7 +884,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-               Player player = new Player(password,nick,nameJugador);
+                Player player = new Player(password, nick, nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn();
             } else {
@@ -905,7 +911,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             }
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-                Player player = new Player(password,nick,nameJugador);
+                Player player = new Player(password, nick, nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn2();
             } else {
@@ -914,13 +920,13 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
         } else {
             try {
-               nameJugador = OnlineStatsHandler.getInstance().comprobarJugador(nick, password);
+                nameJugador = OnlineStatsHandler.getInstance().comprobarJugador(nick, password);
             } catch (Exception e) {
                 showPopupConnectionError();
             }
             if (!nameJugador.equals("")) {
                 game.setNombre(nameJugador);
-                Player player = new Player(password,nick,nameJugador);
+                Player player = new Player(password, nick, nameJugador);
                 game.setPlayer(player);
                 loadMenuFromLogIn2();
             } else {
@@ -957,46 +963,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nifty.closePopup(popup.getId());
     }
 
-    public static Player readFile() {
-        File archivo = null;
-        FileReader fr = null;
-        BufferedReader br = null;
-
-        String nick = "";
-        String pass = "";
-        String name = "";
-
-        try {
-            // Apertura del fichero y creacion de BufferedReader para poder
-            // hacer una lectura comoda (disponer del metodo readLine()).
-            archivo = new File("loggedPlayer.txt");
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
-
-            // Lectura del fichero
-
-            nick = br.readLine();
-            pass = br.readLine();
-            name = br.readLine();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // En el finally cerramos el fichero, para asegurarnos
-            // que se cierra tanto si todo va bien como si salta 
-            // una excepcion.
-            try {
-                if (null != fr) {
-                    fr.close();
-                }
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
-        Player p = new Player(pass,nick,name);
-        return p;
-    }
-
+   
     public void setOnline() {
         game.setOnline(true);
         System.out.println("SET ONLINE DONE CORRECTLY");
@@ -1004,7 +971,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void setOffline() {
-        game.getOnline();
+        game.setOnline(false);
         System.out.println("SET LOCAL DONE CORRECTLY");
 
     }

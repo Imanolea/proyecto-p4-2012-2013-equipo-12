@@ -24,13 +24,16 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioButtonBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioGroupBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
+import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
+import de.lessvoid.nifty.tools.SizeValue;
 import game.MainApp;
 import java.awt.Color;
 
@@ -39,7 +42,7 @@ import java.awt.Color;
  * @author Team 12
  */
 
-public class LogInState extends AbstractAppState implements ScreenController {
+public class LogInState extends AbstractAppState implements ScreenController,TextField {
 
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
@@ -69,6 +72,98 @@ public class LogInState extends AbstractAppState implements ScreenController {
     }
 
     public void onEndScreen() {
+    }
+
+    public String getText() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setText(String string) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setMaxLength(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setCursorPosition(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void enablePasswordChar(char c) {
+      
+    }
+
+    public void disablePasswordChar() {
+        
+    }
+
+    public boolean isPasswordCharEnabled() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Element getElement() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getId() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setId(String id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int getWidth() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setWidth(SizeValue width) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public int getHeight() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setHeight(SizeValue height) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getStyle() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setStyle(String style) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void enable() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void disable() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setFocus() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setFocusable(boolean focusable) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean hasFocus() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void layoutCallback() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean isBound() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private class AppActionListener implements ActionListener {
@@ -107,6 +202,8 @@ public class LogInState extends AbstractAppState implements ScreenController {
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
+        
+        game.setOnline(false);
         
         game.playAudio();
 
@@ -285,8 +382,10 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
                                         control(new TextFieldBuilder("PassLogIn") {
                                             {
+                                                enablePasswordChar('*');
                                                 width("50%");
                                                 height("100%");
+                                                
                                             }
                                         });
                                     }

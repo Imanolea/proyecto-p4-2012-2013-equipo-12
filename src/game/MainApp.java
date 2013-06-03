@@ -33,7 +33,7 @@ public class MainApp extends Application {
     private LogInState2 ls2 = null;
     private GameOverState gos = null;
     private Player player;
-    private boolean online = false;
+    private boolean online=false;
     private String namePlayer;
     private String score;
     private AudioNode backgroundAudio;
@@ -53,7 +53,7 @@ public class MainApp extends Application {
         }
 
         super.start();
-       // OnlineStatsHandler.getInstance().conectar();
+        OnlineStatsHandler.getInstance().conectar();
         LocalStatsHandler.getInstance().conectar();
     }
 
@@ -132,7 +132,10 @@ public class MainApp extends Application {
         getStateManager().detach(is);
 
         ls = new LogInState(this);
+        
+      
         getStateManager().attach(ls);
+        
     }
 
     public void loadMenuFromLogIn2() {

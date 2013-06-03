@@ -46,11 +46,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             conn = DriverManager.getConnection(url, userid, password);
 
         } catch (ClassNotFoundException e1) {
-            JOptionPane.showMessageDialog(this, "Clase no encontrada", "Error de conexion", 0);
-            e1.printStackTrace();
+           System.out.println("Required class not found");
         } catch (SQLException e2) {
-            JOptionPane.showMessageDialog(this, "Error de SQL", "Error de SQL", 0);
-            e2.printStackTrace();
+            System.out.println("Connection to the server did not succeed"); 
         }
     }
 
@@ -63,7 +61,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             // cerramos todo
             conn.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error de comunicacion con el servidor", "Error de conexion", 2);
+             System.out.println("Connection to the server did not succeed");
 
         }
     }
@@ -92,7 +90,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             rs = statement.executeQuery(query);
             // y recorremos lo obtenido
             while (rs.next()) {
-                String name = "" + rs.getString("NAME");
+                String name = "" + rs.getString("NOMBRE");
                 System.out.println("NAME: " + name);
                 String nick = "" + rs.getString("NICK");
                 System.out.println("NICK: " + nick);
@@ -135,7 +133,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         while (rs.next() && !encontrado) {
             String nick = "" + rs.getString("NICK");
             String pass = "" + rs.getString("PASSWORD");
-            name = "" + rs.getString("NAME");
+            name = "" + rs.getString("NOMBRE");
             if (insertedNick.equals(nick) && insertedPassword.equals(pass)) {
                 encontrado = true;
                 return name;
@@ -170,10 +168,10 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
                 String punt = "" + rs.getString("PUNTUACION");
                 String disparos_ac = "" + rs.getString("DISPAROS_AC");
                 String disparos_tot = "" + rs.getString("DISPAROS_TOT");
-                String tiempo = "" + rs.getString("TIEMPO");
+                
                 int prec = (int) ((Float.parseFloat(disparos_ac) * 100) / Float.parseFloat(disparos_tot));
                 int prec2 = (prec * 100) / 50;
-                string = string = nick + "   " + "SCORE: " + punt + " " + "   ACCURACY: " + prec2 + "%   TIME: " + tiempo + "sec.";
+                string = string = nick + "   " + "SCORE: " + punt + " " + "   ACCURACY: " + prec2 + "%";
                 i++;
                 if (pos == i) {
                     return string;
@@ -412,9 +410,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
     public static void main(String[] args) throws Exception {
         
         
-        //BD CAÍDA, cuando funcione quitar los métodos necesarios que están como comentario
+        //BD EN FUNCIONAMIENTO
         getInstance().conectar();
-        getInstance().listarEstadisticasJugadores();
+        getInstance().listarEstadisticasPartidas();
         getInstance().desconectar();
     }
 }

@@ -43,8 +43,9 @@ public class Player {
         
         public void printJugador(Player j){
             System.out.println("PASSWORD: "+j.getPassword());
-            System.out.println("NAME: "+j.getNombre());
             System.out.println("NICK: "+j.getNick());
+            System.out.println("NAME: "+j.getNombre());
+            
         }
 	
 }

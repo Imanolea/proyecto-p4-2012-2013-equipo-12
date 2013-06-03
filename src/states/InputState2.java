@@ -25,6 +25,9 @@ import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
+import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
+import de.lessvoid.nifty.controls.radiobutton.builder.RadioButtonBuilder;
+import de.lessvoid.nifty.controls.radiobutton.builder.RadioGroupBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -337,6 +340,58 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                                         });
                                     }
                                 });// </panel_2.4>
+                                
+                                control(new RadioGroupBuilder("RadioGroup"));
+                                panel(new PanelBuilder("Panel_Space") {
+                                    {
+                                        childLayoutHorizontal();  
+                                        alignCenter();
+                                        valignCenter();
+                                        height("18%");
+                                        width("18%");
+
+
+                                        control(new LabelBuilder("LocalL", "Local"));
+
+                                        control(new RadioButtonBuilder("LocalR") {
+                                            {
+                                                group("RadioGroup");
+                                                interactOnRelease("setOffline()");
+                                            }
+                                        });
+                                        panel(new PanelBuilder("Panel_Space") {
+                                            {
+                                                childLayoutCenter();     
+                                                alignCenter();
+                                                valignCenter();
+                                                height("7%");
+                                                width("30%");
+                                            }
+                                        });
+                                        control(new LabelBuilder("OnlineL", "Online"));
+                                        control(new RadioButtonBuilder("OnlineR") {
+                                            {
+
+                                                group("RadioGroup");
+                                                interactOnRelease("setOnline()");
+                                            }
+                                        });
+
+                                        panel(new PanelBuilder("Panel_Space") {
+                                            {
+
+                                                childLayoutHorizontal();
+                                                alignCenter();
+                                                valignCenter();
+                                                height("2%");
+                                                width("30%");
+
+                                            }
+                                        });
+
+
+                                    }
+                                });
 
                             }
                         }); // </panel_2>
