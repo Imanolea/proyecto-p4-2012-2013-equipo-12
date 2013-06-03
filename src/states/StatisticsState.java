@@ -13,13 +13,11 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import database.LocalStatsHandler;
-import database.Game;
 import database.OnlineStatsHandler;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -27,12 +25,10 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
-import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 import game.MainApp;
-import java.util.ArrayList;
 
 /**
  * Estado relativo al menú que recoge las puntuaciones de los distintos jugadores, tanto online como local
@@ -357,11 +353,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(8)) {
-                                                s = s = "8th "+OnlineStatsHandler.getInstance().listarTop10(8);
+                                                s = "8th "+OnlineStatsHandler.getInstance().listarTop10(8);
                                             }
                                         } else {
                                             if (noHayMasPartidas(8)) {
-                                                s = s = "8th "+LocalStatsHandler.getInstance().listarTop10(8);
+                                                s ="8th "+LocalStatsHandler.getInstance().listarTop10(8);
                                             }
                                         }
                                         text(s);
@@ -387,11 +383,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(9)) {
-                                                s = s = "9th "+ OnlineStatsHandler.getInstance().listarTop10(9);
+                                                s ="9th "+ OnlineStatsHandler.getInstance().listarTop10(9);
                                             }
                                         } else {
                                             if (noHayMasPartidas(9)) {
-                                                s = s = "9th "+ LocalStatsHandler.getInstance().listarTop10(9);
+                                                s ="9th "+ LocalStatsHandler.getInstance().listarTop10(9);
                                             }
                                         }
                                         text(s);
@@ -418,11 +414,11 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
                                         String s = "";
                                         if (game.getOnline()) {
                                             if (noHayMasPartidasOnline(10)) {
-                                                s = s = "10th "+OnlineStatsHandler.getInstance().listarTop10(10);
+                                                s ="10th "+OnlineStatsHandler.getInstance().listarTop10(10);
                                             }
                                         } else {
                                             if (noHayMasPartidas(10)) {
-                                                s = s = "10th "+LocalStatsHandler.getInstance().listarTop10(10);
+                                                s = "10th "+LocalStatsHandler.getInstance().listarTop10(10);
                                             }
                                         }
                                         text(s);
