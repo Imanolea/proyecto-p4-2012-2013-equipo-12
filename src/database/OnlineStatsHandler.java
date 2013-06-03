@@ -406,13 +406,40 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         }
         return r;
     }
+    
+    public void listarJugadores() throws Exception {
+
+        try {
+            // Ahora utilizamos las sentencias de BD
+            String query = "SELECT * FROM JUGADOR;";
+            statement = conn.createStatement();
+            rs = statement.executeQuery(query);
+            // y recorremos lo obtenido
+            while (rs.next()) {
+                String name = "" + rs.getString("NOMBRE");
+                System.out.println("NAME: " + name);
+                String nick = "" + rs.getString("NICK");
+                System.out.println("NICK: " + nick);
+                String pass = "" + rs.getString("PASSWORD");
+                System.out.println("PASS: " + pass);
+                System.out.println("--");
+            }
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecuci��n de sentencias SQLite.", "La conexi��n no pudo ser establecida", 2);
+        }
+
+    }
+
 
     public static void main(String[] args) throws Exception {
         
         
         //BD EN FUNCIONAMIENTO
         getInstance().conectar();
-        getInstance().listarEstadisticasPartidas();
+        getInstance().listarJugadores();
         getInstance().desconectar();
     }
 }

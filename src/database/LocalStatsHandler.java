@@ -71,7 +71,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
      * @throws Exception Esta excepción se tratará en otra clase mediante la
      * visualización del pop up correspodiente.
      */
-    public void listarEstadisticasJugadores() throws Exception {
+    public void listarJugadores() throws Exception {
 
         try {
             // Ahora utilizamos las sentencias de BD
@@ -401,7 +401,7 @@ public class LocalStatsHandler extends JPanel implements Connectible {
 
     public static void main(String[] args) throws Exception {
         getInstance().conectar();
-        getInstance().listarEstadisticasJugadores();
+        getInstance().listarJugadores();
         getInstance().desconectar();
 
     }
