@@ -584,8 +584,22 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void quitGame() {
         LocalStatsHandler.getInstance().desconectar();
-        OnlineStatsHandler.getInstance().desconectar();
-        game.stop();
+      
+        if (game.getConectado() == true) {
+            try {
+                OnlineStatsHandler.getInstance().desconectar();
+
+
+            } catch (SQLException ex) {
+                System.out.println("NO SE PUDO DESCONECTAR DEL SERVIDOR");
+                System.exit(0);
+            }
+
+
+        } else {
+            System.exit(0);
+        }
+
     }
 
     public void loadMenu() {
@@ -602,9 +616,23 @@ public class MenuState extends AbstractAppState implements ScreenController {
     }
 
     public void quitStatistics() {
-        game.stop();
+
         LocalStatsHandler.getInstance().desconectar();
-        OnlineStatsHandler.getInstance().desconectar();
+        
+        if (game.getConectado() == true) {
+            try {
+                OnlineStatsHandler.getInstance().desconectar();
+
+
+            } catch (SQLException ex) {
+                System.out.println("NO SE PUDO DESCONECTAR DEL SERVIDOR");
+                System.exit(0);
+            }
+
+
+        } else {
+            System.exit(0);
+        }
     }
 
     public void loadStatistics() {
@@ -635,8 +663,21 @@ public class MenuState extends AbstractAppState implements ScreenController {
 
     public void exit() {
         LocalStatsHandler.getInstance().desconectar();
-        OnlineStatsHandler.getInstance().desconectar();
-        System.exit(0);
+
+        if (game.getConectado() == true) {
+            try {
+                OnlineStatsHandler.getInstance().desconectar();
+
+
+            } catch (SQLException ex) {
+                System.out.println("NO SE PUDO DESCONECTAR DEL SERVIDOR");
+                System.exit(0);
+            }
+
+
+        } else {
+            System.exit(0);
+        }
     }
 
     public void loadGameFromGameOver() {
@@ -963,7 +1004,6 @@ public class MenuState extends AbstractAppState implements ScreenController {
         nifty.closePopup(popup.getId());
     }
 
-   
     public void setOnline() {
         game.setOnline(true);
         System.out.println("SET ONLINE DONE CORRECTLY");

@@ -28,9 +28,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
      * Método dinámico empleado para hacer la conexión con la base de datos
      * externa
      */
-    public void conectar() {
+    public void conectar() throws ClassNotFoundException, SQLException {
 
-        try {
+      
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL, USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor externo
@@ -45,25 +45,20 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
              */
             conn = DriverManager.getConnection(url, userid, password);
 
-        } catch (ClassNotFoundException e1) {
-           System.out.println("Required class not found");
-        } catch (SQLException e2) {
-            System.out.println("Connection to the server did not succeed"); 
-        }
+       
+        
     }
 
     /**
      * Método dinámico empleado para hacer la desconexión con la base de datos
      * externa
      */
-    public void desconectar() {
-        try {
+
+    public void desconectar() throws SQLException {
+        
             // cerramos todo
             conn.close();
-        } catch (SQLException e) {
-             System.out.println("Connection to the server did not succeed");
-
-        }
+        
     }
 
     public static OnlineStatsHandler getInstance() {
@@ -439,7 +434,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         
         //BD EN FUNCIONAMIENTO
         getInstance().conectar();
-        getInstance().listarJugadores();
+        getInstance().listarEstadisticasPartidas();
         getInstance().desconectar();
     }
 }

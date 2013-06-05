@@ -17,6 +17,6 @@ public interface Connectible {
     /**
      * Desconecta de la base de datos
      */
-	void desconectar();
+	void desconectar() throws Exception;
 
 }

@@ -11,14 +11,17 @@ import com.jme3.system.Timer;
 import database.LocalStatsHandler;
 import database.OnlineStatsHandler;
 import database.Player;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.opengl.Display;
 import states.*;
 
 /**
  * Clase que gestiona los cambios de los estados y principal de la aplicación
+ *
  * @author Team 12
  */
-
 public class MainApp extends Application {
 
     protected Node rootNode = new Node("Root Node");
@@ -33,16 +36,17 @@ public class MainApp extends Application {
     private LogInState2 ls2 = null;
     private GameOverState gos = null;
     private Player player;
-    private boolean online=false;
+    private boolean online = false;
+    private boolean conectado = false;
     private String namePlayer;
     private String score;
     private AudioNode backgroundAudio;
-
 
     public MainApp() {
     }
 
     public void start() {
+
         if (settings == null) {
             s = new AppSettings(true);
             s.setSettingsDialogImage("/Pictures/Portada.jpg");
@@ -53,8 +57,18 @@ public class MainApp extends Application {
         }
 
         super.start();
-        OnlineStatsHandler.getInstance().conectar();
         LocalStatsHandler.getInstance().conectar();
+        try {
+            OnlineStatsHandler.getInstance().conectar();
+
+        } catch (ClassNotFoundException ex) {
+            System.out.println("CLASS NOT FOUND, CONNECTION TO THE SERVER DID NOT SUCCEED");
+            conectado = false;
+
+        } catch (SQLException ex) {
+            System.out.println("CONNECTION TO THE SERVER DID NOT SUCCEED");
+            conectado = false;
+        }
     }
 
     public void initialize() {
@@ -69,7 +83,7 @@ public class MainApp extends Application {
         ms2 = new PauseState(this);
         gos = new GameOverState(this);
         is2 = new InputState2(this);
-        
+
         backgroundAudio = new AudioNode(assetManager, "/Audio/Cavern of Mystery long version.wav", false);
         backgroundAudio.setLooping(true);
         backgroundAudio.setVolume(2);
@@ -102,7 +116,7 @@ public class MainApp extends Application {
         getStateManager().detach(ms);
         getStateManager().attach(is);
     }
-    
+
     public void loadInput2() {
         getStateManager().detach(ls);
         getStateManager().attach(is2);
@@ -132,10 +146,10 @@ public class MainApp extends Application {
         getStateManager().detach(is);
 
         ls = new LogInState(this);
-        
-      
+
+
         getStateManager().attach(ls);
-        
+
     }
 
     public void loadMenuFromLogIn2() {
@@ -147,7 +161,7 @@ public class MainApp extends Application {
         getStateManager().detach(ms);
         getStateManager().attach(ls2);
     }
-    
+
     public void loadLogInFromInput2() {
         getStateManager().detach(is2);
         getStateManager().attach(ls);
@@ -232,6 +246,14 @@ public class MainApp extends Application {
         return online;
     }
 
+    public void setConectado(boolean b) {
+        this.conectado = b;
+    }
+
+    public boolean getConectado() {
+        return conectado;
+    }
+
     public void setNombre(String n) {
         this.namePlayer = n;
     }
@@ -249,7 +271,7 @@ public class MainApp extends Application {
 
         return inputEnabled;
     }
-    
+
     public void setScore(String s) {
 
         this.score = s;
@@ -259,16 +281,18 @@ public class MainApp extends Application {
 
         return score;
     }
-    
+
     public void playAudio() {
 
-        if(backgroundAudio.getStatus() ==  Status.Stopped)
+        if (backgroundAudio.getStatus() == Status.Stopped) {
             this.backgroundAudio.play();
+        }
     }
 
     public void stopAudio() {
-        
-        if(backgroundAudio.getStatus() ==  Status.Playing)
-        this.backgroundAudio.stop();
+
+        if (backgroundAudio.getStatus() == Status.Playing) {
+            this.backgroundAudio.stop();
+        }
     }
 }

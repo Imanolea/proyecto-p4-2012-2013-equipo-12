@@ -482,7 +482,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
     public void render(RenderManager rm) {
     }
 
-    public static boolean noHayMasPartidas(int i) {
+    public boolean noHayMasPartidas(int i) {
         if (i != 0) {
             String nueva = LocalStatsHandler.getInstance().listarTop10(i);
             String deAntes = LocalStatsHandler.getInstance().listarTop10(i - 1);
@@ -496,7 +496,7 @@ public class StatisticsState extends AbstractAppState implements ScreenControlle
         }
     }
 
-    public static boolean noHayMasPartidasOnline(int i) {
+    public boolean noHayMasPartidasOnline(int i) {
         if (i != 0) {
             String nueva = OnlineStatsHandler.getInstance().listarTop10(i);
             String deAntes = OnlineStatsHandler.getInstance().listarTop10(i - 1);
