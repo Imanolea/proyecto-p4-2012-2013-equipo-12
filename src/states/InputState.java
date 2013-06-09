@@ -31,9 +31,9 @@ import game.MainApp;
 
 /**
  * Estado del menú relativo a el registro del usuario desde el menú principal
+ *
  * @author Team 12
  */
-
 public class InputState extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
@@ -85,9 +85,10 @@ public class InputState extends AbstractAppState implements ScreenController {
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-    
+
     /**
      * Método que inicializa las variables de la aplicación
+     *
      * @param stateManager Gestiona los estados del juego
      * @param app Aplicación del juego
      */
@@ -125,7 +126,7 @@ public class InputState extends AbstractAppState implements ScreenController {
         nifty.addScreen("InputScreen", new ScreenBuilder("IScreen") { // comenzamos la creacion de la pantalla y le damos un nombre: InputScreen
             {
                 controller(new MenuState(game));  // Esto conecta este estado con el ScreenController correcpondiente, que es donde se encntraran los metodos a los que los botones de esta clase llama
-                
+
                 layer(new LayerBuilder("Layer_ID2") {
                     {
                         childLayoutVertical(); // organizacion vertical de los elementos
@@ -139,7 +140,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 width("50%");
                             }
                         }); // </panel_1>
-                        
+
                         // <panel_2>
                         panel(new PanelBuilder("Panel_TITLE2") {
                             {
@@ -151,7 +152,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                 text(new TextBuilder() {
                                     {
                                         text("SIGN UP");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman23.fnt");
                                         height("100%");
                                         width("100%");
                                     }
@@ -192,7 +193,7 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 height("1%");
                                                 width("10%");
                                             }
-                                        }); 
+                                        });
 
                                         control(new TextFieldBuilder("NameInput", "") {
                                             {
@@ -222,8 +223,8 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 width("50%");
                                             }
                                         });
-                                        
-                                         panel(new PanelBuilder("Panel_TITLE2") {
+
+                                        panel(new PanelBuilder("Panel_TITLE2") {
                                             {
                                                 childLayoutCenter();
                                                 alignCenter();
@@ -259,8 +260,8 @@ public class InputState extends AbstractAppState implements ScreenController {
                                                 width("50%");
                                             }
                                         });
-                                        
-                                         panel(new PanelBuilder("Panel_TITLE2") {
+
+                                        panel(new PanelBuilder("Panel_TITLE2") {
                                             {
                                                 childLayoutCenter();
                                                 alignCenter();
@@ -442,7 +443,7 @@ public class InputState extends AbstractAppState implements ScreenController {
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        }     
+        }
     }
 
     public void stateDetached(AppStateManager stateManager) {

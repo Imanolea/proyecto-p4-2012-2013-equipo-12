@@ -35,9 +35,9 @@ import game.MainApp;
 
 /**
  * Estado del menú relativo al registro del jugado desde el menú del juego
+ *
  * @author Team 12
  */
-
 public class InputState2 extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
@@ -91,9 +91,10 @@ public class InputState2 extends AbstractAppState implements ScreenController {
         menuText.setText("Frames per second");
         guiNode.attachChild(menuText);
     }
-    
+
     /**
      * Método que inicializa las variables de la aplicación
+     *
      * @param stateManager Gestiona los estados del juego
      * @param app Aplicación del juego
      */
@@ -140,7 +141,7 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                 //controller(new GUI.PowdersScreenController()); // This connects the Java class StartingScreen and the GUI screen.     
                 controller(new MenuState(game));
 
-                
+
                 layer(new LayerBuilder("Layer_ID2") {
                     {
                         childLayoutVertical(); // layer properties, add more...
@@ -165,7 +166,7 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                                 text(new TextBuilder() {
                                     {
                                         text("SIGN UP");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman23.fnt");
                                         height("100%");
                                         width("100%");
                                     }
@@ -236,8 +237,8 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                                                 width("50%");
                                             }
                                         });
-                                        
-                                         panel(new PanelBuilder("Panel_TITLE2") {
+
+                                        panel(new PanelBuilder("Panel_TITLE2") {
                                             {
                                                 childLayoutCenter();
                                                 alignCenter();
@@ -273,8 +274,8 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                                                 width("50%");
                                             }
                                         });
-                                        
-                                         panel(new PanelBuilder("Panel_TITLE2") {
+
+                                        panel(new PanelBuilder("Panel_TITLE2") {
                                             {
                                                 childLayoutCenter();
                                                 alignCenter();
@@ -340,11 +341,11 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                                         });
                                     }
                                 });// </panel_2.4>
-                                
+
                                 control(new RadioGroupBuilder("RadioGroup"));
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
-                                        childLayoutHorizontal();  
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignCenter();
                                         height("18%");
@@ -361,7 +362,7 @@ public class InputState2 extends AbstractAppState implements ScreenController {
                                         });
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutCenter();     
+                                                childLayoutCenter();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("7%");

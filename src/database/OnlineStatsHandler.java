@@ -423,7 +423,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecuci��n de sentencias SQLite.", "La conexi��n no pudo ser establecida", 2);
+            JOptionPane.showMessageDialog(this, "Error al conectarse a la base de datos EstadisticasLocal. Error de ejecucion de sentencias SQLite.", "La conexi��n no pudo ser establecida", 2);
         }
 
     }
@@ -434,7 +434,7 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
         
         //BD EN FUNCIONAMIENTO
         getInstance().conectar();
-        getInstance().listarEstadisticasPartidas();
+        getInstance().listarJugadores();
         getInstance().desconectar();
     }
 }

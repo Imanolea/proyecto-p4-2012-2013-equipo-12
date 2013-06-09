@@ -150,7 +150,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                                 text(new TextBuilder() {
                                     {
                                         text("LOG IN");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman23.fnt"); // define la fuente a usar
                                         height("100%");
                                         width("100%");
                                     }
@@ -180,7 +180,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                                                 alignCenter();
                                                 valignCenter();
                                                 font("Interface/Fonts/Default.fnt");
-                                                text("Insert your nick and password if you are alredy registered.");
+                                                 text("Insert your nick and password if you are already registered");
                                                 height("20%");
                                                 width("80%");
                                             }
@@ -190,7 +190,7 @@ public class LogInState2 extends AbstractAppState implements ScreenController {
                                             {
                                                 alignCenter();
                                                 valignCenter();
-                                                text("If not, go \"BACK\" press the \"REGISTER\" button in the main menu.");
+                                                text("Otherwise, please \"SIGN UP\"");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("20%");
                                                 width("80%");

@@ -62,7 +62,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
     private NiftyJmeDisplay niftyDisplay;
     private FlyByCamera flyCam;
     private Nifty nifty;
-    private String titulos[][] = {{"Comienzo", "Start"}, {"Estadísticas", "Statistics"},
+    private String titulos[][] = {{"Comienzo", "Play"}, {"Estadísticas", "Leaderboards"},
         {"Registrarse", "Sign Up"}, {"Cambiar de Jugador", "Change Player"}, {"Salir", "Quit"}};
     private int i = 1;
     private boolean primeraVez1 = true;
@@ -295,7 +295,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
                                         width("55%");
 
 
-                                        control(new ButtonBuilder("Button_CHANGEPLAYER", titulos[3][i]) {
+                                        control(new ButtonBuilder("Button_CHANGEPLAYER", "NOT "+game.getPlayer().getNombre()+"?" ){
                                             {
                                                 alignCenter();
                                                 valignCenter();

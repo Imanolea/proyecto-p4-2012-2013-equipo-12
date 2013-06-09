@@ -10,13 +10,14 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.RenderState;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import database.LocalStatsHandler;
+import database.OnlineStatsHandler;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.LayerBuilder;
@@ -24,7 +25,6 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.PopupBuilder;
 import de.lessvoid.nifty.builder.ScreenBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.radiobutton.builder.RadioButtonBuilder;
@@ -33,16 +33,15 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
-import de.lessvoid.nifty.tools.SizeValue;
 import game.MainApp;
-import java.awt.Color;
+import java.sql.SQLException;
 
 /**
  * Estado del menú relativo a la pantalla de "log in" desde el menú principal
+ *
  * @author Team 12
  */
-
-public class LogInState extends AbstractAppState implements ScreenController,TextField {
+public class LogInState extends AbstractAppState implements ScreenController {
 
     protected Node rootNode = new Node("Root Node");
     protected Node guiNode = new Node("Gui Node");
@@ -58,6 +57,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
     private NiftyJmeDisplay niftyDisplay;
     private FlyByCamera flyCam;
     private Nifty nifty;
+    private Element popup;
     public static boolean b = false;
 
     public LogInState(MainApp game) {
@@ -74,108 +74,6 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
     public void onEndScreen() {
     }
 
-    public String getText() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setText(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setMaxLength(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setCursorPosition(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void enablePasswordChar(char c) {
-      
-    }
-
-    public void disablePasswordChar() {
-        
-    }
-
-    public boolean isPasswordCharEnabled() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Element getElement() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getId() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setId(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public int getWidth() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setWidth(SizeValue width) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public int getHeight() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setHeight(SizeValue height) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public String getStyle() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setStyle(String style) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void enable() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void disable() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setFocus() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setFocusable(boolean focusable) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public boolean hasFocus() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void layoutCallback() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public boolean isBound() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private class AppActionListener implements ActionListener {
-
-        public void onAction(String name, boolean value, float tpf) {
-            if (!value) {
-                return;
-            }
-
-        }
-    }
-
     public void loadFPSText() {
         menuFont = game.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
         menuText = new BitmapText(menuFont, false);
@@ -187,6 +85,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
     /**
      * Método que inicializa las variables de la aplicación
+     *
      * @param stateManager Gestiona los estados del juego
      * @param app Aplicación del juego
      */
@@ -202,9 +101,10 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
         this.audioRenderer = this.game.getAudioRenderer();
         this.guiViewPort = this.game.getGuiViewPort();
         this.flyCam = new FlyByCamera(game.getCamera());
-        
+
+
         game.setOnline(false);
-        
+
         game.playAudio();
 
         game.getRenderer().applyRenderState(RenderState.DEFAULT);
@@ -269,7 +169,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
                                 text(new TextBuilder() {
                                     {
                                         text("LOG IN");
-                                        font("Interface/Fonts/Default.fnt");
+                                        font("Interface/Fonts/Jokerman23.fnt"); // define la fuente a usar
                                         height("100%");
                                         width("100%");
                                     }
@@ -280,7 +180,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
                         // <panel_2>
                         panel(new PanelBuilder("Panel_RegisterProcess") {
                             {
-                                childLayoutVertical();        
+                                childLayoutVertical();
                                 alignCenter();
                                 valignCenter();
                                 height("45%");
@@ -300,7 +200,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
                                                 valignCenter();
                                                 font("Interface/Fonts/Default.fnt");
                                                 color("#FFE4E1");
-                                                text("Insert nick and password if you are alredy registered.");
+                                                text("Insert your nick and password if you are already registered");
                                                 height("20%");
                                                 width("80%");
                                             }
@@ -311,7 +211,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
                                                 alignCenter();
                                                 valignCenter();
                                                 color("#FFE4E1");
-                                                text("If not, press the \"REGISTER\" button to start the registration process.");
+                                                text("Otherwise, please \"SIGN UP\"");
                                                 font("Interface/Fonts/Default.fnt");
                                                 height("20%");
                                                 width("80%");
@@ -323,7 +223,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                 panel(new PanelBuilder("Panel_InsertData1") {
                                     {
-                                        childLayoutHorizontal();       
+                                        childLayoutHorizontal();
                                         height("7%");
                                         width("50%");
                                         alignCenter();
@@ -351,7 +251,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                 panel(new PanelBuilder("Panel_Empty") {
                                     {
-                                        childLayoutHorizontal();          
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignCenter();
                                         height("3%");
@@ -363,7 +263,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                 panel(new PanelBuilder("Panel_InsertData12") {
                                     {
-                                        childLayoutHorizontal();        
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignCenter();
                                         height("7%");
@@ -382,10 +282,10 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                         control(new TextFieldBuilder("PassLogIn") {
                                             {
-                                                enablePasswordChar('*');
+
                                                 width("50%");
                                                 height("100%");
-                                                
+
                                             }
                                         });
                                     }
@@ -394,7 +294,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                 panel(new PanelBuilder("Panel_ERRORES") {
                                     {
-                                        childLayoutHorizontal();         
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignBottom();
                                         height("16%");
@@ -405,13 +305,13 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                 panel(new PanelBuilder("Panel_Buttons") {
                                     {
-                                        childLayoutHorizontal();            
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignCenter();
                                         height("12%");
                                         width("100%");
 
-                                        control(new ButtonBuilder("Button_REGISTER", "REGISTER") {
+                                        control(new ButtonBuilder("Button_REGISTER", "SIGN UP") {
                                             {
                                                 alignCenter();
                                                 valignBottom();
@@ -450,7 +350,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutHorizontal();          
+                                                childLayoutHorizontal();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("2%");
@@ -476,7 +376,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
-                                        childLayoutVertical();  
+                                        childLayoutVertical();
                                         alignCenter();
                                         valignBottom();
                                         height("11%");
@@ -484,7 +384,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutCenter();       
+                                                childLayoutCenter();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("30%");
@@ -508,7 +408,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
                                 control(new RadioGroupBuilder("RadioGroup"));
                                 panel(new PanelBuilder("Panel_Space") {
                                     {
-                                        childLayoutHorizontal();  
+                                        childLayoutHorizontal();
                                         alignCenter();
                                         valignCenter();
                                         height("18%");
@@ -525,7 +425,7 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
                                         });
                                         panel(new PanelBuilder("Panel_Space") {
                                             {
-                                                childLayoutCenter();     
+                                                childLayoutCenter();
                                                 alignCenter();
                                                 valignCenter();
                                                 height("7%");
@@ -644,13 +544,66 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
             }
         }.registerPopup(nifty);
 
+        new PopupBuilder("popupOnline") {
+            {
+                childLayoutCenter();
+                backgroundColor("#000a");
+
+
+                panel(new PanelBuilder("PanelPopupO") {
+                    {
+                        childLayoutVertical();
+                        alignCenter();
+                        backgroundImage("/Pictures/FondoDialog.png");
+                        valignCenter();
+                        height("20%");
+                        width("40%");
+
+                        text(new TextBuilder() {
+                            {
+                                alignCenter();
+                                color("f043");
+                                text("A network connection to the server could not be established");
+                                font("Interface/Fonts/Default.fnt");
+                                height("50%");
+                                width("27%");
+                            }
+                        });
+
+                        control(new ButtonBuilder("Btnx", "OK") {
+                            {
+                                alignCenter();
+                                valignCenter();
+                                height("30%");
+                                width("40%");
+                                interactOnClick("closePopupOnline()");
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        }.registerPopup(nifty);
+
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("LogInScreen");
+
+
+
+        try {
+            OnlineStatsHandler.getInstance().conectar();
+        } catch (ClassNotFoundException ex) {
+            showPopupOnline();
+        } catch (SQLException ex) {
+            showPopupOnline();
+        }
+        LocalStatsHandler.getInstance().conectar();
     }
 
     public void update(float tpf) {
         super.update(tpf);
-        
+
         rootNode.updateLogicalState(tpf);
         guiNode.updateLogicalState(tpf);
         rootNode.updateGeometricState();
@@ -666,7 +619,9 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
         game.getGUIViewPort().attachScene(guiNode);
         if (b == true) {
             game.getGUIViewPort().addProcessor(niftyDisplay);
-        } 
+        }
+
+
     }
 
     @Override
@@ -693,5 +648,10 @@ public class LogInState extends AbstractAppState implements ScreenController,Tex
 
     public void loadInput() {
         game.loadInput();
+    }
+
+    public void showPopupOnline() {
+        popup = nifty.createPopup("popupOnline");
+        nifty.showPopup(nifty.getCurrentScreen(), popup.getId(), null);
     }
 }
