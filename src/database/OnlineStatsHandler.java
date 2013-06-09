@@ -34,9 +34,9 @@ public class OnlineStatsHandler extends JFrame implements Connectible {
             // Cargar por refletividad el driver de JDBC MySQL
             Class.forName("com.mysql.jdbc.Driver");
             // Ahora indicamos la URL, USUARIO Y CONTRASEÑA para conectarse a la BD de MySQL albergada en un servidor externo
-            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
-            String userid = "powders";
-            String password = "p0wd3rs";
+            String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powdersv2";
+            String userid = "powdersv2";
+            String password = "p0wd3rsv2";
 
             /*
              * String url = "jdbc:mysql://lamaisondeleiaylocomj.homelinux.com/powders";
