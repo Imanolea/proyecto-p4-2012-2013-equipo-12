@@ -808,6 +808,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             } catch (SQLException e2) {
                 showPopupUserError();
             } catch (Exception e3) {
+                showPopupConnectionError();
             }
         } else {
 
@@ -820,6 +821,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             } catch (SQLException e2) {
                 showPopupUserError();
             } catch (Exception e3) {
+                showPopupConnectionError();
             }
 
         }
@@ -859,6 +861,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             } catch (SQLException e2) {
                 showPopupUserError();
             } catch (Exception e3) {
+                showPopupConnectionError();
             }
         } else {
 
@@ -871,6 +874,7 @@ public class MenuState extends AbstractAppState implements ScreenController {
             } catch (SQLException e2) {
                 showPopupUserError();
             } catch (Exception e3) {
+                showPopupConnectionError();
             }
 
         }
