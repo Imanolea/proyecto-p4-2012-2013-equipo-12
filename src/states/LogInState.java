@@ -544,61 +544,12 @@ public class LogInState extends AbstractAppState implements ScreenController {
             }
         }.registerPopup(nifty);
 
-        new PopupBuilder("popupOnline") {
-            {
-                childLayoutCenter();
-                backgroundColor("#000a");
 
-
-                panel(new PanelBuilder("PanelPopupO") {
-                    {
-                        childLayoutVertical();
-                        alignCenter();
-                        backgroundImage("/Pictures/FondoDialog.png");
-                        valignCenter();
-                        height("20%");
-                        width("40%");
-
-                        text(new TextBuilder() {
-                            {
-                                alignCenter();
-                                color("f043");
-                                text("A network connection to the server could not be established");
-                                font("Interface/Fonts/Default.fnt");
-                                height("50%");
-                                width("27%");
-                            }
-                        });
-
-                        control(new ButtonBuilder("Btnx", "OK") {
-                            {
-                                alignCenter();
-                                valignCenter();
-                                height("30%");
-                                width("40%");
-                                interactOnClick("closePopupOnline()");
-                            }
-                        });
-
-                    }
-                });
-
-            }
-        }.registerPopup(nifty);
 
         game.getGUIViewPort().addProcessor(niftyDisplay);
         nifty.gotoScreen("LogInScreen");
 
 
-
-        try {
-            OnlineStatsHandler.getInstance().conectar();
-        } catch (ClassNotFoundException ex) {
-            showPopupOnline();
-        } catch (SQLException ex) {
-            showPopupOnline();
-        }
-        LocalStatsHandler.getInstance().conectar();
     }
 
     public void update(float tpf) {
@@ -648,10 +599,5 @@ public class LogInState extends AbstractAppState implements ScreenController {
 
     public void loadInput() {
         game.loadInput();
-    }
-
-    public void showPopupOnline() {
-        popup = nifty.createPopup("popupOnline");
-        nifty.showPopup(nifty.getCurrentScreen(), popup.getId(), null);
     }
 }
